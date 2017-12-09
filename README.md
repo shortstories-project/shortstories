@@ -14,9 +14,11 @@ install postgresql
 install gems `bundle install`
 
 copy and rename files
+
+```
 .env.development.sample -> .env.development
 .env.test.sample -> .env.test
-
+```
 set yours settings for db inside .env.* files, example:
 
 `DATABASE_URL="postgresql://markfrost@localhost/shortstories_test"`
@@ -28,6 +30,8 @@ hanami db prepare
 
 HANAMI_ENV=test hanami db prepare
 ```
+
+### Other
 
 How to run tests:
 
