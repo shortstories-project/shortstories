@@ -5,6 +5,7 @@ Welcome to your new Hanami project!
 ## Setup
 
 install ruby https://github.com/rvm/rvm
+
 install `gem install bundler`
 
 install postgresql
