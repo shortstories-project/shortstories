@@ -4,4 +4,4 @@
 # Example:
 # get '/hello', to: ->(env) { [200, {}, ['Hello from Hanami!']] }
 
-resources :stories, only: [:index, :create]
+resources :stories, only: [:index, :create, :destroy]
