@@ -7,7 +7,7 @@ require_relative '../apps/web/application'
 
 Hanami.configure do
   mount WebApi::Application, at: '/web_api'
-  mount Web::Application, at: '/'
+  mount Web::Application, at: '/web'
 
   model do
     ##
