@@ -6,6 +6,9 @@ gem 'hanami-model', '~> 1.1'
 
 gem 'pg'
 
+gem 'json'
+gem 'hashie'
+
 group :development do
   # Code reloading
   # See: http://hanamirb.org/guides/projects/code-reloading
@@ -14,6 +17,9 @@ end
 
 group :test, :development do
   gem 'dotenv', '~> 2.0'
+
+  gem 'pry'
+  gem 'pry-theme'
 end
 
 group :test do

@@ -3,7 +3,9 @@ module WebApi::Controllers::Stories
     include WebApi::Action
   
     def call(_)
-      status 200, JSON.generate(Stories.all.as_json)
+      repository = StoryRepository.new
+
+      status 200, JSON.generate({ stories: repository.all.map(&:to_h) })
     end
   end
 end

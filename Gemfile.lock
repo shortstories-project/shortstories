@@ -10,6 +10,7 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    coderay (1.1.2)
     concurrent-ruby (1.0.5)
     dotenv (2.2.1)
     dry-configurable (0.7.0)
@@ -94,19 +95,27 @@ GEM
     hanami-view (1.1.0)
       hanami-utils (~> 1.1)
       tilt (~> 2.0, >= 2.0.1)
+    hashie (3.5.6)
     http_router (0.11.2)
       rack (>= 1.0.0)
       url_mount (~> 0.2.1)
     ice_nine (0.11.2)
     inflecto (0.0.2)
+    json (2.1.0)
     mail (2.7.0)
       mini_mime (>= 0.1.1)
+    method_source (0.9.0)
     mini_mime (1.0.0)
     mini_portile2 (2.3.0)
     minitest (5.10.3)
     nokogiri (1.8.1)
       mini_portile2 (~> 2.3.0)
     pg (0.21.0)
+    pry (0.11.3)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    pry-theme (1.2.0)
+      coderay (~> 1.1)
     public_suffix (3.0.1)
     rack (2.0.3)
     rack-test (0.8.2)
@@ -152,10 +161,14 @@ DEPENDENCIES
   dotenv (~> 2.0)
   hanami (~> 1.1)
   hanami-model (~> 1.1)
+  hashie
+  json
   minitest
   pg
+  pry
+  pry-theme
   rake
   shotgun
 
 BUNDLED WITH
-   1.15.4
+   1.16.0
