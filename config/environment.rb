@@ -2,10 +2,12 @@ require 'bundler/setup'
 require 'hanami/setup'
 require 'hanami/model'
 require_relative '../lib/shortstories'
+require_relative '../apps/admin/application'
 require_relative '../apps/web_api/application'
 require_relative '../apps/web/application'
 
 Hanami.configure do
+  mount Admin::Application, at: '/admin'
   mount WebApi::Application, at: '/web_api'
   mount Web::Application, at: '/web'
 
