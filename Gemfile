@@ -11,6 +11,10 @@ gem 'hashie'
 
 gem 'bcrypt'
 
+gem 'omniauth-hanami'
+gem 'omniauth-twitter'
+gem 'warden'
+
 group :development do
   # Code reloading
   # See: http://hanamirb.org/guides/projects/code-reloading

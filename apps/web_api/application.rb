@@ -7,6 +7,15 @@ module WebApi
       ##
       # BASIC
       #
+      
+      middleware.use Warden::Manager do |manager|
+        # manager.failure_app = Web::Controllers::Session::Failure.new
+      end
+
+      middleware.use OmniAuth::Builder do
+        provider :hanami, interactor: FindUserForAuth
+        provider :twitter, "bPSv0fzOVwy8KNqa4yRETyQSq", "rRZaALRImbDTZEFngU1XHeP3qEYFj2JzR3myUO9EzdxrS5JzNG"
+      end
 
       # Define the root path of this application.
       # All paths specified in this configuration are relative to path below.
