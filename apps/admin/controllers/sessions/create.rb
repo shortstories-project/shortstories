@@ -8,7 +8,7 @@ module Admin::Controllers::Sessions
       if !admin_user.nil? && password_correct?(admin_user)
         session[:admin_user_id] = admin_user.id
 
-        redirect_to routes.home_page
+        redirect_to routes.root_path
       else
         redirect_to routes.new_session_path
       end
