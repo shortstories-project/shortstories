@@ -1,0 +1,11 @@
+{
+  "name": "shortstories_api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:frostmark/shortstories_api.git",
+  "author": "<cheerful.mf@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "uikit": "^3.0.0-beta.35"
+  }
+}
