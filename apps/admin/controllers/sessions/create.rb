@@ -5,7 +5,7 @@ module Admin::Controllers::Sessions
     def call(_)
       admin_user = AdminUserRepository.new.find_by_email(requested_email)
 
-      if !user.nil? && password_correct?(admin_user)
+      if !admin_user.nil? && password_correct?(admin_user)
         session[:admin_user_id] = admin_user.id
 
         redirect_to routes.home_page

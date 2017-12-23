@@ -1,6 +1,6 @@
 class AdminUserRepository < Hanami::Repository
   def find_by_email(email)
-    users
+    admin_users
       .where(email: email)
       .as(AdminUser)
       .one
