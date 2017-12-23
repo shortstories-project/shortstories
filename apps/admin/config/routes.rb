@@ -4,4 +4,4 @@
 # Example:
 # get '/hello', to: ->(env) { [200, {}, ['Hello from Hanami!']] }
 
-resources :sessions, only: [:new]
+resources :sessions, only: [:new, :create]
