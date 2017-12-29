@@ -9,12 +9,11 @@ module WebApi
       #
       
       middleware.use Warden::Manager do |manager|
-        # manager.failure_app = Web::Controllers::Session::Failure.new
+        manager.failure_app = WebApi::Controllers::Session::Failure.new
       end
 
       middleware.use OmniAuth::Builder do
-        provider :hanami, interactor: FindUserForAuth
-        provider :twitter, "bPSv0fzOVwy8KNqa4yRETyQSq", "rRZaALRImbDTZEFngU1XHeP3qEYFj2JzR3myUO9EzdxrS5JzNG"
+        provider :twitter, ENV['TWITTER_CLIENT_KEY'], ENV['TWITTER_CLIENT_SECRET']
       end
 
       # Define the root path of this application.
@@ -83,7 +82,7 @@ module WebApi
       #
       # See: http://www.rubydoc.info/gems/rack/Rack/Session/Cookie
       #
-      # sessions :cookie, secret: ENV['API_SESSIONS_SECRET']
+      sessions :cookie, secret: ENV['API_SESSIONS_SECRET']
 
       # Configure Rack middleware for this application
       #
@@ -178,6 +177,7 @@ module WebApi
       #
       # See: http://www.rubydoc.info/gems/hanami-controller#Configuration
       controller.prepare do
+        include WebApi::Authentication
         # include MyAuthentication # included in all the actions
         # before :authenticate!    # run an authentication before callback
       end
