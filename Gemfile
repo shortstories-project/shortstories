@@ -11,6 +11,9 @@ gem 'hashie'
 
 gem 'bcrypt'
 
+gem 'omniauth-twitter'
+gem 'warden'
+
 group :development do
   # Code reloading
   # See: http://hanamirb.org/guides/projects/code-reloading
@@ -25,7 +28,7 @@ group :test, :development do
 end
 
 group :test do
-  gem 'minitest'
+  gem 'rspec-hanami'
   gem 'capybara'
 end
 

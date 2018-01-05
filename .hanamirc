@@ -1,3 +1,3 @@
 project=shortstories
-test=minitest
+test=rspec
 template=erb
