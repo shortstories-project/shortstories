@@ -1,11 +1,7 @@
-<h1>You need to sign in to continue</h1>
 <p>
-  <a href="/sign_in" class="pure-button pure-button-primary">
-    Sign in
-  </a>
-  or
-  <a href='/users/new' class="pure-button pure-button-primary">
-    Register
-  </a>
+<% if current_user %>
+  Hello, <%= current_user.name %> | <%= link_to "Sign out", "/auth/signout" %>
+<% else %>
+  <%= link_to "Login with Github", "/auth/github" %>
+<% end %>
 </p>
-

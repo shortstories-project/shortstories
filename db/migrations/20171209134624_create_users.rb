@@ -5,8 +5,10 @@ Hanami::Model.migration do
 
       column :name, String, null: false
 
-      column :email, String, null: false
-      column :password, String, null: false
+      column :email, String
+
+      column :twitter_id, String
+      column :github_id, String
 
       column :created_at, DateTime, null: false
       column :updated_at, DateTime, null: false

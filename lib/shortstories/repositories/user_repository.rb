@@ -7,7 +7,7 @@ class UserRepository < Hanami::Repository
       name: info['name'],
       email: info['email']
     }
-    binding.pry
+
     if user = users.where(twitter_id: attrs[:twitter_id]).first
       user.update(attrs)
       update(user)

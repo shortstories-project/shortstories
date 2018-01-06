@@ -9,7 +9,7 @@ module WebApi
       #
       
       middleware.use Warden::Manager do |manager|
-        manager.failure_app = WebApi::Controllers::Session::Failure.new
+        manager.failure_app = WebApi::Controllers::Sessions::Failure.new
       end
 
       middleware.use OmniAuth::Builder do

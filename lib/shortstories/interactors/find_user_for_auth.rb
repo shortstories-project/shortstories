@@ -7,7 +7,7 @@ class FindUserForAuth
 
   def initialize(login, password)
     @login = login
-    @password = password    
+    @password = password
   end
 
   def call
