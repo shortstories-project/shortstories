@@ -1,7 +1,7 @@
 class UserRepository < Hanami::Repository
   def auth!(auth_hash)
     info = auth_hash[:info]
-    twitter_id = info[:uid].to_i
+    twitter_id = auth_hash[:uid].to_i
 
     attrs = {
       name: info['name'],
