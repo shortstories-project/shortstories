@@ -5,7 +5,3 @@ require 'capybara'
 require 'capybara/dsl'
 
 Capybara.app = ::Hanami.app
-
-# class MiniTest::Spec
-#   include Capybara::DSL
-# end
