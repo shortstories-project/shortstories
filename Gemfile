@@ -30,6 +30,7 @@ end
 group :test do
   gem 'rspec-hanami'
   gem 'capybara'
+  gem 'database_cleaner'
 end
 
 group :production do

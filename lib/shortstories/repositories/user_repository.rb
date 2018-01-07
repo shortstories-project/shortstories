@@ -1,18 +1,19 @@
 class UserRepository < Hanami::Repository
   def auth!(auth_hash)
+    puts auth_hash
     info = auth_hash[:info]
-    twitter_id = auth_hash[:uid].to_i
+    twitter_id = auth_hash[:uid]
 
     attrs = {
-      name: info['name'],
-      email: info['email']
+      name: info[:name],
+      email: info[:email],
+      twitter_id: twitter_id
     }
 
-    if user = users.where(twitter_id: attrs[:twitter_id]).first
-      user.update(attrs)
-      update(user)
+    if user = users.where(twitter_id: twitter_id).first
+      update(user.id, attrs)
     else
-      create(User.new(attrs.merge(twitter_id: twitter_id)))
+      create(User.new(attrs))
     end
   end
 end
