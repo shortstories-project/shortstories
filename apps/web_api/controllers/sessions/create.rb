@@ -1,5 +1,5 @@
 module WebApi::Controllers::Sessions
-  class New
+  class Create
     include WebApi::Action
 
     def auth_hash
