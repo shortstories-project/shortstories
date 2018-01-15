@@ -9,7 +9,7 @@ module WebApi::Controllers::Sessions
     def call(params)
       user = UserRepository.new.auth!(auth_hash)
       warden.set_user(user)
-      redirect_to '/'
+      redirect_to 'http://localhost:3000/'
     end
 
     def warden
