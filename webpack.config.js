@@ -1,4 +1,5 @@
 const { resolve } = require('path')
+const StatsPlugin = require("stats-webpack-plugin")
 
 module.exports = {
   entry: {
@@ -8,6 +9,10 @@ module.exports = {
     path: resolve(__dirname, 'public'),
     filename: '[name]-[chunkhash].js'
   },
+
+  plugins: [
+    new StatsPlugin("webpack_manifest.json")
+  ],
   module: {
     rules: [
       {
@@ -30,5 +35,9 @@ module.exports = {
       }
     ]
   },
-}
 
+  devServer: {
+    port: 3020,
+    publicPath: '/'
+  }
+}
