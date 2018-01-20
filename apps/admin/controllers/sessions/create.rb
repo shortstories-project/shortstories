@@ -27,7 +27,7 @@ module Admin::Controllers::Sessions
     def requested_password
       params[:session][:password_plain]
     end
-    
+
     def authenticate!; end
   end
 end
