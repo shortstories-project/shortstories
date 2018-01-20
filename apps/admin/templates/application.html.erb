@@ -6,5 +6,9 @@
   </head>
   <body>
     <%= yield %>
+
+    <% if Hanami.env?(:development) %>
+      <script src="<%= webpack_asset_path('admin') %>"></script>
+    <% end %>
   </body>
 </html>

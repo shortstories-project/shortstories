@@ -1,3 +1,10 @@
+GIT
+  remote: git://github.com/samuelsimoes/hanami-webpack.git
+  revision: 1019f8efc217c9ae7290e220bf2c9e05ddd603ae
+  specs:
+    hanami-webpack (0.0.1)
+      hanami
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -193,6 +200,7 @@ DEPENDENCIES
   dotenv (~> 2.0)
   hanami (~> 1.1)
   hanami-model (~> 1.1)
+  hanami-webpack!
   hashie
   json
   omniauth-twitter
@@ -205,4 +213,4 @@ DEPENDENCIES
   warden
 
 BUNDLED WITH
-   1.16.0
+   1.16.1
