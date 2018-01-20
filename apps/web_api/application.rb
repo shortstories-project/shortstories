@@ -7,7 +7,7 @@ module WebApi
       ##
       # BASIC
       #
-      
+
       middleware.use Warden::Manager do |manager|
         manager.failure_app = WebApi::Controllers::Sessions::Failure.new
       end
@@ -82,7 +82,7 @@ module WebApi
       #
       # See: http://www.rubydoc.info/gems/rack/Rack/Session/Cookie
       #
-      sessions :cookie, secret: ENV['API_SESSIONS_SECRET']
+      sessions :cookie, secret: ENV['WEB_API_SESSIONS_SECRET']
 
       # Configure Rack middleware for this application
       #
