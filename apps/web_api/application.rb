@@ -178,8 +178,10 @@ module WebApi
       # See: http://www.rubydoc.info/gems/hanami-controller#Configuration
       controller.prepare do
         include WebApi::Authentication
-        # include MyAuthentication # included in all the actions
-        # before :authenticate!    # run an authentication before callback
+
+        def verify_csrf_token?
+          false
+        end
       end
 
       # Configure the code that will yield each time Api::View is included
