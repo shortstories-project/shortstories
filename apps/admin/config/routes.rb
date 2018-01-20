@@ -5,3 +5,5 @@ resources :sessions, only: [:new, :create] do
     get :destroy
   end
 end
+
+resources :stories, only: [:index]
