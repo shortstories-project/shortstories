@@ -5,7 +5,15 @@
     <%= favicon %>
   </head>
   <body>
-    <%= yield %>
+    <% if current_user %>
+      <%= render partial: 'shared/navbar' %>
+    <% end %>
+
+    <div class="container-fluid">
+      <div class="row">
+        <%= yield %>
+      </div>
+    </div>
 
     <% if Hanami.env?(:development) %>
       <script src="<%= webpack_asset_path('admin') %>"></script>
