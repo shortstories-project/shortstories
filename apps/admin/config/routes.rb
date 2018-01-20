@@ -1,3 +1,7 @@
 root to: "dashboard#index"
 
-resources :sessions, only: [:new, :create]
+resources :sessions, only: [:new, :create] do
+  collection do
+    get :destroy
+  end
+end

@@ -5,6 +5,10 @@
     <%= favicon %>
   </head>
   <body>
+    <% if current_user %>
+      <%= render partial: 'shared/navbar' %>
+    <% end %>
+
     <%= yield %>
 
     <% if Hanami.env?(:development) %>
