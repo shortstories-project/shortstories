@@ -6,11 +6,13 @@
   "author": "<cheerful.mf@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "uikit": "^3.0.0-beta.35"
-  },
-  "devDependencies": {
-    "stats-webpack-plugin": "*",
-    "webpack": "*",
-    "webpack-dev-server": "*"
+    "extract-text-webpack-plugin": "^1.0.1",
+    "webpack": "^1.14.0",
+    "webpack-dev-server": "1.16.3",
+    "uikit": "^3.0.0-beta.35",
+    "babel-core": "^6.20.0",
+    "babel-loader": "^6.2.9",
+    "babel-preset-es2015": "^6.18.0",
+    "stats-webpack-plugin": "*"
   }
 }

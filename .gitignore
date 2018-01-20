@@ -8,3 +8,6 @@
 node_modules
 
 .vscode
+
+public/admin*.js
+public/webpack_manifest.json
