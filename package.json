@@ -9,8 +9,10 @@
     "start": "webpack"
   },
   "dependencies": {
+    "bootstrap": "^4.0.0",
+    "jquery": "^3.3.1",
     "node-sass": "^4.7.2",
-    "uikit": "^3.0.0-beta.35"
+    "popper.js": "^1.12.9"
   },
   "devDependencies": {
     "@babel/core": "^7.0.0-beta.38",
