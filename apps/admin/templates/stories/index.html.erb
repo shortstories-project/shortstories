@@ -1,31 +1,44 @@
-<h1>Stories</h1>
+<div class="container-fluid">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="#">Home</a></li>
+      <li class="breadcrumb-item"><a href="#">Library</a></li>
+      <li class="breadcrumb-item active" aria-current="page">Data</li>
+    </ol>
+  </nav>
+</div>
 
-<table class="table">
-  <caption>List of stories</caption>
-  <thead>
-    <tr>
-      <th scope="col">#</th>
-      <th scope="col">Text</th>
-      <th scope="col">Created at</th>
-      <th scope="col">Updated at</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% stories.each do |story| %>
+
+<div class="container-fluid">
+  <h1>Stories</h1>
+
+  <table class="table">
+    <caption>List of stories</caption>
+    <thead>
       <tr>
-        <th scope="row">
-          <%= story.id %>
-        </th>
-        <td>
-          <%= story.text %>
-        </td>
-        <td>
-          <%= story.created_at %>
-        </td>
-        <td>
-          <%= story.updated_at %>
-        </td>
+        <th scope="col">#</th>
+        <th scope="col">Text</th>
+        <th scope="col">Created at</th>
+        <th scope="col">Updated at</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% stories.each do |story| %>
+        <tr>
+          <th scope="row">
+            <%= story.id %>
+          </th>
+          <td>
+            <%= story.text %>
+          </td>
+          <td>
+            <%= story.created_at %>
+          </td>
+          <td>
+            <%= story.updated_at %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
