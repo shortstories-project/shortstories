@@ -1,0 +1,9 @@
+<%= render partial: 'shared/breadcrumbs' %>
+
+<div class="container-fluid">
+  <h1>Story № <%= story.id %></h1>
+
+  text:
+  <p><%= story.text %></p>
+  <p>Created at: <b><%= story.created_at.to_date %></b></p>
+</div>
