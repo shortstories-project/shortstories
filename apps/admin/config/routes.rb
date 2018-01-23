@@ -6,4 +6,4 @@ resources :sessions, only: [:new, :create] do
   end
 end
 
-resources :stories, only: [:index]
+resources :stories, only: [:index, :show]
