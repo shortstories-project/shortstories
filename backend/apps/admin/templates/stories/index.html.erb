@@ -17,7 +17,7 @@
       <% stories.each do |story| %>
         <tr>
           <th scope="row">
-            <%= story.id %>
+            <%= link_to story.id, routes.story_path(id: story.id) %>
           </th>
           <td>
             <%= story.text %>

@@ -6,4 +6,9 @@
   text:
   <p><%= story.text %></p>
   <p>Created at: <b><%= story.created_at.to_date %></b></p>
+
+  <div>
+    <%= cmd(story, 'approved', class_name: 'btn btn-success') %>
+    <%= cmd(story, 'declined', class_name: 'btn btn-danger') %>
+  </div>
 </div>
