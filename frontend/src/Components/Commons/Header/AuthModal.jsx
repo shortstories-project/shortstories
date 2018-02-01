@@ -73,6 +73,7 @@ class AuthModal extends Component<Props, State> {
         className="AuthModal"
         overlayClassName="OverlayAuthModal"
         onRequestClose={closeModal}
+        ariaHideApp={false}
         shouldCloseOnOverlayClick
       >
         <OAuthButton

@@ -4,14 +4,16 @@ import { routerMiddleware } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import logger from 'redux-logger'
 import createHistory from 'history/createBrowserHistory'
-import rootReducer from '../reducers'
+import apiMiddleware from '../Middlewares/api'
+import rootReducer from '../Reducers'
 
 export const history = createHistory()
 
 const middlewares = [
-  logger,
   thunk,
+  apiMiddleware,
   routerMiddleware(history),
+  logger,
 ]
 
 const configureStore = (initialState?: Object) => {

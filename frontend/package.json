@@ -14,6 +14,7 @@
     "bricks.js": "^1.8.0",
     "history": "^4.7.2",
     "humps": "^2.0.1",
+    "lodash": "^4.17.4",
     "normalizr": "^3.2.4",
     "react": "^16.2.0",
     "react-dom": "^16.2.0",

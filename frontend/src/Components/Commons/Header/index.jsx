@@ -1,7 +1,10 @@
 // @flow
 import React, { Component } from 'react'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
+
+import { loadUser, loadStories } from '../../../Actions/Commons'
 
 import AuthModal from './AuthModal'
 
@@ -55,6 +58,11 @@ class Header extends Component<Props, State> {
     type: undefined,
   }
 
+  componentDidMount() {
+    this.props.dispatch(loadUser())
+    this.props.dispatch(loadStories())
+  }
+
   openModal = (type) => {
     this.setState({
       isOpen: true,
@@ -85,4 +93,4 @@ class Header extends Component<Props, State> {
   }
 }
 
-export default Header
+export default connect()(Header)

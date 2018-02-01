@@ -1,33 +1,29 @@
-import * as api from '../Constants/api'
-import { fetchProfileTypes } from '../Constants/types'
+import { CALL_API, Schemas } from '../Middlewares/api'
 
-export const fetchProfile = () => async (dispatch) => {
-  try {
-    dispatch(fetchProfileTypes.pending)
-    const response = await fetch(api.routes.profile, {
-      ...api.withCookie,
-      method: 'get',
-    })
-    const body = await response.json()
-    if (response.ok) {
-      dispatch({
-        type: fetchProfileTypes.success,
-        payload: body,
-      })
-    } else {
-      dispatch({
-        type: fetchProfileTypes.failure,
-        payload: body,
-        error: true,
-      })
-    }
-  } catch (err) {
-    dispatch({
-      type: fetchProfileTypes.failure,
-      payload: err,
-      error: true,
-    })
-  }
-}
+export const USER_REQUEST = 'USER_REQUEST'
+export const USER_SUCCESS = 'USER_SUCCESS'
+export const USER_FAILURE = 'USER_FAILURE'
 
-export const a = 1
+const fetchUser = () => ({
+  [CALL_API]: {
+    types: [USER_REQUEST, USER_SUCCESS, USER_FAILURE],
+    endpoint: 'profile',
+    schema: Schemas.USERS,
+  },
+})
+
+export const loadUser = () => dispatch => dispatch(fetchUser())
+
+export const STORIES_REQUEST = 'STORIES_REQUEST'
+export const STORIES_SUCCESS = 'STORIES_SUCCESS'
+export const STORIES_FAILURE = 'STORIES_FAILURE'
+
+const fetchStories = () => ({
+  [CALL_API]: {
+    types: [STORIES_REQUEST, STORIES_SUCCESS, STORIES_FAILURE],
+    endpoint: 'stories',
+    schema: Schemas.STORIES,
+  },
+})
+
+export const loadStories = () => dispatch => dispatch(fetchStories())

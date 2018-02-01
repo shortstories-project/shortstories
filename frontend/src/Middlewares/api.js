@@ -1,43 +1,27 @@
+// @flow
 import { normalize, schema } from 'normalizr'
 import { camelizeKeys } from 'humps'
 
-import { API_URL } from '../Constants/api'
+const API_ROOT = 'http://localhost:3000/web_api/'
 
-const callApi = (endpoint, sch) => {
-  const fullURL = endpoint.indexOf(API_URL) === -1 ? API_URL + endpoint : endpoint
-  return fetch(fullURL).then(response =>
+const callApi = (endpoint, s) => {
+  const fullUrl = endpoint.indexOf(API_ROOT) === -1 ? API_ROOT + endpoint : endpoint
+  return fetch(fullUrl, { credentials: 'same-origin' }).then(response =>
     response.json().then((json) => {
       if (!response.ok) {
         return Promise.reject(json)
       }
-
       const camelizedJson = camelizeKeys(json)
-
-      return normalize(camelizedJson, sch)
+      return normalize(camelizedJson, s)
     }))
 }
 
-const userSchema = new schema.Entity(
-  'users',
-  {},
-  {
-    idAttribute: user => user.name.toLowerCase(),
-  },
-)
-
-const storySchema = new schema.Entity(
-  'stories',
-  {},
-  {
-    idAttribute: story => story.id,
-  },
-)
+const userSchema = new schema.Entity('users')
+const storySchema = new schema.Entity('stories')
 
 export const Schemas = {
-  USER: userSchema,
-  USER_ARRAY: [userSchema],
-  STORY: storySchema,
-  STORY_ARRAY: [storySchema],
+  USERS: { profile: userSchema },
+  STORIES: { stories: [storySchema] },
 }
 
 export const CALL_API = 'Call API'
@@ -69,7 +53,10 @@ export default store => next => (action) => {
   }
 
   const actionWith = (data) => {
-    const finalAction = Object.assign({}, action, data)
+    const finalAction = {
+      ...action,
+      ...data,
+    }
     delete finalAction[CALL_API]
     return finalAction
   }
