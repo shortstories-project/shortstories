@@ -1,14 +1,12 @@
 import React from 'react'
 import { Route } from 'react-router-dom'
-import { Header } from '../components'
-import Home from '../components/pages/Home'
-import CreateStory from '../components/pages/CreateStory'
+import Header from '../Components/Commons/Header'
 
 const Routes = () => (
   <div>
-    <Header />
-    <Route exact path="/" component={Home} />
-    <Route path="/create-story" component={CreateStory} />
+    <Route path="/" component={Header} />
+    {/* <Route exact path="/" component={Home} />
+    <Route path="/create-story" component={CreateStory} /> */}
   </div>
 )
 

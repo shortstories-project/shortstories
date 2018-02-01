@@ -3,7 +3,7 @@ import { render } from 'react-dom'
 import { injectGlobal } from 'styled-components'
 import globalStyles from './globalStyles'
 import Root from './Root'
-import configureStore, { history } from './store'
+import configureStore, { history } from './Store'
 import registerServiceWorker from './registerServiceWorker'
 
 injectGlobal`${globalStyles}` // eslint-disable-line

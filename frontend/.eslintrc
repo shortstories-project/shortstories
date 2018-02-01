@@ -7,7 +7,10 @@
     "react"
   ],
   "rules": {
-    "max-len": [1, 120, 2, {"ignoreComments": true}],
+    "max-len": [1, 120, 2, {
+      "ignoreComments": true,
+      "ignoreStrings": true
+    }],
     "semi": ["error", "never"],
     "no-param-reassign": ["error", { "props": false }],
     "react/jsx-filename-extension": 0,

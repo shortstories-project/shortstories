@@ -1,6 +1,6 @@
 import { push } from 'react-router-redux'
 
-import API_URL from '../config'
+import API_URL from '../Constants/api'
 
 export const FETCH_STORIES_REQUEST = 'FETCH_STORIES_REQUEST'
 export const FETCH_STORIES_SUCCESS = 'FETCH_STORIES_SUCCESS'
