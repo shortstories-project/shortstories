@@ -3,9 +3,15 @@
 <div class="container-fluid">
   <h1>Story № <%= story.id %></h1>
 
-  text:
-  <p><%= story.text %></p>
-  <p>Created at: <b><%= story.created_at.to_date %></b></p>
+  <p>
+    <b>text: </b><%= story.text %>
+  </p>
+  <p>
+    <b>state: </b><%= story.state %>
+  </p>
+  <p>
+    <b>Created at: </b><%= story.created_at.to_date %>
+  </p>
 
   <div>
     <%= cmd(story, 'approved', class_name: 'btn btn-success') %>
