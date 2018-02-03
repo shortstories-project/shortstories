@@ -1,11 +1,22 @@
 module WebApi::Controllers::Stories
   class Index
     include WebApi::Action
-  
-    def call(_)
-      repository = StoryRepository.new
+    include Hanami::Serializer::Action
 
-      status 200, JSON.generate({ stories: repository.all.map(&:to_h) })
+    def call(_)
+      collection = repo.all_approved.map { |s| serializer.new(s) }
+
+      send_json(collection)
+    end
+
+    private
+
+    def repo
+      StoryRepository.new
+    end
+
+    def scope
+      repo
     end
   end
 end
