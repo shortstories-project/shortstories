@@ -1,4 +1,12 @@
 GIT
+  remote: git://github.com/davydovanton/hanami-serializer.git
+  revision: d5f10ef199a73fd5816c01d8dd66d13115e00212
+  specs:
+    hanami-serializer (0.1.0)
+      dry-struct
+      dry-types
+
+GIT
   remote: git://github.com/samuelsimoes/hanami-webpack.git
   revision: 1019f8efc217c9ae7290e220bf2c9e05ddd603ae
   specs:
@@ -200,6 +208,7 @@ DEPENDENCIES
   dotenv (~> 2.0)
   hanami (~> 1.1)
   hanami-model (~> 1.1)
+  hanami-serializer!
   hanami-webpack!
   hashie
   json
