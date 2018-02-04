@@ -13,7 +13,15 @@ module WebApi
       end
 
       middleware.use OmniAuth::Builder do
-        provider :twitter, ENV['TWITTER_CLIENT_KEY'], ENV['TWITTER_CLIENT_SECRET']
+        provider(
+          :twitter,
+          ENV['TWITTER_CLIENT_KEY'],
+          ENV['TWITTER_CLIENT_SECRET'],
+          {
+            secure_image_url: 'true',
+            image_size: 'original'
+          }
+        )
       end
 
       # Define the root path of this application.

@@ -14,9 +14,5 @@ module WebApi::Controllers::Stories
     def repo
       StoryRepository.new
     end
-
-    def scope
-      repo
-    end
   end
 end
