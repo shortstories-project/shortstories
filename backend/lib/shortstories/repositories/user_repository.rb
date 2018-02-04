@@ -7,7 +7,8 @@ class UserRepository < Hanami::Repository
     attrs = {
       name: info[:name],
       email: info[:email],
-      twitter_id: twitter_id
+      twitter_id: twitter_id,
+      avatar: info[:image]
     }
 
     if user = users.where(twitter_id: twitter_id).first
