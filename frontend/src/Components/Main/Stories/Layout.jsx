@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import Bricks from 'bricks.js'
 import InfiniteScroll from 'react-infinite-scroller'
 
@@ -19,7 +19,7 @@ type Props = {
   useWindow?: boolean,
 }
 
-class Layout extends Component<Props> {
+class Layout extends PureComponent<Props> {
   static defaultProps = {
     className: '',
     pack: false,
@@ -114,7 +114,7 @@ class Layout extends Component<Props> {
       <InfiniteScroll
         element={element}
         hasMore={hasMore}
-        loadMore={loadMore}
+        loadMore={loadMore || Function.prototype}
         loader={loader}
         pageStart={pageStart}
         threshold={threshold}

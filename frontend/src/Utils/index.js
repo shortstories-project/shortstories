@@ -1,10 +1,6 @@
 // @flow
-import React from 'react'
-
-const conditionalRender = (
-  statement: boolean,
-  f: React.Element,
-  s = null,
-) => (statement ? f : s)
-
-export default conditionalRender
+export const conditionalRender = (statement, f, s) => (statement ? f : s)
+export function getCookie(name) {
+  const matches = document.cookie.match(new RegExp(`(?:^|; )${name.replace(/([.$?*|{}()[]\\\/\+^])/g, '\\$1')}=([^;]*)`))
+  return matches ? decodeURIComponent(matches[1]) : undefined
+}

@@ -6,7 +6,7 @@ import Modal from 'react-modal'
 import OAuthButton from './OAuthButton'
 import TwitterIcon from './TwitterIcon'
 
-import conditionalRender from '../../../Utils'
+import { conditionalRender } from '../../../Utils'
 
 const Button = styled.button`
   border: none;

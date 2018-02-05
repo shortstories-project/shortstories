@@ -2,9 +2,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import Textarea from '../common/Textarea'
-import Button from '../common/Button'
-import * as actions from '../../actions'
+import Textarea from '../Commons/Textarea'
+import Button from '../Commons/Button'
 
 const Wrapper = styled.main`
   margin: 0 auto;
@@ -37,7 +36,7 @@ class CreateStory extends Component<*, State> {
           onChange={e => this.setState({ story: e.target.value })}
         />
         <Button
-          onClick={() => this.props.dispatch(actions.createStory(story))}
+          onClick={() => {}}
           style={{ width: '200px', marginBottom: '30px', float: 'right' }}
         >
           <p>Publish your story</p>

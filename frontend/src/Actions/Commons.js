@@ -1,3 +1,4 @@
+// @flow
 import { CALL_API, Schemas } from '../Middlewares/api'
 
 export const USER_REQUEST = 'USER_REQUEST'

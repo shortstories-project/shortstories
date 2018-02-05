@@ -4,9 +4,9 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
-import { loadUser, loadStories } from '../../../Actions/Commons'
-
 import AuthModal from './AuthModal'
+
+import { conditionalRender } from '../../../Utils'
 
 const StyledHeader = styled.header`
   background-color: #fff;
@@ -45,22 +45,32 @@ const AuthButton = styled.button`
   color: ${props => (props.blue ? '#50abf1' : '#000')};
 `
 
-type Props = {}
+const UserBlock = styled.div`
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  > img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+  }
+`
+
+type Props = {
+  user: Object
+}
 
 type State = {
-  isOpenModal: boolean,
-  type?: string
+  isOpen: boolean,
+  type?: string,
 }
 
 class Header extends Component<Props, State> {
   state = {
     isOpen: false,
     type: undefined,
-  }
-
-  componentDidMount() {
-    this.props.dispatch(loadUser())
-    this.props.dispatch(loadStories())
   }
 
   openModal = (type) => {
@@ -72,25 +82,29 @@ class Header extends Component<Props, State> {
 
   render() {
     const { isOpen, type } = this.state
+    const { user } = this.props
     return (
       <StyledHeader>
         <Logo to="/">Short stories</Logo>
-        <ButtonsWrapper>
-          <AuthButton onClick={() => this.openModal('Sign Up')}>
-            Sign Up
-          </AuthButton>
-          <AuthButton onClick={() => this.openModal('Log In')}>
-            Log In
-          </AuthButton>
-        </ButtonsWrapper>
-        <AuthModal
-          isOpen={isOpen}
-          closeModal={() => this.setState({ isOpen: false })}
-          typeFromProps={type}
-        />
+        {conditionalRender(
+          (user.name && user.avatar),
+          <UserBlock>
+            <img src={user.avatar} alt="userpic" />
+            <p>{user.name}</p>
+          </UserBlock>,
+          <ButtonsWrapper>
+            <AuthButton onClick={() => this.openModal('Sign Up')}>Sign Up</AuthButton>
+            <AuthButton onClick={() => this.openModal('Log In')}>Log In</AuthButton>
+          </ButtonsWrapper>,
+        )}
+        <AuthModal isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} typeFromProps={type} />
       </StyledHeader>
     )
   }
 }
 
-export default connect()(Header)
+const mapStateToProps = ({ entities: { users } }) => ({
+  user: Object.values(users)[0] || {},
+})
+
+export default connect(mapStateToProps)(Header)

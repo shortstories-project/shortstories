@@ -8,8 +8,6 @@
 [libs]
 flow/
 
-[lints]
-
 [options]
 emoji=true
 
@@ -28,4 +26,5 @@ suppress_comment=\\(.\\|\n\\)*\\$FlowExpectedError
 
 unsafe.enable_getters_and_setters=true
 
-[strict]
+[version]
+^0.61.0
