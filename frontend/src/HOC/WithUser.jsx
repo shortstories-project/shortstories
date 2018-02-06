@@ -4,7 +4,8 @@ import { connect } from 'react-redux'
 import { loadUser } from '../Actions/Commons'
 
 type Props = {
-  loadUser: () => {}
+  loadUser: () => {},
+  users: Array,
 }
 
 export default function withUser(WrappedComponent) {
@@ -22,5 +23,9 @@ export default function withUser(WrappedComponent) {
     loadUser: () => dispatch(loadUser()),
   })
 
-  return connect(null, mapDispatchToProps)(ComponentWithUser)
+  const mapStateToProps = ({ entities: { users } }) => ({
+    users: Object.values(users),
+  })
+
+  return connect(mapStateToProps, mapDispatchToProps)(ComponentWithUser)
 }

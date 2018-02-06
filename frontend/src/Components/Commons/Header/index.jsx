@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { Link } from 'react-router-dom'
 
 import AuthModal from './AuthModal'
+import DropdownMenu from './DropdownMenu'
 
 import { conditionalRender } from '../../../Utils'
 
@@ -45,19 +46,6 @@ const AuthButton = styled.button`
   color: ${props => (props.blue ? '#50abf1' : '#000')};
 `
 
-const UserBlock = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  > img {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-right: 10px;
-  }
-`
-
 type Props = {
   user: Object
 }
@@ -82,16 +70,13 @@ class Header extends Component<Props, State> {
 
   render() {
     const { isOpen, type } = this.state
-    const { user } = this.props
+    const { user: { name, avatar } } = this.props
     return (
       <StyledHeader>
         <Logo to="/">Short stories</Logo>
         {conditionalRender(
-          (user.name && user.avatar),
-          <UserBlock>
-            <img src={user.avatar} alt="userpic" />
-            <p>{user.name}</p>
-          </UserBlock>,
+          (name && avatar),
+          <DropdownMenu name={name} avatar={avatar} />,
           <ButtonsWrapper>
             <AuthButton onClick={() => this.openModal('Sign Up')}>Sign Up</AuthButton>
             <AuthButton onClick={() => this.openModal('Log In')}>Log In</AuthButton>
