@@ -1,0 +1,25 @@
+<div class="container-fluid">
+  <h1><%= table_name %></h1>
+
+  <table class="table">
+    <caption>List of <%= table_name.downcase %></caption>
+    <thead>
+      <tr>
+        <% attributes.each do |attribute| %>
+          <th scope="col"><%= attribute %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% collection.each do |entity| %>
+        <tr>
+          <% attributes.each do |attribute| %>
+            <td scope="col">
+              <%= entity.public_send(attribute) %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

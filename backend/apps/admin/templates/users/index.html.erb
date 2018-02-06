@@ -1,0 +1,8 @@
+<%= render partial: 'shared/breadcrumbs' %>
+
+<%= render partial: 'shared/table', locals: {
+  collection: users,
+  table_name: 'Users',
+  attributes: %i[id name twitter_id created_at updated_at]
+} %>
+
