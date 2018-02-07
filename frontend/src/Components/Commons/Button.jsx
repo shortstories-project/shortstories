@@ -27,12 +27,12 @@ const StyledButton = styled.button`
 type Props = {
   children: any,
   onClick?: Function,
-  style?: Object,
+  extStyle?: Object,
 }
 
-const Button = ({ children, onClick, style }: Props) => (
+const Button = ({ children, onClick, extStyle }: Props) => (
   <StyledButton
-    style={style}
+    style={extStyle}
     onClick={onClick}
   >
     {children}

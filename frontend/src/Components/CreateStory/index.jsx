@@ -2,11 +2,18 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+
 import Textarea from '../Commons/Textarea'
 import Button from '../Commons/Button'
+import Preloader from '../Commons/Preloader'
+
+import { createStory } from '../../Actions/Commons'
+
+import { conditionalRender } from '../../Utils'
 
 const Wrapper = styled.main`
   margin: 0 auto;
+  margin-top: 24px;
   width: 90%;
   max-width: 600px;
 `
@@ -15,17 +22,23 @@ const Count = styled.p`
   text-align: right;
 `
 
+type Props = {
+  dispatch: Function,
+  isFetching?: boolean,
+}
+
 type State = {
   story: string,
 }
 
-class CreateStory extends Component<*, State> {
+class CreateStory extends Component<*, Props, State> {
   state = {
     story: '',
   }
 
   render() {
     const { story } = this.state
+    const { isFetching, dispatch } = this.props
     return (
       <Wrapper>
         <Count>{3000 - story.length}</Count>
@@ -36,14 +49,20 @@ class CreateStory extends Component<*, State> {
           onChange={e => this.setState({ story: e.target.value })}
         />
         <Button
-          onClick={() => {}}
-          style={{ width: '200px', marginBottom: '30px', float: 'right' }}
+          onClick={() => {
+            dispatch(createStory(story))
+          }}
+          extStyle={{ width: '200px', marginBottom: '30px', float: 'right' }}
         >
-          <p>Publish your story</p>
+          {conditionalRender(isFetching, <Preloader />, <p>Publish your story</p>)}
         </Button>
       </Wrapper>
     )
   }
 }
 
-export default connect()(CreateStory)
+const mapStateToProps = ({ UI }) => ({
+  isFetching: UI.createStoryFetching,
+})
+
+export default connect(mapStateToProps)(CreateStory)

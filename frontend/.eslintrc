@@ -24,6 +24,8 @@
     "window": true,
     "fetch": true,
     "navigator": true,
-    "Element": true
+    "Element": true,
+    "Class": true,
+    "React$Component": true
   }
 }

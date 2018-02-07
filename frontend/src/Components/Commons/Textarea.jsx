@@ -4,13 +4,14 @@ import styled from 'styled-components'
 
 const StyledTextarea = styled.textarea`
   margin-bottom: 15px;
-  width: 548px;
+  width: 600px;
+  box-sizing: border-box;
   height: 860px;
   padding: 25px;
   font-size: 1rem;
   font-family: 'PT Sans', sans-serif;
   resize: none;
-  border: 2px solid #eee;
+  border: 3px solid #eee;
   &:focus {
     outline: 0;
   }

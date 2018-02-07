@@ -1,8 +1,10 @@
 // @flow
 import React, { Component } from 'react'
+import { compose } from 'redux'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { push } from 'react-router-redux'
+import onClickOutside from 'react-onclickoutside'
 
 import { conditionalRender } from '../../../Utils'
 
@@ -75,22 +77,32 @@ const Triangle = styled.div`
 type Props = {
   avatar: string,
   name: string,
-  dispatch: () => {},
+  dispatch: Function,
 }
 
 type State = {
   isOpen: boolean,
 }
 
-class DropdownMenu extends Component<Props, State> {
+class DropdownMenu extends Component<any, Props, State> {
   state = {
     isOpen: false,
+  }
+
+  handleClickOutside = () => {
+    this.closeDropdown()
   }
 
   toggle = () => {
     this.setState(prevState => ({
       isOpen: !prevState.isOpen,
     }))
+  }
+
+  closeDropdown = () => {
+    this.setState({
+      isOpen: false,
+    })
   }
 
   render() {
@@ -106,8 +118,21 @@ class DropdownMenu extends Component<Props, State> {
           isOpen,
           <Wrapper>
             <InnerWrapper>
-              <Item onClick={() => dispatch(push('/profile'))}>Profile</Item>
-              <Item>Logout</Item>
+              <Item
+                onClick={() => {
+                  dispatch(push('/profile'))
+                  this.closeDropdown()
+                }}
+              >
+                Profile
+              </Item>
+              <Item
+                onClick={() => {
+                  this.closeDropdown()
+                }}
+              >
+                Logout
+              </Item>
             </InnerWrapper>
             <Triangle>
               <svg width="24" height="24">
@@ -121,4 +146,4 @@ class DropdownMenu extends Component<Props, State> {
   }
 }
 
-export default connect()(DropdownMenu)
+export default compose(connect(), onClickOutside)(DropdownMenu)

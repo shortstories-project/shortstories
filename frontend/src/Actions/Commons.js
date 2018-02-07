@@ -1,5 +1,6 @@
 // @flow
 import { CALL_API, Schemas } from '../Middlewares/api'
+import { API_URL } from '../Constants/api'
 
 export const USER_REQUEST = 'USER_REQUEST'
 export const USER_SUCCESS = 'USER_SUCCESS'
@@ -13,7 +14,7 @@ const fetchUser = () => ({
   },
 })
 
-export const loadUser = () => dispatch => dispatch(fetchUser())
+export const loadUser = () => (dispatch: Function) => dispatch(fetchUser())
 
 export const STORIES_REQUEST = 'STORIES_REQUEST'
 export const STORIES_SUCCESS = 'STORIES_SUCCESS'
@@ -27,4 +28,41 @@ const fetchStories = () => ({
   },
 })
 
-export const loadStories = () => dispatch => dispatch(fetchStories())
+export const loadStories = () => (dispatch: Function) => dispatch(fetchStories())
+
+export const CREATE_STORY_REQUEST = 'CREATE_STORY_REQUEST'
+export const CREATE_STORY_SUCCESS = 'CREATE_STORY_SUCCESS'
+export const CREATE_STORY_FAILURE = 'CREATE_STORY_FAILURE'
+
+export const createStory = (story: string) => async (dispatch: Function) => {
+  try {
+    dispatch({ type: CREATE_STORY_REQUEST })
+    const url = `${API_URL}/stories`
+    const response = await fetch(url, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json; charset=utf-8',
+      },
+      body: JSON.stringify({ text: story }),
+    })
+    const body = await response.json()
+    if (response.ok) {
+      dispatch({
+        type: CREATE_STORY_SUCCESS,
+        payload: body,
+      })
+    } else {
+      dispatch({
+        type: CREATE_STORY_FAILURE,
+        error: true,
+        payload: body,
+      })
+    }
+  } catch (err) {
+    dispatch({
+      type: CREATE_STORY_FAILURE,
+      error: true,
+      payload: err,
+    })
+  }
+}

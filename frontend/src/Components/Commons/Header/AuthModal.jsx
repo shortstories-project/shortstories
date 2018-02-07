@@ -15,7 +15,7 @@ const Button = styled.button`
   background: transparent;
   font-family: 'PT Sans', sans-serif;
   font-weight: bold;
-  color: ${props => props.color};
+  color: ${(props: Object) => props.color};
 `
 
 const TypeDescription = styled.p`
@@ -28,7 +28,7 @@ const TypeDescription = styled.p`
 
 type Props = {
   isOpen: boolean,
-  closeModal: () => {},
+  closeModal: Function,
   typeFromProps?: string
 }
 
@@ -36,14 +36,14 @@ type State = {
   type: string
 }
 
-class AuthModal extends Component<Props, State> {
+class AuthModal extends Component<any, Props, State> {
   state = {
     type: 'Sign up',
   }
 
-  componentWillReceiveProps({ typeFromProps }) {
+  componentWillReceiveProps({ typeFromProps }: Props) {
     if (typeFromProps !== this.props.typeFromProps) {
-      this.changeType(typeFromProps)
+      this.changeType(typeFromProps || 'Sign up')
     }
   }
 

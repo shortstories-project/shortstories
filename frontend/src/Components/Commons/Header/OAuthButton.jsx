@@ -24,8 +24,8 @@ const Button = styled.button`
 `
 
 type Props = {
-  Icon?: React.Element,
-  onClick: () => {},
+  Icon: Class<React$Component<*, *, *>>,
+  onClick: Function,
   title: string,
   bgColor: string,
 }

@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom'
 
 import AuthModal from './AuthModal'
 import DropdownMenu from './DropdownMenu'
+import Preloader from '../Preloader'
 
 import { conditionalRender } from '../../../Utils'
 
@@ -47,7 +48,11 @@ const AuthButton = styled.button`
 `
 
 type Props = {
-  user: Object
+  user: {
+    name: string,
+    avatar: string,
+  },
+  isFetching?: boolean,
 }
 
 type State = {
@@ -55,7 +60,7 @@ type State = {
   type?: string,
 }
 
-class Header extends Component<Props, State> {
+class Header extends Component<*, Props, State> {
   state = {
     isOpen: false,
     type: undefined,
@@ -70,17 +75,21 @@ class Header extends Component<Props, State> {
 
   render() {
     const { isOpen, type } = this.state
-    const { user: { name, avatar } } = this.props
+    const { user: { name, avatar }, isFetching } = this.props
     return (
       <StyledHeader>
         <Logo to="/">Short stories</Logo>
         {conditionalRender(
-          (name && avatar),
-          <DropdownMenu name={name} avatar={avatar} />,
-          <ButtonsWrapper>
-            <AuthButton onClick={() => this.openModal('Sign Up')}>Sign Up</AuthButton>
-            <AuthButton onClick={() => this.openModal('Log In')}>Log In</AuthButton>
-          </ButtonsWrapper>,
+          isFetching,
+          <Preloader />,
+          conditionalRender(
+            (name && avatar),
+            <DropdownMenu name={name} avatar={avatar} />,
+            <ButtonsWrapper>
+              <AuthButton onClick={() => this.openModal('Sign Up')}>Sign Up</AuthButton>
+              <AuthButton onClick={() => this.openModal('Log In')}>Log In</AuthButton>
+            </ButtonsWrapper>,
+          ),
         )}
         <AuthModal isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} typeFromProps={type} />
       </StyledHeader>
@@ -88,8 +97,9 @@ class Header extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ entities: { users } }) => ({
+const mapStateToProps = ({ entities: { users }, UI }) => ({
   user: Object.values(users)[0] || {},
+  isFetching: UI.userFetching,
 })
 
 export default connect(mapStateToProps)(Header)

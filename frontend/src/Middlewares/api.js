@@ -4,7 +4,7 @@ import { camelizeKeys } from 'humps'
 
 const API_ROOT = 'http://localhost:3000/web_api/'
 
-const callApi = (endpoint, s) => {
+const callApi = (endpoint: string, s: Object) => {
   const fullUrl = endpoint.indexOf(API_ROOT) === -1 ? API_ROOT + endpoint : endpoint
   return fetch(fullUrl, { credentials: 'same-origin' }).then(response =>
     response.json().then((json) => {
@@ -26,7 +26,7 @@ export const Schemas = {
 
 export const CALL_API = 'Call API'
 
-export default store => next => (action) => {
+export default (store: Object) => (next: Function) => (action: Object) => {
   const callAPI = action[CALL_API]
   if (typeof callAPI === 'undefined') {
     return next(action)

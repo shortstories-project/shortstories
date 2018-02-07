@@ -4,6 +4,10 @@ import styled from 'styled-components'
 import Input from '../Commons/Input'
 import Button from '../Commons/Button'
 
+const H1 = styled.h1`
+  margin: 24px 0;
+`
+
 const Wrapper = styled.main`
   padding: 0 5%;
 `
@@ -32,7 +36,7 @@ const Profile = ({ users }: Props) => {
   const name = hasUser ? users[0].name : ''
   return (
     <Wrapper>
-      <h1>Profile</h1>
+      <H1>Profile</H1>
       <Input
         label="Name"
         value={name}
