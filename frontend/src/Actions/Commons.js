@@ -67,3 +67,16 @@ export const createStory = (story: string) => async (dispatch: Function) => {
     })
   }
 }
+
+export const SHOW_AUTH_MODAL = 'SHOW_AUTH_MODAL'
+export const HIDE_AUTH_MODAL = 'HIDE_AUTH_MODAL'
+
+export const showAuthModal = () => ({
+  type: SHOW_AUTH_MODAL,
+  payload: true,
+})
+
+export const hideAuthModal = () => ({
+  type: HIDE_AUTH_MODAL,
+  payload: false,
+})

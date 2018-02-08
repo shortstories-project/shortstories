@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const StyledTextarea = styled.textarea`
   margin-bottom: 15px;
-  width: 600px;
+  width: 640px;
   box-sizing: border-box;
   height: 860px;
   padding: 25px;

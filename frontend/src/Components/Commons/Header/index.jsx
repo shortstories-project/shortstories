@@ -8,6 +8,8 @@ import AuthModal from './AuthModal'
 import DropdownMenu from './DropdownMenu'
 import Preloader from '../Preloader'
 
+import * as actions from '../../../Actions/Commons'
+
 import { conditionalRender } from '../../../Utils'
 
 const StyledHeader = styled.header`
@@ -18,6 +20,7 @@ const StyledHeader = styled.header`
   height: 80px;
   padding: 0 5%;
   box-shadow: 0 2px 4px rgba(57, 63, 72, 0.1);
+  min-width: 640px;
 `
 
 const Logo = styled(Link)`
@@ -52,30 +55,34 @@ type Props = {
     name: string,
     avatar: string,
   },
+  showModal: Function,
+  hideModal: Function,
   isFetching: boolean,
+  isShowModal: boolean,
 }
 
 type State = {
-  isOpen: boolean,
   type?: string,
 }
 
 class Header extends Component<*, Props, State> {
   state = {
-    isOpen: false,
     type: undefined,
   }
 
   openModal = (type) => {
-    this.setState({
-      isOpen: true,
-      type,
-    })
+    const { showModal } = this.props
+    this.setState({ type }, showModal)
   }
 
   render() {
-    const { isOpen, type } = this.state
-    const { user: { name, avatar }, isFetching } = this.props
+    const { type } = this.state
+    const {
+      user: { name, avatar },
+      isFetching,
+      hideModal,
+      isShowModal,
+    } = this.props
     return (
       <StyledHeader>
         <Logo to="/">Short stories</Logo>
@@ -91,15 +98,21 @@ class Header extends Component<*, Props, State> {
             </ButtonsWrapper>,
           ),
         )}
-        <AuthModal isOpen={isOpen} closeModal={() => this.setState({ isOpen: false })} typeFromProps={type} />
+        <AuthModal isOpen={isShowModal} closeModal={hideModal} typeFromProps={type} />
       </StyledHeader>
     )
   }
 }
 
-const mapStateToProps = ({ entities: { users }, UI }) => ({
-  user: Object.values(users)[0] || {},
-  isFetching: UI.userFetching,
+const mapDispatchToProps = dispatch => ({
+  showModal: () => dispatch(actions.showAuthModal()),
+  hideModal: () => dispatch(actions.hideAuthModal()),
 })
 
-export default connect(mapStateToProps)(Header)
+const mapStateToProps = ({ entities: { users }, UI: { userFetching, isShowModal } }) => ({
+  user: Object.values(users)[0] || {},
+  isFetching: userFetching,
+  isShowModal,
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

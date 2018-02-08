@@ -16,7 +16,8 @@ const Wrapper = styled.main`
   margin-top: 24px;
   margin-bottom: 24px;
   width: 90%;
-  max-width: 600px;
+  width: 640px;
+  min-width: 640px;
 `
 
 const Count = styled.p`

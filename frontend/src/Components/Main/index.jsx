@@ -8,6 +8,8 @@ import Stories from './Stories'
 import Button from '../Commons/Button'
 import Preloader from '../Commons/Preloader'
 
+import * as actions from '../../Actions/Commons'
+
 import { conditionalRender } from '../../Utils'
 
 const ButtonWrapper = styled.div`
@@ -25,31 +27,49 @@ const PreloadersWrapper = styled.div`
 
 type Props = {
   stories: Object[],
-  dispatch: (func: Function) => {},
+  toCreateStory: Function,
+  showModal: Function,
   isFetching: boolean,
+  users: Object[],
 }
 
-const Main = ({ stories, dispatch, isFetching }: Props) => (
+const Main = ({
+  stories,
+  toCreateStory,
+  isFetching,
+  users,
+  showModal,
+}: Props) => (
   <React.Fragment>
     <ButtonWrapper>
-      <Button onClick={() => dispatch(push('create-story'))}>Create story</Button>
+      <Button
+        onClick={() => {
+          if (users.length) toCreateStory()
+          else showModal()
+        }}
+      >
+        Create story
+      </Button>
     </ButtonWrapper>
-    <div>
-      {conditionalRender(
-        isFetching,
-        <PreloadersWrapper>
-          <Preloader />
-          <Preloader />
-          <Preloader />
-        </PreloadersWrapper>,
-        <Stories stories={stories} />,
-      )}
-    </div>
+    {conditionalRender(
+      isFetching,
+      <PreloadersWrapper>
+        <Preloader />
+        <Preloader />
+        <Preloader />
+      </PreloadersWrapper>,
+      <Stories stories={stories} />,
+    )}
   </React.Fragment>
 )
+
+const mapDispatchToProps = dispatch => ({
+  showModal: () => dispatch(actions.showAuthModal()),
+  toCreateStory: () => dispatch(push('create-story')),
+})
 
 const mapStateToProps = ({ UI }) => ({
   isFetching: UI.storyFetching,
 })
 
-export default connect(mapStateToProps)(Main)
+export default connect(mapStateToProps, mapDispatchToProps)(Main)
