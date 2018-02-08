@@ -16,6 +16,7 @@ const pulseAndRotate = keyframes`
 const Wrapper = styled.div`
   font-size: 1rem;
   animation: ${pulseAndRotate} 1.5s linear infinite;
+  width: 30px;
 `
 
 const Preloader = () => (

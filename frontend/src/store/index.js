@@ -9,7 +9,7 @@ import rootReducer from '../Reducers'
 
 export const history = createHistory()
 
-const middlewares = [
+const middlewares: Array<Function> = [
   thunk,
   apiMiddleware,
   routerMiddleware(history),

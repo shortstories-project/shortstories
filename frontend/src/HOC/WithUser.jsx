@@ -1,15 +1,22 @@
+// @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { loadUser } from '../Actions/Commons'
 
-type Props = {
-  loadUser: Function,
-  users: Array,
+type StateToPropsTypes = {
+  entities: {
+    users: Object,
+  },
 }
 
-export default function withUser(WrappedComponent) {
-  class ComponentWithUser extends Component<Props> {
+type Props = {
+  loadUser: Function,
+  users: Object[],
+}
+
+export default function withUser(WrappedComponent: Class<React$Component<*, *, *>>) {
+  class ComponentWithUser extends Component<any, Props, any> {
     componentDidMount() {
       const { users } = this.props
       if (!users.length) this.props.loadUser()
@@ -24,7 +31,7 @@ export default function withUser(WrappedComponent) {
     loadUser: () => dispatch(loadUser()),
   })
 
-  const mapStateToProps = ({ entities: { users } }) => ({
+  const mapStateToProps = ({ entities: { users } }: StateToPropsTypes) => ({
     users: Object.values(users),
   })
 

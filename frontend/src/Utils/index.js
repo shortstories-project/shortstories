@@ -1,8 +1,8 @@
 // @flow
 export const conditionalRender = (
   statement: boolean,
-  f: Class<React$Component<*, *, *>>,
-  s?: Class<React$Component<*, *, *>>,
+  f: any,
+  s?: any,
 ) => (statement ? f : s)
 
 export function getCookie(name: string) {

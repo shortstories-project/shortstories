@@ -26,6 +26,9 @@
     "navigator": true,
     "Element": true,
     "Class": true,
-    "React$Component": true
+    "React$Component": true,
+    "React$Element": true,
+    "SyntheticInputEvent": true,
+    "HTMLInputElement": true
   }
 }

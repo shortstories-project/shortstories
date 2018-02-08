@@ -6,6 +6,9 @@ import { push } from 'react-router-redux'
 
 import Stories from './Stories'
 import Button from '../Commons/Button'
+import Preloader from '../Commons/Preloader'
+
+import { conditionalRender } from '../../Utils'
 
 const ButtonWrapper = styled.div`
   width: 100%;
@@ -14,20 +17,39 @@ const ButtonWrapper = styled.div`
   margin-top: 24px;
 `
 
+const PreloadersWrapper = styled.div`
+  display: flex;
+  width: 100px;
+  margin: 24px auto;
+`
+
 type Props = {
   stories: Object[],
-  dispatch: (func: Function) => {}
+  dispatch: (func: Function) => {},
+  isFetching: boolean,
 }
 
-const Main = ({ stories, dispatch }: Props) => (
+const Main = ({ stories, dispatch, isFetching }: Props) => (
   <React.Fragment>
     <ButtonWrapper>
-      <Button onClick={() => dispatch(push('create-story'))}>
-        Create story
-      </Button>
+      <Button onClick={() => dispatch(push('create-story'))}>Create story</Button>
     </ButtonWrapper>
-    <Stories stories={stories} />
+    <div>
+      {conditionalRender(
+        isFetching,
+        <PreloadersWrapper>
+          <Preloader />
+          <Preloader />
+          <Preloader />
+        </PreloadersWrapper>,
+        <Stories stories={stories} />,
+      )}
+    </div>
   </React.Fragment>
 )
 
-export default connect()(Main)
+const mapStateToProps = ({ UI }) => ({
+  isFetching: UI.storyFetching,
+})
+
+export default connect(mapStateToProps)(Main)

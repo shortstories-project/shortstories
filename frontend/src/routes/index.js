@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react'
+// @flow
+import * as React from 'react'
 import { compose } from 'redux'
 import { Route, Switch } from 'react-router-dom'
 
@@ -11,14 +12,14 @@ import WithUser from '../HOC/WithUser'
 import WithStories from '../HOC/WithStories'
 
 const Routes = () => (
-  <Fragment>
+  <React.Fragment>
     <Header />
     <Switch>
       <Route exact path="/" component={compose(WithUser, WithStories)(Main)} />
       <Route path="/create-story" component={WithUser(CreateStory)} />
       <Route path="/profile" component={WithUser(Profile)} />
     </Switch>
-  </Fragment>
+  </React.Fragment>
 )
 
 export default Routes

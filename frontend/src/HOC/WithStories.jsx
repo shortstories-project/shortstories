@@ -1,17 +1,24 @@
+// @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import { loadStories } from '../Actions/Commons'
 
-type Props = {
-  loadStories: () => {},
-  stories: Array
+type StateToPropsTypes = {
+  entities: {
+    stories: Object,
+  },
 }
 
-export default function withStories(WrappedComponent) {
-  class ComponentWithStories extends Component<Props> {
+type Props = {
+  loadStories: () => {},
+  stories: Object[],
+}
+
+export default function withStories(WrappedComponent: Class<React$Component<*, *, *>>) {
+  class ComponentWithStories extends Component<any, Props, any> {
     componentDidMount() {
-      this.props.loadStories()
+      if (!this.props.stories.length) this.props.loadStories()
     }
 
     render() {
@@ -19,11 +26,11 @@ export default function withStories(WrappedComponent) {
     }
   }
 
-  const mapDispatchToProps = dispatch => ({
+  const mapDispatchToProps = (dispatch: (func: Function) => {}) => ({
     loadStories: () => dispatch(loadStories()),
   })
 
-  const mapStateToProps = ({ entities: { stories } }) => ({
+  const mapStateToProps = ({ entities: { stories } }: StateToPropsTypes) => ({
     stories: Object.values(stories),
   })
 

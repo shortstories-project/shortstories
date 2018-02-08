@@ -52,7 +52,7 @@ type Props = {
     name: string,
     avatar: string,
   },
-  isFetching?: boolean,
+  isFetching: boolean,
 }
 
 type State = {
@@ -83,7 +83,7 @@ class Header extends Component<*, Props, State> {
           isFetching,
           <Preloader />,
           conditionalRender(
-            (name && avatar),
+            Boolean(name && avatar),
             <DropdownMenu name={name} avatar={avatar} />,
             <ButtonsWrapper>
               <AuthButton onClick={() => this.openModal('Sign Up')}>Sign Up</AuthButton>

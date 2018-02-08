@@ -24,8 +24,8 @@ const Count = styled.p`
 `
 
 type Props = {
-  dispatch: Function,
-  isFetching?: boolean,
+  dispatch: (func: Function) => {},
+  isFetching: boolean,
 }
 
 type State = {
@@ -35,6 +35,10 @@ type State = {
 class CreateStory extends Component<*, Props, State> {
   state = {
     story: '',
+  }
+
+  writeStory = (e: SyntheticInputEvent) => {
+    this.setState({ story: e.target.value })
   }
 
   render() {
@@ -47,14 +51,14 @@ class CreateStory extends Component<*, Props, State> {
           placeholder="Write your story here..."
           maxLength={3000}
           value={story}
-          onChange={e => this.setState({ story: e.target.value })}
+          onChange={this.writeStory}
         />
         <Button
           onClick={() => {
             dispatch(createStory(story))
           }}
         >
-          {conditionalRender(isFetching, <Preloader />, <p>Publish your story</p>)}
+          {conditionalRender(isFetching, <Preloader />, 'Publish your story')}
         </Button>
       </Wrapper>
     )
