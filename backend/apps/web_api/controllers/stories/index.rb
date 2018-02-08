@@ -6,7 +6,7 @@ module WebApi::Controllers::Stories
     def call(_)
       collection = repo.all_approved.map { |s| serializer.new(s) }
 
-      send_json(collection)
+      send_json(stories: collection)
     end
 
     private
