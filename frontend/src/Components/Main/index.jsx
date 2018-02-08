@@ -1,4 +1,5 @@
-import React, { Fragment } from 'react'
+// @flow
+import * as React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
@@ -14,22 +15,19 @@ const ButtonWrapper = styled.div`
 `
 
 type Props = {
-  stories: Array,
-  dispatch: () => {}
+  stories: Object[],
+  dispatch: (func: Function) => {}
 }
 
 const Main = ({ stories, dispatch }: Props) => (
-  <Fragment>
-    <Stories stories={stories} />
+  <React.Fragment>
     <ButtonWrapper>
-      <Button
-        extStyle={{ width: '180px' }}
-        onClick={() => dispatch(push('create-story'))}
-      >
+      <Button onClick={() => dispatch(push('create-story'))}>
         Create story
       </Button>
     </ButtonWrapper>
-  </Fragment>
+    <Stories stories={stories} />
+  </React.Fragment>
 )
 
 export default connect()(Main)

@@ -14,6 +14,7 @@ import { conditionalRender } from '../../Utils'
 const Wrapper = styled.main`
   margin: 0 auto;
   margin-top: 24px;
+  margin-bottom: 24px;
   width: 90%;
   max-width: 600px;
 `
@@ -52,7 +53,6 @@ class CreateStory extends Component<*, Props, State> {
           onClick={() => {
             dispatch(createStory(story))
           }}
-          extStyle={{ width: '200px', marginBottom: '30px', float: 'right' }}
         >
           {conditionalRender(isFetching, <Preloader />, <p>Publish your story</p>)}
         </Button>

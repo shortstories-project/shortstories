@@ -4,8 +4,6 @@ import styled from 'styled-components'
 
 const StyledButton = styled.button`
   outline: none;
-  height: 40px;
-  width: 100px;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
@@ -16,26 +14,25 @@ const StyledButton = styled.button`
   cursor: pointer;
   transition: all 0.25s ease;
   text-transform: uppercase;
+  > p {
+    padding: 8px;
+    margin: 0;
+  }
   &:hover {
     color: white;
     background: black;
-    border: 2px solid black;
+    border: 3px solid black;
   }
-  ${(props: Object) => ({ ...props.style })}
 `
 
 type Props = {
   children: any,
   onClick?: Function,
-  extStyle?: Object,
 }
 
-const Button = ({ children, onClick, extStyle }: Props) => (
-  <StyledButton
-    style={extStyle}
-    onClick={onClick}
-  >
-    {children}
+const Button = ({ children, onClick }: Props) => (
+  <StyledButton onClick={onClick}>
+    <p>{children}</p>
   </StyledButton>
 )
 

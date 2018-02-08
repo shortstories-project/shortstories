@@ -1,6 +1,11 @@
 import React, { PureComponent } from 'react'
+import styled from 'styled-components'
 import Bricks from 'bricks.js'
 import InfiniteScroll from 'react-infinite-scroller'
+
+const Wrapper = styled.div`
+  margin: 24px auto;
+`
 
 type Props = {
   children: Array,
@@ -120,9 +125,9 @@ class Layout extends PureComponent<Props> {
         threshold={threshold}
         useWindow={useWindow}
       >
-        <div ref={this.setContainerRef} className={className} style={style}>
+        <Wrapper innerRef={this.setContainerRef} className={className} style={style}>
           {children}
-        </div>
+        </Wrapper>
       </InfiniteScroll>
     )
   }

@@ -1,5 +1,8 @@
+// @flow
 import React from 'react'
 import styled from 'styled-components'
+
+import { getRandomInt } from '../../../Utils'
 
 const StyledStory = styled.div`
   padding: 0;
@@ -10,23 +13,22 @@ const StyledStory = styled.div`
   color: #555;
   border: 1px solid #eee;
   box-sizing: border-box;
-  cursor: ${props => (props.long ? 'pointer' : 'default')};
-`
-
-const OpenButton = styled.span`
-  font-weight: bold;
-  font-size: 1.5rem;
+  hyphens: auto;
+  word-wrap: break-word;
 `
 
 type Props = {
-  story: string
+  story: string,
 }
 
-const Story = ({ story }: Props) => (
-  <StyledStory long={story.length > 1500}>
-    {`${story.slice(0, 1500)}...`}
-    <OpenButton>Open full story</OpenButton>
-  </StyledStory>
-)
+const Story = ({ story }: Props) => {
+  const storyLength: number = story.length
+  const isLong: boolean = storyLength > 900
+  return (
+    <StyledStory long={isLong}>
+      {isLong ? story.substring(0, getRandomInt(500, 1000)) : story}
+    </StyledStory>
+  )
+}
 
 export default Story

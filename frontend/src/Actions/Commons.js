@@ -43,6 +43,7 @@ export const createStory = (story: string) => async (dispatch: Function) => {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
       },
+      credentials: 'same-origin',
       body: JSON.stringify({ text: story }),
     })
     const body = await response.json()
