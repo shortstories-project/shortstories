@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import Quill from 'quill'
 
-import Textarea from '../Commons/Textarea'
 import Button from '../Commons/Button'
 import Preloader from '../Commons/Preloader'
 
@@ -16,7 +16,6 @@ const Wrapper = styled.main`
   margin-top: 24px;
   margin-bottom: 24px;
   width: 90%;
-  width: 640px;
   min-width: 640px;
 `
 
@@ -26,16 +25,36 @@ const Count = styled.p`
 
 type Props = {
   dispatch: (func: Function) => {},
-  isFetching: boolean,
+  isFetching: boolean
 }
 
 type State = {
-  story: string,
+  story: string
 }
 
-class CreateStory extends Component<*, Props, State> {
+class CreateStory extends Component<any, Props, State> {
+  quill;
   state = {
-    story: '',
+    story: ''
+  }
+
+  componentDidMount() {
+    const fonts = ['pt-sans', 'roboto', 'montserrat', 'noto-sans', 'marck-script', 'amatic-sc']
+    const Font = Quill.import('formats/font')
+    Font.whitelist = fonts
+    Quill.register(Font, true)
+    this.quill = new Quill('#editor', {
+      modules: {
+        toolbar: [
+          [{ header: [1, 2, false] }],
+          ['bold', 'italic', 'underline'],
+          [{ font: fonts }]
+        ]
+      },
+      placeholder: 'Where is my mind...',
+      theme: 'snow'
+    })
+    this.quill.format('font', 'pt-sans')
   }
 
   writeStory = (e: SyntheticInputEvent) => {
@@ -48,15 +67,10 @@ class CreateStory extends Component<*, Props, State> {
     return (
       <Wrapper>
         <Count>{3000 - story.length}</Count>
-        <Textarea
-          placeholder="Write your story here..."
-          maxLength={3000}
-          value={story}
-          onChange={this.writeStory}
-        />
+        <div id="editor" />
         <Button
           onClick={() => {
-            dispatch(createStory(story))
+            dispatch(createStory(this.quill.container.firstChild.innerHTML))
           }}
         >
           {conditionalRender(isFetching, <Preloader />, 'Publish your story')}
@@ -66,8 +80,8 @@ class CreateStory extends Component<*, Props, State> {
   }
 }
 
-const mapStateToProps = ({ UI }) => ({
-  isFetching: UI.createStoryFetching,
+const mapStateToProps = ({ UI }: Object) => ({
+  isFetching: UI.createStoryFetching
 })
 
 export default connect(mapStateToProps)(CreateStory)
