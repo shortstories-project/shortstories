@@ -9,7 +9,7 @@ const camelCaseHelper = (str: string): string => {
   const arr = str.split('_')
   const filteredArr = arr
     .filter((i, index) => index !== 0)
-    .map(i => i.replace(/\b\w/g, l => l.toUpperCase()))
+    .map((i) => i.replace(/\b\w/g, (l) => l.toUpperCase()))
   return `${arr[0]}${filteredArr.join()}`
 }
 

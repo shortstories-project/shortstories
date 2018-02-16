@@ -1,25 +1,12 @@
-import normalizeCSS from 'styled-normalize'
+import sanitize from 'sanitize.css'
 
 export default `
-  ${normalizeCSS}
-
+  @import url(${sanitize});
   :root {
     font-size: 16px;
   }
-
   body {
-    margin: 0;
-    padding: 0;
     background-color: #fffaea;
-  }
-
-  * {
-    font-family: 'PT Sans', sans-serif;
-  }
-
-  p {
-    margin: 0;
-    padding: 0;
   }
 
   .AuthModal {

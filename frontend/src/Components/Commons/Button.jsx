@@ -14,6 +14,7 @@ const StyledButton = styled.button`
   cursor: pointer;
   transition: all 0.25s ease;
   text-transform: uppercase;
+  background-color: white;
   > p {
     padding: 8px;
     margin: 0;

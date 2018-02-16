@@ -6,7 +6,7 @@ import Root from './Root'
 import configureStore, { history } from './Store'
 import registerServiceWorker from './registerServiceWorker'
 
-injectGlobal`${globalStyles}` // eslint-disable-line
+injectGlobal`${globalStyles}`
 
 const store = configureStore()
 
