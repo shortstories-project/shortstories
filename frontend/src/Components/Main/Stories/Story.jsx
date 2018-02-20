@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { conditionalRender } from '../../../Utils'
 
 const StyledStory = styled.div`
-  cursor: ${(isLong) => (isLong ? 'pointer' : 'default')};
   padding: 0;
   margin: 0;
   width: 300px;
@@ -28,24 +27,24 @@ const BottomGradient = styled.span`
 `
 
 const StoryText = styled.div`
-  max-height: 700px;
+  max-height: 660px;
   overflow: hidden;
 `
 
 type Props = {
-  story: string
+  story: string,
 }
 
 class Story extends Component<any, Props, any> {
-  story: Object
-
   state = {
-    isLong: false
+    isLong: false,
   }
 
   componentDidMount() {
-    this.setState({ isLong: this.story.offsetHeight === 700 })
+    this.setState({ isLong: this.story.offsetHeight === 660 })
   }
+
+  story: Object
 
   render() {
     const { story } = this.props

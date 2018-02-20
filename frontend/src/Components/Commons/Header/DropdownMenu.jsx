@@ -28,7 +28,6 @@ const UserBlock = styled.div`
     margin-right: 10px;
   }
 `
-
 const Wrapper = styled.div`
   margin-top: 5px;
   right: 5%;
@@ -44,6 +43,7 @@ const Wrapper = styled.div`
   border: 1px solid currentColor;
   border-radius: 8px;
   box-sizing: border-box;
+  z-index: 9999;
 `
 const InnerWrapper = styled.div`
   width: 230px;

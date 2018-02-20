@@ -3,11 +3,14 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
 
+// Components
 import OAuthButton from './OAuthButton'
 import TwitterIcon from './TwitterIcon'
 
+// Utils
 import { conditionalRender } from '../../../Utils'
 
+// Styled components
 const Button = styled.button`
   border: none;
   box-sizing: border-box;
@@ -17,7 +20,6 @@ const Button = styled.button`
   font-weight: bold;
   color: ${(props: Object) => props.color};
 `
-
 const TypeDescription = styled.p`
   text-align: center;
   font-size: 0.9rem;
@@ -26,12 +28,12 @@ const TypeDescription = styled.p`
   padding: 15px 0;
 `
 
+// Types
 type Props = {
   isOpen: boolean,
   closeModal: Function,
-  typeFromProps?: string
+  typeFromProps?: string,
 }
-
 type State = {
   type: string
 }
@@ -66,7 +68,8 @@ class AuthModal extends Component<any, Props, State> {
   render() {
     const { isOpen, closeModal } = this.props
     const { type } = this.state
-    const getTitle = (t, social) => (t === 'Sign Up' ? `Continue with ${social}` : `Log in with ${social}`)
+    const getTitle = (t: string, social: string): string =>
+      (t === 'Sign Up' ? `Continue with ${social}` : `Log in with ${social}`)
     return (
       <Modal
         isOpen={isOpen}
@@ -79,7 +82,7 @@ class AuthModal extends Component<any, Props, State> {
         <OAuthButton
           Icon={TwitterIcon}
           title={getTitle(type, 'Twitter')}
-          onClick={() => window.open('http://localhost:2300/web_api/auth/twitter', '', 'width=500, height=500')}
+          onClick={() => window.location.assign('http://localhost:2300/web_api/auth/twitter')}
           bgColor="#50abf1"
         />
         {conditionalRender(
