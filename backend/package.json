@@ -6,7 +6,8 @@
   "author": "<cheerful.mf@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "webpack"
+    "start": "webpack",
+    "build": "webpack"
   },
   "dependencies": {
     "bootstrap": "^4.0.0",
