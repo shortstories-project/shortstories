@@ -144,6 +144,7 @@ GEM
     pry-theme (1.2.0)
       coderay (~> 1.1)
     public_suffix (3.0.1)
+    puma (3.11.2)
     rack (2.0.3)
     rack-test (0.8.2)
       rack (>= 1.0, < 3)
@@ -216,6 +217,7 @@ DEPENDENCIES
   pg
   pry
   pry-theme
+  puma
   rake
   rspec-hanami
   shotgun
