@@ -42,4 +42,4 @@ const OAuthButton = ({
   </Button>
 )
 
-export default OAuthButton
+export { OAuthButton }

@@ -2,15 +2,10 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
+import { OAuthButton } from './oauth-button'
+import { TwitterIcon } from './twitter-icon'
+import { conditionalRender } from '../../../../utils'
 
-// Components
-import OAuthButton from './OAuthButton'
-import TwitterIcon from './TwitterIcon'
-
-// Utils
-import { conditionalRender } from '../../../Utils'
-
-// Styled components
 const Button = styled.button`
   border: none;
   box-sizing: border-box;
@@ -28,7 +23,6 @@ const TypeDescription = styled.p`
   padding: 15px 0;
 `
 
-// Types
 type Props = {
   isOpen: boolean,
   closeModal: Function,
@@ -95,4 +89,4 @@ class AuthModal extends Component<any, Props, State> {
   }
 }
 
-export default AuthModal
+export { AuthModal }

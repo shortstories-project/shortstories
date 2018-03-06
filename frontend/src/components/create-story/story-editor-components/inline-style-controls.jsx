@@ -1,5 +1,5 @@
 import React from 'react'
-import StyleButton from './StyleButton'
+import StyleButton from './style-button'
 
 const INLINE_STYLES: { label: string, style: string }[] = [
   { label: 'Bold', style: 'BOLD' },
@@ -30,4 +30,4 @@ const InlineStyleControls = ({ editorState, onToggle }: Props) => {
   )
 }
 
-export default InlineStyleControls
+export { InlineStyleControls }

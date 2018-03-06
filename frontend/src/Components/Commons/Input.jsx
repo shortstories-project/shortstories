@@ -1,7 +1,6 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
-
-import { conditionalRender } from '../../Utils'
+import { conditionalRender } from '../../utils'
 
 const Wrapper = styled.div`
   display: flex;
@@ -22,35 +21,33 @@ const Wrapper = styled.div`
   }
 `
 
-class Input extends Component {
-  render() {
-    const {
-      name,
-      type,
-      error,
-      label,
-      placeholder,
-      value,
-      onChange,
-    } = this.props
-    return (
-      <Wrapper>
-        <label htmlFor={name}>{label}</label>
-        <input
-          placeholder={placeholder}
-          id={name}
-          name={name}
-          type={type}
-          value={value}
-          onChange={onChange}
-        />
-        {conditionalRender(
-          error,
-          <label htmlFor={name}>{error}</label>,
-        )}
-      </Wrapper>
-    )
-  }
+type Props = {
+  name: string,
+  type: string,
+  error: string,
+  label: string,
+  placeholder: string,
+  value: string,
+  onChange: (e: SyntheticInputEvent) => void,
 }
+
+const Input = ({
+  name, type, error, label, placeholder, value, onChange,
+}: Props) => (
+  <Wrapper>
+    <label htmlFor={name}>
+      {label}
+    </label>
+    <input
+      placeholder={placeholder}
+      id={name}
+      name={name}
+      type={type}
+      value={value}
+      onChange={onChange}
+    />
+    {conditionalRender(error, <label htmlFor={name}>{error}</label>)}
+  </Wrapper>
+)
 
 export default Input

@@ -1,18 +1,18 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { injectGlobal } from 'styled-components'
-import globalStyles from './globalStyles'
-import Root from './Root'
-import configureStore, { history } from './Store'
-import registerServiceWorker from './registerServiceWorker'
+import globalStyles from './global-styles'
+import App from './components'
+import configureStore, { history } from './store'
+import registerServiceWorker from './register-service-worker'
 
-injectGlobal`${globalStyles}`
+injectGlobal`${globalStyles}` // eslint-disable-line
 
 const store = configureStore()
 
 const mountNode = document.getElementById('root')
 
-render(<Root history={history} store={store} />, mountNode)
+render(<App history={history} store={store} />, mountNode) // eslint-disable-line
 
 if (module.hot) {
   module.hot.accept()

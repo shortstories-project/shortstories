@@ -1,6 +1,6 @@
 // @flow
-import { CALL_API, Schemas } from '../Middlewares/api'
-import { API_URL } from '../Constants/api'
+import { CALL_API, Schemas } from '../middlewares/api'
+import { API_URL } from '../constants/api'
 
 export const USER_REQUEST = 'USER_REQUEST'
 export const USER_SUCCESS = 'USER_SUCCESS'

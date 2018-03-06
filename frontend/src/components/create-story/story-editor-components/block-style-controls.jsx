@@ -1,5 +1,5 @@
 import React from 'react'
-import StyleButton from './StyleButton'
+import StyleButton from './style-button'
 
 const BLOCK_TYPES: { label: string, style: string }[] = [
   { label: 'H1', style: 'header-one' },
@@ -39,4 +39,4 @@ const BlockStyleControls = ({ editorState, onToggle }: Props) => {
   )
 }
 
-export default BlockStyleControls
+export { BlockStyleControls }

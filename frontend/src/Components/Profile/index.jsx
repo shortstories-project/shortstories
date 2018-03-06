@@ -1,8 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
-
-import Input from '../Commons/Input'
-import Button from '../Commons/Button'
+import Input from '../commons/input'
+import Button from '../commons/button'
 
 const H1 = styled.h1`
   margin: 24px 0;
@@ -27,7 +26,7 @@ const Avatar = styled.img`
 `
 
 type Props = {
-  users?: Array,
+  users: Array,
 }
 
 const Profile = ({ users }: Props) => {

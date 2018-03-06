@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 const StyledButton = styled.button`
   outline: none;
-  padding: 0;
+  padding: 8px;
   margin: 0;
   box-sizing: border-box;
   text-align: center;
@@ -15,10 +15,6 @@ const StyledButton = styled.button`
   transition: all 0.25s ease;
   text-transform: uppercase;
   background-color: white;
-  > p {
-    padding: 8px;
-    margin: 0;
-  }
   &:hover {
     color: white;
     background: black;
@@ -28,12 +24,12 @@ const StyledButton = styled.button`
 
 type Props = {
   children: any,
-  onClick?: Function,
+  onClick: () => void,
 }
 
 const Button = ({ children, onClick }: Props) => (
   <StyledButton onClick={onClick}>
-    <p>{children}</p>
+    {children}
   </StyledButton>
 )
 

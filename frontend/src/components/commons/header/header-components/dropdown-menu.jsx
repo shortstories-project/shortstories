@@ -5,8 +5,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { push } from 'react-router-redux'
 import onClickOutside from 'react-onclickoutside'
-
-import { conditionalRender } from '../../../Utils'
+import { conditionalRender } from '../../../../utils'
 
 const UserBlock = styled.div`
   background-color: #fff;
@@ -146,4 +145,6 @@ class DropdownMenu extends Component<any, Props, State> {
   }
 }
 
-export default compose(connect(), onClickOutside)(DropdownMenu)
+const DropdownMenuContainer = compose(connect(), onClickOutside)(DropdownMenu)
+
+export { DropdownMenuContainer }

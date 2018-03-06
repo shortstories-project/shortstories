@@ -1,22 +1,19 @@
 // @flow
 import omit from 'lodash/omit'
+import * as types from '../actions'
 
-import * as types from '../Actions/Commons'
-
-const lowerCaseHelper = (str: string, replace: string): string => str.toLowerCase().replace(replace, '')
+const lowerCaseHelper = (str: string, replace: string): string =>
+  str.toLowerCase().replace(replace, '')
 
 const camelCaseHelper = (str: string): string => {
   const arr = str.split('_')
   const filteredArr = arr
     .filter((i, index) => index !== 0)
-    .map((i) => i.replace(/\b\w/g, (l) => l.toUpperCase()))
+    .map(i => i.replace(/\b\w/g, l => l.toUpperCase()))
   return `${arr[0]}${filteredArr.join()}`
 }
 
-const UI = (
-  state: Object = { isShowModal: false },
-  action: Object,
-): Object => {
+const UI = (state: Object = { isShowModal: false }, action: Object): Object => {
   const requestType = action.type.includes('REQUEST')
   const successType = action.type.includes('SUCCESS')
   const failureType = action.type.includes('FAILURE')

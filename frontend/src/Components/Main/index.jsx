@@ -3,19 +3,12 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import Stories from './stories'
+import Button from '../commons/button'
+import Preloader from '../commons/preloader'
+import * as actions from '../../actions'
+import { conditionalRender } from '../../utils'
 
-// Components
-import Stories from './Stories'
-import Button from '../Commons/Button'
-import Preloader from '../Commons/Preloader'
-
-// Actions
-import * as actions from '../../Actions/Commons'
-
-// Utils
-import { conditionalRender } from '../../Utils'
-
-// Styled components
 const ButtonWrapper = styled.div`
   width: 100%;
   display: flex;
@@ -34,10 +27,12 @@ type Props = {
   toCreateStory: Function,
   showModal: Function,
   isFetching: boolean,
-  users: Object[]
+  users: Object[],
 }
 
-const Main = ({ stories, toCreateStory, isFetching, users, showModal }: Props) => (
+const Main = ({
+  stories, toCreateStory, isFetching, users, showModal,
+}: Props) => (
   <React.Fragment>
     <ButtonWrapper>
       <Button
@@ -56,18 +51,18 @@ const Main = ({ stories, toCreateStory, isFetching, users, showModal }: Props) =
         <Preloader />
         <Preloader />
       </PreloadersWrapper>,
-      <Stories stories={stories} />
+      <Stories stories={stories} />,
     )}
   </React.Fragment>
 )
 
-const mapDispatchToProps = (dispatch) => ({
+const mapDispatchToProps = dispatch => ({
   showModal: () => dispatch(actions.showAuthModal()),
-  toCreateStory: () => dispatch(push('create-story'))
+  toCreateStory: () => dispatch(push('create-story')),
 })
 
 const mapStateToProps = ({ UI }) => ({
-  isFetching: UI.storyFetching
+  isFetching: UI.storyFetching,
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main)

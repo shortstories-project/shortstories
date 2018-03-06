@@ -1,8 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-
-import { loadUser } from '../Actions/Commons'
+import { loadUser } from '../actions'
 
 type StateToPropsTypes = {
   entities: {

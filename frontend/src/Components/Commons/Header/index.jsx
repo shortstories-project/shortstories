@@ -3,14 +3,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { Link } from 'react-router-dom'
-
-import AuthModal from './AuthModal'
-import DropdownMenu from './DropdownMenu'
-import Preloader from '../Preloader'
-
-import * as actions from '../../../Actions/Commons'
-
-import { conditionalRender } from '../../../Utils'
+import { AuthModal, DropdownMenuContainer } from './header-components'
+import Preloader from '../preloader'
+import * as actions from '../../../actions'
+import { conditionalRender } from '../../../utils'
 
 const StyledHeader = styled.header`
   background-color: #fff;
@@ -91,7 +87,10 @@ class Header extends Component<*, Props, State> {
           <Preloader />,
           conditionalRender(
             Boolean(name && avatar),
-            <DropdownMenu name={name} avatar={avatar} />,
+            <DropdownMenuContainer
+              name={name}
+              avatar={avatar}
+            />,
             <ButtonsWrapper>
               <AuthButton onClick={() => this.openModal('Sign Up')}>Sign Up</AuthButton>
               <AuthButton onClick={() => this.openModal('Log In')}>Log In</AuthButton>

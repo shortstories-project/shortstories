@@ -1,8 +1,7 @@
 // @flow
 import React, { Component } from 'react'
 import styled from 'styled-components'
-
-import { conditionalRender } from '../../../Utils'
+import { conditionalRender } from '../../../utils'
 
 const StyledStory = styled.div`
   padding: 0;
