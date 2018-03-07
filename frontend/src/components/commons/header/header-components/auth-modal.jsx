@@ -64,6 +64,7 @@ class AuthModal extends Component<any, Props, State> {
     const { type } = this.state
     const getTitle = (t: string, social: string): string =>
       (t === 'Sign Up' ? `Continue with ${social}` : `Log in with ${social}`)
+    const twitterRedirectHost = process.env.NODE_ENV === 'development' ? 'localhost:2300' : '185.227.108.23'
     return (
       <Modal
         isOpen={isOpen}
@@ -76,7 +77,7 @@ class AuthModal extends Component<any, Props, State> {
         <OAuthButton
           Icon={TwitterIcon}
           title={getTitle(type, 'Twitter')}
-          onClick={() => window.location.assign('http://localhost:2300/web_api/auth/twitter')}
+          onClick={() => window.location.assign(`http://${twitterRedirectHost}/web_api/auth/twitter`)}
           bgColor="#50abf1"
         />
         {conditionalRender(
