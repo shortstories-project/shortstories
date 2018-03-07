@@ -1,18 +1,17 @@
 // @flow
 import { normalize, schema } from 'normalizr'
 import { camelizeKeys } from 'humps'
+import { API_URL } from '../constants/api'
 
-const API_ROOT = 'http://localhost:3000/web_api/'
+const API_ROOT = `${API_URL}/`
 
-const callApi = (endpoint: string, s: Object) => {
+const callApi = (endpoint: string, schm: Object) => {
   const fullUrl = endpoint.indexOf(API_ROOT) === -1 ? API_ROOT + endpoint : endpoint
-  return fetch(fullUrl, { credentials: 'same-origin' }).then((response) =>
+  return fetch(fullUrl, { credentials: 'same-origin' }).then(response =>
     response.json().then((json) => {
-      if (!response.ok) {
-        return Promise.reject(json)
-      }
+      if (!response.ok) return Promise.reject(json)
       const camelizedJson = camelizeKeys(json)
-      return normalize(camelizedJson, s)
+      return normalize(camelizedJson, schm)
     }))
 }
 
@@ -28,29 +27,17 @@ export const CALL_API = 'Call API'
 
 export default (store: Object) => (next: Function) => (action: Object) => {
   const callAPI = action[CALL_API]
-  if (typeof callAPI === 'undefined') {
-    return next(action)
-  }
+  if (typeof callAPI === 'undefined') return next(action)
 
   let { endpoint } = callAPI
   const { types } = callAPI
 
-  if (typeof endpoint === 'function') {
-    endpoint = endpoint(store.getState())
-  }
+  if (typeof endpoint === 'function') endpoint = endpoint(store.getState())
 
-  if (typeof endpoint !== 'string') {
-    throw new Error('Specify a string endpoint URL.')
-  }
-  if (!callAPI.schema) {
-    throw new Error('Specify one of the exported Schemas.')
-  }
-  if (!Array.isArray(types) || types.length !== 3) {
-    throw new Error('Expected an array of three action types.')
-  }
-  if (!types.every((type) => typeof type === 'string')) {
-    throw new Error('Expected action types to be strings.')
-  }
+  if (typeof endpoint !== 'string') throw new Error('Specify a string endpoint URL.')
+  if (!callAPI.schema) throw new Error('Specify one of the exported Schemas.')
+  if (!Array.isArray(types) || types.length !== 3) throw new Error('Expected an array of three action types.')
+  if (!types.every(type => typeof type === 'string')) throw new Error('Expected action types to be strings.')
 
   const actionWith = (data) => {
     const finalAction = {
@@ -65,12 +52,12 @@ export default (store: Object) => (next: Function) => (action: Object) => {
   next(actionWith({ type: requestType }))
 
   return callApi(endpoint, callAPI.schema).then(
-    (response) =>
+    response =>
       next(actionWith({
         response,
         type: successType,
       })),
-    (error) =>
+    error =>
       next(actionWith({
         type: failureType,
         error: error.message || 'Something bad happened',

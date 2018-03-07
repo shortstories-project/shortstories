@@ -56,8 +56,14 @@ const Item = styled.div`
   border-bottom: 1px solid #efefef;
   text-transform: uppercase;
   transition: background-color 0.2s ease;
+  :first-child {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
   :last-child {
     border-bottom: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
   }
   :hover {
     background-color: #efefef;
