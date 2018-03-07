@@ -10,7 +10,7 @@ const StyledStory = styled.div`
   padding: 20px;
   background-color: #fff;
   color: #555;
-  border: 1px solid #eee;
+  border: 3px solid #eee;
   box-sizing: border-box;
   hyphens: auto;
   word-wrap: break-word;
