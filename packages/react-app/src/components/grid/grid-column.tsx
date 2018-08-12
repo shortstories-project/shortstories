@@ -10,7 +10,6 @@ interface IProps {
 }
 
 const Column: any = styled.div`
-  background-color: #ffffff;
   grid-column: span ${(props: IProps) => props.xs};
   @media (min-width: 768px) {
     grid-column: span ${(props: IProps) => props.sm};

@@ -11,8 +11,11 @@ import { store, history } from '../store'
 /* tslint:disable */
 injectGlobal`
   :root {
+    font-size: 16px;
     --yellow: #ffc600;
     --black: #272727;
+    --white: #ffffff;
+    --purple: #6d47d9;
   }
 
   html {
@@ -21,24 +24,16 @@ injectGlobal`
       Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-weight: 900;
     color: var(--black);
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
-  }
-
-  *,
-  *:before,
-  *:after {
-    box-sizing: inherit;
   }
 
   body {
     background-image: url("src/assets/images/topography.svg"),
-      linear-gradient(110deg, #f93d66, #6d47d9);
+      linear-gradient(110deg, #f93d66, var(--purple));
     background-size: 340px, auto;
     background-repeat: repeat;
     min-height: calc(100vh);
     background-attachment: fixed;
-    letter-spacing: -1px;
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.5;
     margin: 0;
     padding: 0;
