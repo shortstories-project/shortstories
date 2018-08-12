@@ -10,7 +10,9 @@
     "paths": {
       "pages": ["pages"],
       "components": ["components"],
-      "higher-order-components": ["higher-order-components"]
+      "higher-order-components": ["higher-order-components"],
+      "images": ["assets/images"],
+      "fonts": ["assets/fonts"]
     }
   },
   "include": [

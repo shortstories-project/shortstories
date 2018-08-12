@@ -11,8 +11,14 @@
     "no-implicit-dependencies": [true, [
       "pages",
       "components",
-      "higher-order-components"
-    ]]
+      "higher-order-components",
+      "images",
+      "fonts"
+    ]],
+    "no-submodule-imports": false,
+    "jsx-no-lambda": false,
+    "jsx-boolean-value": false,
+    "object-literal-sort-keys": false
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

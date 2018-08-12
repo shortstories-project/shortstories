@@ -16,6 +16,8 @@ module.exports = {
       pages: path.join(__dirname, 'src', 'pages'),
       components: path.join(__dirname, 'src', 'components'),
       'higher-order-components': path.join(__dirname, 'src', 'higher-order-components'),
+      images: path.join(__dirname, 'src', 'assets', 'images'),
+      fonts: path.join(__dirname, 'src', 'assets', 'fonts'),
     },
     extensions: ['.ts', '.tsx', '.js', '.json'],
   },
@@ -34,6 +36,14 @@ module.exports = {
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
+      },
+      {
+        test: /\.svg$/,
+        loader: 'url-loader'
+      },
+      {
+        test: /\.svg$/,
+        use: 'file-loader',
       },
     ],
   },

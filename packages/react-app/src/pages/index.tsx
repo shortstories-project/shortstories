@@ -1,15 +1,76 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'connected-react-router'
+import { Route, Switch } from 'react-router-dom'
 import { hot } from 'react-hot-loader'
+import { injectGlobal } from 'styled-components'
+import Auth from './auth'
+import Main from './main'
 import { store, history } from '../store'
+
+/* tslint:disable */
+injectGlobal`
+  :root {
+    --yellow: #ffc600;
+    --black: #272727;
+  }
+
+  html {
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+      Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    font-weight: 900;
+    color: var(--black);
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
+  }
+
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+
+  body {
+    background-image: url("src/assets/images/topography.svg"),
+      linear-gradient(110deg, #f93d66, #6d47d9);
+    background-size: 340px, auto;
+    background-repeat: repeat;
+    min-height: calc(100vh);
+    background-attachment: fixed;
+    letter-spacing: -1px;
+    font-size: 16px;
+    line-height: 1.5;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0 0 5px 0;
+  }
+
+  p {
+    font-size: 1rem;
+    color: var(--black);
+  }
+`
+/* tslint:enable */
 
 class App extends React.PureComponent<any, any> {
   public render() {
     return (
       <Provider store={store}>
         <ConnectedRouter history={history}>
-          <div />
+          <div>
+            <Switch>
+              <Route exact path="/" render={() => <Auth />} />
+              <Route exact path="/main" render={() => <Main />} />
+            </Switch>
+          </div>
         </ConnectedRouter>
       </Provider>
     )
