@@ -56,7 +56,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Shortstories',
+      title: 'Short Stories',
       inject: true,
       hash: true,
       template: path.join(__dirname, 'public', 'index.ejs'),

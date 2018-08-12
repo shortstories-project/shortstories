@@ -8,8 +8,14 @@ const AuthContainer = styled.div`
   background-color: var(--white);
   border-radius: 8px;
   box-shadow: rgba(0, 0, 0, 0.45) 0px 2px 10px;
-  min-height: 520px;
-  padding: 12px;
+  padding: 36px;
+`
+
+const Form = styled.form`
+  height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `
 
 class Auth extends React.PureComponent {
@@ -21,13 +27,10 @@ class Auth extends React.PureComponent {
           <GridColumn lg={4} md={6} sm={8} xs={10}>
             <AuthContainer>
               <Logo full={false} />
-              <form>
-                <Input type="text" placeholder="Login" label="Login" />
-                <Input type="password" placeholder="Password" label="Password" />
-              </form>
-              <p>with Google</p>
-              <p>with Facebook</p>
-              <p>with Twitter</p>
+              <Form>
+                <Input type="text" id="Login" label="Login" />
+                <Input type="password" id="Password" label="Password" />
+              </Form>
             </AuthContainer>
           </GridColumn>
           <GridColumn lg={4} md={3} sm={2} xs={1} />
