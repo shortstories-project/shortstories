@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { GridContainer, GridRow, GridColumn } from 'components/grid'
 import Logo from 'components/logo'
 import Input from 'components/input'
+import Button from 'components/button'
 
 const AuthContainer = styled.div`
   background-color: var(--white);
@@ -12,7 +13,7 @@ const AuthContainer = styled.div`
 `
 
 const Form = styled.form`
-  height: 120px;
+  height: 200px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -30,6 +31,8 @@ class Auth extends React.PureComponent {
               <Form>
                 <Input type="text" id="Login" label="Login" />
                 <Input type="password" id="Password" label="Password" />
+                <Button title="LOGIN" />
+                <a href="/main">main</a>
               </Form>
             </AuthContainer>
           </GridColumn>

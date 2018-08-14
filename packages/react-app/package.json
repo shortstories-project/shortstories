@@ -15,6 +15,7 @@
   "dependencies": {
     "connected-react-router": "^4.4.0",
     "history": "^4.7.2",
+    "masonry-layout": "^4.2.2",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-hot-loader": "^4.3.4",
@@ -34,6 +35,7 @@
     "@babel/plugin-syntax-typescript": "^7.0.0-rc.1",
     "@babel/preset-env": "^7.0.0-rc.1",
     "@types/history": "^4.7.0",
+    "@types/masonry-layout": "^4.2.0",
     "@types/node": "^10.5.8",
     "@types/react": "^16.4.9",
     "@types/react-dom": "^16.0.7",

@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 interface IProps {
   center?: boolean
+  innerRef?: (node: string | Element) => void
 }
 
 const Row = styled.div`
@@ -20,8 +21,12 @@ const Row = styled.div`
 
 class GridRow extends React.PureComponent<IProps> {
   public render() {
-    const { children, center } = this.props
-    return <Row center={center}>{children}</Row>
+    const { children, center, innerRef } = this.props
+    return (
+      <Row innerRef={innerRef} center={center}>
+        {children}
+      </Row>
+    )
   }
 }
 

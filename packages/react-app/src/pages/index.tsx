@@ -65,7 +65,7 @@ class App extends React.PureComponent<any, any> {
         <ConnectedRouter history={history}>
           <div>
             <Switch>
-              <Route exact path="/" render={() => <Auth />} />
+              <Route exact path="/" render={() => <Main />} />
               <Route exact path="/main" render={() => <Main />} />
             </Switch>
           </div>

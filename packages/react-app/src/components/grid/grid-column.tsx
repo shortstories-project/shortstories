@@ -7,10 +7,12 @@ interface IProps {
   md?: number
   lg?: number
   children?: React.ReactNode
+  className?: string
 }
 
 const Column: any = styled.div`
   grid-column: span ${(props: IProps) => props.xs};
+  grid-auto-rows: auto;
   @media (min-width: 768px) {
     grid-column: span ${(props: IProps) => props.sm};
   }
@@ -31,9 +33,9 @@ class GridColumn extends React.PureComponent<IProps> {
   }
 
   public render() {
-    const { xs, sm, md, lg, children } = this.props
+    const { xs, sm, md, lg, children, className } = this.props
     return (
-      <Column xs={xs} sm={sm} md={md} lg={lg}>
+      <Column className={className} xs={xs} sm={sm} md={md} lg={lg}>
         {children}
       </Column>
     )
