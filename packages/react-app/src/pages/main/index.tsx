@@ -1,7 +1,7 @@
 import * as React from 'react'
 import * as Masonry from 'masonry-layout'
 import styled from 'styled-components'
-import { GridContainer, GridRow, GridColumn } from 'components/grid'
+import { GridContainer, GridRow, GridColumn } from 'components'
 import data from '../../data'
 import './style.css'
 

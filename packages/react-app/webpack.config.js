@@ -53,6 +53,7 @@ module.exports = {
     open: true,
     overlay: true,
     progress: true,
+    historyApiFallback: true,
   },
   plugins: [
     new HtmlWebpackPlugin({

@@ -10,7 +10,9 @@
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "webpack --mode production",
-    "lint:ts": "tslint 'src/**/*.{ts,tsx}'"
+    "lint:ts": "tslint 'src/**/*.{ts,tsx}'",
+    "storybook": "start-storybook -p 6006 -c .storybook",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "connected-react-router": "^4.4.0",
@@ -34,6 +36,11 @@
     "@babel/plugin-syntax-jsx": "^7.0.0-rc.1",
     "@babel/plugin-syntax-typescript": "^7.0.0-rc.1",
     "@babel/preset-env": "^7.0.0-rc.1",
+    "@babel/runtime": "^7.0.0-rc.1",
+    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/addon-links": "^3.4.10",
+    "@storybook/addons": "^3.4.10",
+    "@storybook/react": "^3.4.10",
     "@types/history": "^4.7.0",
     "@types/masonry-layout": "^4.2.0",
     "@types/node": "^10.5.8",

@@ -1,78 +1,9 @@
-import * as React from 'react'
-import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
-import { Route, Switch } from 'react-router-dom'
-import { hot } from 'react-hot-loader'
-import { injectGlobal } from 'styled-components'
 import Auth from './auth'
+import CreateStory from './create-story'
 import Main from './main'
-import { store, history } from '../store'
+import NotFound from './not-found'
+import Profile from './profile'
+import Story from './story'
+import User from './user'
 
-/* tslint:disable */
-injectGlobal`
-  :root {
-    font-size: 16px;
-    --yellow: #ffc600;
-    --black: #272727;
-    --white: #ffffff;
-    --purple: #6d47d9;
-  }
-
-  html {
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
-      Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-weight: 900;
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: var(--black);
-  }
-
-  body {
-    background-image: url("src/assets/images/topography.svg"),
-      linear-gradient(110deg, #f93d66, var(--purple));
-    background-size: 340px, auto;
-    background-repeat: repeat;
-    min-height: calc(100vh);
-    background-attachment: fixed;
-    font-size: 1rem;
-    letter-spacing: -1px;
-    margin: 0;
-    padding: 0;
-  }
-
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 0 0 5px 0;
-  }
-
-  p {
-    font-size: 1rem;
-    color: var(--black);
-  }
-`
-/* tslint:enable */
-
-class App extends React.PureComponent<any, any> {
-  public render() {
-    return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <div>
-            <Switch>
-              <Route exact path="/" render={() => <Main />} />
-              <Route exact path="/main" render={() => <Main />} />
-            </Switch>
-          </div>
-        </ConnectedRouter>
-      </Provider>
-    )
-  }
-}
-
-export default hot(module)(App)
+export { Auth, CreateStory, Main, NotFound, Profile, Story, User }
