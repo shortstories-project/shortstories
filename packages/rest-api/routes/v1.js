@@ -1,9 +1,9 @@
 const express = require('express')
-const UserController = require('./../controllers/user')
-const StoryController = require('./../controllers/story')
+const UserController = require('../controllers/user')
+const StoryController = require('../controllers/story')
 const passport = require('passport')
 const passportMiddleware = require('../middleware/passport')
-const storyMiddleware = require('../middleware/story')
+const { storyMiddleware } = require('../middleware/story')
 
 const router = express.Router()
 
@@ -23,18 +23,8 @@ router.post('/users/login', UserController.login)
 // Stories
 router.post('/stories', passport.authenticate('jwt', { session: false }), StoryController.create)
 router.get('/stories', passport.authenticate('jwt', { session: false }), StoryController.getAll)
-router.get('/stories/:id', passport.authenticate('jwt', { session: false }), storyMiddleware.story, StoryController.get)
-router.put(
-  '/stories/:id',
-  passport.authenticate('jwt', { session: false }),
-  storyMiddleware.story,
-  StoryController.update
-)
-router.delete(
-  '/stories/:id',
-  passport.authenticate('jwt', { session: false }),
-  storyMiddleware.story,
-  StoryController.remove
-)
+router.get('/stories/:id', passport.authenticate('jwt', { session: false }), storyMiddleware, StoryController.get)
+router.put('/stories/:id', passport.authenticate('jwt', { session: false }), storyMiddleware, StoryController.update)
+router.delete('/stories/:id', passport.authenticate('jwt', { session: false }), storyMiddleware, StoryController.remove)
 
 module.exports = router
