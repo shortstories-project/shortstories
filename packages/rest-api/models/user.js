@@ -21,9 +21,9 @@ const UserSchema = new mongoose.Schema(
           message: 'Not a valid email',
         }),
       ],
-      password: {
-        type: String,
-      },
+    },
+    password: {
+      type: String,
     },
   },
   { timestamps: true }

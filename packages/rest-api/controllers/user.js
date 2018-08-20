@@ -49,7 +49,7 @@ module.exports.update = update
 async function remove(req, res) {
   const [err] = await to(req.user.destroy())
   if (err) {
-    return errorHandler(res, 'error occured trying to delete user')
+    return errorHandler(res, 'Error occured trying to delete user')
   }
   return successHandler(res, { message: 'Deleted User' }, 204)
 }

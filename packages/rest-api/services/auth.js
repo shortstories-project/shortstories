@@ -25,7 +25,7 @@ async function createUser(userInfo) {
     uniqueKey.method = 'email'
     userInfo.email = uniqueKey
     const [err, user] = await to(User.create(userInfo))
-    if (err) throwError('user already exists with that email')
+    if (err) throwError('User already exists with that email')
     return user
   } else {
     throwError('A valid email was not entered.')
@@ -43,14 +43,15 @@ async function authUser(userInfo) {
   let user
   if (validator.isEmail(uniqueKey)) {
     authInfo.method = 'email'
-    let [err] = await to(User.findOne({ email: uniqueKey }))
+    const [err, findedUser] = await to(User.findOne({ email: uniqueKey }))
+    user = findedUser
     if (err) throwError(err.message)
+    if (!user) throwError('Not registered')
   } else {
     throwError('A valid email or phone number was not entered')
   }
-  if (!user) throwError('Not registered')
-  const [err] = await to(user.comparePassword(userInfo.password))
-  user = await to(user.comparePassword(userInfo.password))[1]
+  const [err, matchedUser] = await to(user.comparePassword(userInfo.password))
+  user = matchedUser
   if (err) throwError(err.message)
   return user
 }
