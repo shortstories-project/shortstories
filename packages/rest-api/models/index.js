@@ -29,3 +29,5 @@ if (config.DB_HOST !== '') {
 } else {
   console.log('*** No Mongo Credentials Given ***')
 }
+
+module.exports = models

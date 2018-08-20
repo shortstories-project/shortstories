@@ -2,8 +2,7 @@ const { to } = require('await-to-js')
 const parseError = require('parse-error')
 
 module.exports.to = async promise => {
-  let err, res
-  ;[err, res] = await to(promise)
+  const [err, res] = await to(promise)
   if (err) return [parseError(err)]
   return [null, res]
 }

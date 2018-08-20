@@ -1,6 +1,7 @@
 dependencies:
   await-to-js: 2.0.1
   bcrypt: 3.0.0
+  bcrypt-promise: 2.0.0
   body-parser: 1.18.3
   connect-flash: 0.1.1
   connect-mongo: 2.0.1
@@ -16,6 +17,7 @@ dependencies:
   md5: 2.2.1
   mongoose: 5.2.9
   mongoose-mongodb-errors: 0.0.2
+  mongoose-validator: 2.1.0
   morgan: 1.9.0
   parse-error: 0.2.0
   passport: 0.4.0
@@ -311,6 +313,12 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha1-AV2z81PgLlY3d1X5YnQuiYHnu7o=
+  /bcrypt-promise/2.0.0:
+    dev: false
+    peerDependencies:
+      bcrypt: '>0.8.x'
+    resolution:
+      integrity: sha1-oLaD6UNCEArubuaXF0Oj4Xna4nw=
   /bcrypt/3.0.0:
     bundledDependencies:
       - node-pre-gyp
@@ -1952,6 +1960,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-eXK1UInq2bPmjyX6e3VHIzMLobc4J94i4AWn+Hpq3OU5KkrRC96OAcR3PRJ/pGu6m8TRnBHP9dkXQVsT/COVIA==
+  /is/3.2.1:
+    dev: false
+    resolution:
+      integrity: sha1-0Kwq1V63sL7JJqUmb2xmKqqD3KU=
   /isarray/1.0.0:
     resolution:
       integrity: sha1-u5NdSFgsuhaMBoNJV6VKPgcSTxE=
@@ -2341,6 +2353,13 @@ packages:
     dev: false
     resolution:
       integrity: sha1-f+rLjJAbX4mcYWZSM3svSZcXKRw=
+  /mongoose-validator/2.1.0:
+    dependencies:
+      is: 3.2.1
+      validator: 10.6.0
+    dev: false
+    resolution:
+      integrity: sha512-o1oThcinMdYfuut8ld8iQv4TdEB8W6I/WIKB6lWGtHzHmxa/SRnmXg2FeLL2CO+b9vzRitVubrFTeMOr9bJ2cA==
   /mongoose/5.2.9:
     dependencies:
       async: 2.6.1
@@ -3880,6 +3899,7 @@ shrinkwrapVersion: 3
 specifiers:
   await-to-js: ^2.0.1
   bcrypt: ^3.0.0
+  bcrypt-promise: ^2.0.0
   body-parser: ^1.18.3
   connect-flash: ^0.1.1
   connect-mongo: ^2.0.1
@@ -3907,6 +3927,7 @@ specifiers:
   md5: ^2.2.1
   mongoose: ^5.2.9
   mongoose-mongodb-errors: ^0.0.2
+  mongoose-validator: ^2.1.0
   morgan: ^1.9.0
   nodemon: ^1.18.3
   parse-error: ^0.2.0
