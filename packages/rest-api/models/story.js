@@ -8,10 +8,15 @@ const StorySchema = new mongoose.Schema(
     body: {
       type: String,
     },
-    author: {
-      type: mongoose.Schema.ObjectId,
-      ref: 'User',
-    },
+    author: [
+      {
+        author: {
+          type: mongoose.Schema.ObjectId,
+          ref: 'User',
+        },
+        permissions: [{ type: String }],
+      },
+    ],
   },
   { timestamps: true }
 )

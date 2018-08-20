@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema(
 UserSchema.virtual('stories', {
   ref: 'Story',
   localField: '_id',
-  foreignField: 'users.user',
+  foreignField: 'author.author',
   justOne: false,
 })
 

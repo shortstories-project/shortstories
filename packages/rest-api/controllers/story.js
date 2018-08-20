@@ -19,7 +19,7 @@ async function getAll(req, res) {
     const story = stories[i]
     storiesJSON.push(story.toWeb())
   }
-  return successHandler(res, { companies: storiesJSON })
+  return successHandler(res, { stories: storiesJSON })
 }
 module.exports.getAll = getAll
 
