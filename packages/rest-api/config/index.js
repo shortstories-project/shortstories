@@ -15,4 +15,7 @@ config.DB_PASSWORD = process.env.DB_PASSWORD || 'db-password'
 config.JWT_ENCRYPTION = process.env.JWT_ENCRYPTION || 'jwt_please_change'
 config.JWT_EXPIRATION = process.env.JWT_EXPIRATION || '10000'
 
+config.SECRET = process.env.SECRET
+config.KEY = process.env.KEY
+
 module.exports = config

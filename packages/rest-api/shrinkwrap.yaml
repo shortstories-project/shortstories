@@ -1,6 +1,7 @@
 dependencies:
   await-to-js: 2.0.1
   bcrypt: 3.0.0
+  bcrypt-nodejs: 0.0.3
   bcrypt-promise: 2.0.0
   body-parser: 1.18.3
   connect-flash: 0.1.1
@@ -313,6 +314,10 @@ packages:
       node: '>= 0.8'
     resolution:
       integrity: sha1-AV2z81PgLlY3d1X5YnQuiYHnu7o=
+  /bcrypt-nodejs/0.0.3:
+    dev: false
+    resolution:
+      integrity: sha1-xgkX8m3CNWYVZsaBBhwwPCsohCs=
   /bcrypt-promise/2.0.0:
     dev: false
     peerDependencies:
@@ -3899,6 +3904,7 @@ shrinkwrapVersion: 3
 specifiers:
   await-to-js: ^2.0.1
   bcrypt: ^3.0.0
+  bcrypt-nodejs: ^0.0.3
   bcrypt-promise: ^2.0.0
   body-parser: ^1.18.3
   connect-flash: ^0.1.1

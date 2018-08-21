@@ -1,29 +1,10 @@
 const authService = require('../services/auth')
 const { to, errorHandler, successHandler } = require('../services/utils')
 
-/* CREATE */
-async function create(req, res) {
-  res.setHeader('Content-Type', 'application/json')
-  if (!req.body['unique_key'] && !req.body['email']) {
-    return errorHandler(res, 'Please enter an email to register.')
-  } else if (!req.body['password']) {
-    return errorHandler(res, 'Please enter a password to register.')
-  } else {
-    const [err, user] = await to(authService.createUser(req.body))
-    if (err) return errorHandler(res, err, 422)
-    return successHandler(
-      res,
-      { message: 'Successfully created new user.', user: user.toWeb(), token: user.getJWT() },
-      201
-    )
-  }
-}
-module.exports.create = create
-
 /* READ */
 async function get(req, res) {
   res.setHeader('Content-Type', 'application/json')
-  return successHandler(res, { user: req.user.toWeb() })
+  return successHandler(res, { user: req.user })
 }
 module.exports.get = get
 
@@ -56,11 +37,25 @@ async function remove(req, res) {
 module.exports.remove = remove
 
 /* AUTH */
+async function register(req, res) {
+  res.setHeader('Content-Type', 'application/json')
+  if (!req.body['unique_key'] && !req.body['email']) {
+    return errorHandler(res, 'Please enter an email to register.')
+  } else if (!req.body['password']) {
+    return errorHandler(res, 'Please enter a password to register.')
+  } else {
+    const [err, user] = await to(authService.createUser(req.body))
+    if (err) return errorHandler(res, err, 422)
+    return successHandler(res, { message: 'Successfully created new user.', user, token: user.getJWT() }, 201)
+  }
+}
+module.exports.register = register
+
 async function login(req, res) {
   const [err, user] = await to(authService.authUser(req.body))
   if (err) {
     return errorHandler(res, err, 422)
   }
-  return successHandler(res, { token: user.getJWT(), user: user.toWeb() })
+  return successHandler(res, { token: user.getJWT(), user })
 }
 module.exports.login = login

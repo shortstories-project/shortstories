@@ -1,27 +1,41 @@
-const { Story } = require('../models')
+const { Story, User } = require('../models')
 const { to, errorHandler, successHandler } = require('../services/utils')
 
-async function create(req, res) {
+exports.createStory = async (req, res) => {
   res.setHeader('Content-Type', 'application/json')
-  const [err, story] = await to(Story.create(req.body))
-  if (err) return errorHandler(res, err, 422)
-
-  return successHandler(res, { story: story.toWeb() }, 201)
+  req.body.author = await User.findOne({ _id: req.user._id })
+  const story = await new Story(req.body).save()
+  res.status(201).send({
+    code: 201,
+    data: story,
+    message: 'Success',
+  })
 }
-module.exports.create = create
 
-async function getAll(req, res) {
-  res.setHeader('Content-Type', 'application/json')
-  const [err, stories] = await to(req.user.Stories())
-  if (err) return errorHandler(res, err, 422)
-  let storiesJSON = []
-  for (let i in stories) {
-    const story = stories[i]
-    storiesJSON.push(story.toWeb())
-  }
-  return successHandler(res, { stories: storiesJSON })
+exports.getStories = async (req, res) => {
+  const page = +req.query.page || 1
+  const limit = 20
+  const skip = page * limit - limit
+  const storiesPromise = Story.find()
+    .skip(skip)
+    .limit(limit)
+    .sort({ created: 'desc' })
+  const countPromise = Story.count()
+  const [stories, count] = await Promise.all([storiesPromise, countPromise])
+  const pages = Math.ceil(count / limit)
+  res.status(200).send({
+    code: 200,
+    data: {
+      stories,
+      meta: {
+        page,
+        total: pages,
+        'has-next': page < pages,
+      },
+    },
+    message: 'OK',
+  })
 }
-module.exports.getAll = getAll
 
 function get(req, res) {
   res.setHeader('Content-Type', 'application/json')

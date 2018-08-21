@@ -1,26 +1,46 @@
 const express = require('express')
+const session = require('express-session')
+const mongoose = require('mongoose')
+const MongoStore = require('connect-mongo')(session)
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
+const cookieParser = require('cookie-parser')
 const passport = require('passport')
 const parseError = require('parse-error')
 const cors = require('cors')
+const expressValidator = require('express-validator')
 const v1 = require('./routes/v1')
+
+require('./middleware/passport')
 
 const app = express()
 
-const config = require('./config') // eslint-disable-line
+const config = require('./config')
 
 app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
+app.use(expressValidator())
+app.use(cookieParser())
+
+app.use(
+  session({
+    secret: config.SECRET,
+    key: config.KEY,
+    resave: false,
+    saveUninitialized: false,
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  })
+)
 
 app.use(passport.initialize())
+app.use(passport.session())
 
 const models = require('./models') // eslint-disable-line
 
 app.use(cors())
 
-app.use('/v1', v1)
+app.use('/api/v1', v1)
 app.use('/', (req, res) => {
   res.statusCode = 200
   res.json({ status: 'success', message: 'Parcel Pending API', data: {} })

@@ -1,30 +1,50 @@
 const mongoose = require('mongoose')
 
-const StorySchema = new mongoose.Schema(
-  {
-    title: {
-      type: String,
-    },
-    body: {
-      type: String,
-    },
-    author: [
-      {
-        author: {
-          type: mongoose.Schema.ObjectId,
-          ref: 'User',
-        },
-        permissions: [{ type: String }],
-      },
-    ],
-  },
-  { timestamps: true }
-)
+const { Schema } = mongoose
+mongoose.Promise = global.Promise
 
-StorySchema.methods.toWeb = function() {
-  const json = this.toJSON()
-  json.id = this._id
-  return json
+const storySchema = new Schema({
+  title: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  body: {
+    type: String,
+    trim: true,
+    required: true,
+  },
+  author: {
+    type: Schema.ObjectId,
+    ref: 'User',
+    required: 'You must supply an author',
+  },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
+  meta: {
+    views: {
+      type: Number,
+      default: 0,
+    },
+    likes: {
+      type: Number,
+      default: 0,
+    },
+    dislikes: {
+      type: Number,
+      default: 0,
+    },
+  },
+})
+
+function autopopulate(next) {
+  this.populate('author')
+  next()
 }
 
-const Story = (module.exports = mongoose.model('Story', StorySchema)) // eslint-disable-line
+storySchema.pre('find', autopopulate)
+storySchema.pre('findOne', autopopulate)
+
+module.exports = mongoose.model('Story', storySchema)

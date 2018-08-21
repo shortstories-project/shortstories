@@ -25,6 +25,7 @@ async function createUser(userInfo) {
     uniqueKey.method = 'email'
     userInfo.email = uniqueKey
     const [err, user] = await to(User.create(userInfo))
+    console.log(err)
     if (err) throwError('User already exists with that email')
     return user
   } else {

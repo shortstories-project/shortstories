@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./app.js",
-    "start": "node ./bin/www"
+    "start": "nodemon ./bin/www"
   },
   "engines": {
     "node": ">=7.6"
@@ -17,6 +17,7 @@
   "dependencies": {
     "await-to-js": "^2.0.1",
     "bcrypt": "^3.0.0",
+    "bcrypt-nodejs": "^0.0.3",
     "bcrypt-promise": "^2.0.0",
     "body-parser": "^1.18.3",
     "connect-flash": "^0.1.1",
