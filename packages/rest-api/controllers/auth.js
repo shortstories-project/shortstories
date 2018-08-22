@@ -2,6 +2,7 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const makeResponse = require('../utils/make-response')
+const setCookie = require('../utils/set-cookie')
 const config = require('../config')
 
 async function login(req, res) {
@@ -17,21 +18,19 @@ async function login(req, res) {
     const token = jwt.sign({ id: user._id }, config.SECRET, {
       expiresIn: 86400,
     })
-    res
-      .status(200)
-      .cookie('token', token, { maxAge: 86400 })
-      .send({
-        code: 200,
-        data: { auth: true, token },
-        message: 'Logged in',
-      })
+    setCookie(res, token).send({
+      code: 200,
+      data: { auth: true },
+      message: 'Logged in',
+    })
   } catch (error) {
     makeResponse(res, 500, 'Failure login on the server')
   }
 }
 
 function logout(req, res) {
-  makeResponse(res, 200, { auth: false, token: null })
+  res.clearCookie('token')
+  makeResponse(res, 200, { auth: false })
 }
 
 async function register(req, res) {
@@ -45,21 +44,25 @@ async function register(req, res) {
     const token = jwt.sign({ id: user._id }, config.SECRET, {
       expiresIn: 86400,
     })
-    makeResponse(res, 200, 'User has successfully registered', { auth: true, token })
+    setCookie(res, token).send({
+      code: 200,
+      data: { auth: true },
+      message: 'User has successfully registered',
+    })
   } catch (error) {
     makeResponse(res, 500, 'Failure register on the server')
   }
 }
 
-async function getProfile(req, res) {
+async function checkAuth(req, res) {
   try {
     const user = await User.findById(req.userId, { password: 0 })
     if (!user) {
       return makeResponse(res, 404, 'User not found')
     }
-    makeResponse(res, 200, 'User was found', user)
+    makeResponse(res, 200, 'Logged in', { auth: true })
   } catch (error) {
-    makeResponse(res, 500, 'Failure get profile on the server')
+    makeResponse(res, 500, 'Failure check auth on the server')
   }
 }
 
@@ -67,5 +70,5 @@ module.exports = {
   login,
   logout,
   register,
-  getProfile,
+  checkAuth,
 }
