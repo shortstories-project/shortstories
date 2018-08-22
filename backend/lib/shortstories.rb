@@ -1,2 +1,0 @@
-module Shortstories
-end
