@@ -22,6 +22,7 @@ async function getStory(req, res) {
 
 async function createStory(req, res) {
   try {
+    req.body.author = req.userId
     const story = await Story.create(req.body)
     makeResponse(res, 200, 'Success', story)
   } catch (error) {
