@@ -4,7 +4,7 @@ const config = require('../config')
 
 async function verifyToken(req, res, next) {
   try {
-    const { token } = req.cookies
+    const { token } = req.session
     if (!token) return makeResponse(res, 403, 'No token provided', { auth: false })
     const decoded = await jwt.verify(token, config.SECRET)
     req.userId = decoded.id

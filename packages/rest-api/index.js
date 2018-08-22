@@ -1,6 +1,8 @@
 const express = require('express')
+const session = require('express-session')
 const mongoose = require('mongoose')
 const Promise = require('bluebird')
+const MongoStore = require('connect-mongo')(session)
 const morgan = require('morgan')
 const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
@@ -33,6 +35,20 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
 app.use(cookieParser())
+
+app.use(
+  session({
+    secret: config.SECRET,
+    key: config.KEY,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 2147483647,
+      secure: true,
+    },
+    store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  })
+)
 
 app.use(cors())
 

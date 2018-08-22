@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 const User = require('../models/user')
 const makeResponse = require('../utils/make-response')
-const setCookie = require('../utils/set-cookie')
 const config = require('../config')
 
 async function login(req, res) {
@@ -16,21 +15,22 @@ async function login(req, res) {
       return makeResponse(res, 401, 'Incorrect password', { auth: false, token: null })
     }
     const token = jwt.sign({ id: user._id }, config.SECRET, {
-      expiresIn: 86400,
+      expiresIn: 2147483647,
     })
-    setCookie(res, token).send({
-      code: 200,
-      data: { auth: true },
-      message: 'Logged in',
-    })
+    req.session.token = token
+    makeResponse(res, 200, 'Logged in', { auth: true })
   } catch (error) {
     makeResponse(res, 500, 'Failure login on the server')
   }
 }
 
-function logout(req, res) {
-  res.clearCookie('token')
-  makeResponse(res, 200, { auth: false })
+async function logout(req, res) {
+  try {
+    await req.session.destroy()
+    makeResponse(res, 200, { auth: false })
+  } catch (error) {
+    makeResponse(res, 500, 'Failure logout on the server')
+  }
 }
 
 async function register(req, res) {
@@ -42,13 +42,10 @@ async function register(req, res) {
       password: hashedPassword,
     })
     const token = jwt.sign({ id: user._id }, config.SECRET, {
-      expiresIn: 86400,
+      expiresIn: 2147483647,
     })
-    setCookie(res, token).send({
-      code: 200,
-      data: { auth: true },
-      message: 'User has successfully registered',
-    })
+    req.session.token = token
+    makeResponse(res, 201, 'User has successfully registered', { auth: true })
   } catch (error) {
     makeResponse(res, 500, 'Failure register on the server')
   }
