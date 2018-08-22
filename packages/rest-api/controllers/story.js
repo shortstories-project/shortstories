@@ -1,61 +1,56 @@
-const { Story, User } = require('../models')
-const { to, errorHandler, successHandler } = require('../services/utils')
+const Story = require('../models/story')
+const makeResponse = require('../utils/make-response')
 
-exports.createStory = async (req, res) => {
-  res.setHeader('Content-Type', 'application/json')
-  req.body.author = await User.findOne({ _id: req.user._id })
-  const story = await new Story(req.body).save()
-  res.status(201).send({
-    code: 201,
-    data: story,
-    message: 'Success',
-  })
-}
-
-exports.getStories = async (req, res) => {
-  const page = +req.query.page || 1
-  const limit = 20
-  const skip = page * limit - limit
-  const storiesPromise = Story.find()
-    .skip(skip)
-    .limit(limit)
-    .sort({ created: 'desc' })
-  const countPromise = Story.count()
-  const [stories, count] = await Promise.all([storiesPromise, countPromise])
-  const pages = Math.ceil(count / limit)
-  res.status(200).send({
-    code: 200,
-    data: {
-      stories,
-      meta: {
-        page,
-        total: pages,
-        'has-next': page < pages,
-      },
-    },
-    message: 'OK',
-  })
-}
-
-function get(req, res) {
-  res.setHeader('Content-Type', 'application/json')
-  return successHandler(res, { company: req.story.toWeb() })
-}
-module.exports.get = get
-
-async function update(req, res) {
-  req.user.story.set(req.body)
-  const [err, story] = await to(req.user.story.save())
-  if (err) {
-    return errorHandler(res, err)
+async function getStories(req, res) {
+  try {
+    const stories = await Story.find({})
+    makeResponse(res, 200, 'Success', stories)
+  } catch (error) {
+    makeResponse(res, 500, 'There was a problem finding the stories')
   }
-  return successHandler(res, { story: story.toWeb() })
 }
-module.exports.update = update
 
-async function remove(req, res) {
-  const [err] = await to(req.story.remove())
-  if (err) return errorHandler(res, 'Error occured trying to delete the story')
-  return successHandler(res, { message: 'Deleted story' }, 204)
+async function getStory(req, res) {
+  try {
+    const story = await Story.findById(req.params.id)
+    if (!story) return makeResponse(res, 404, 'Story not found')
+    makeResponse(res, 200, 'Success', story)
+  } catch (error) {
+    makeResponse(res, 500, 'There was a problem finding the story')
+  }
 }
-module.exports.remove = remove
+
+async function createStory(req, res) {
+  try {
+    const story = await Story.create(req.body)
+    makeResponse(res, 200, 'Success', story)
+  } catch (error) {
+    makeResponse(res, 500, 'There was a problem create story')
+  }
+}
+
+async function updateStory(req, res) {
+  try {
+    const story = await Story.findByIdAndUpdate(req.params.id, req.body, { new: true })
+    makeResponse(res, 200, 'Success', story)
+  } catch (error) {
+    makeResponse(res, 500, 'There was a problem update story')
+  }
+}
+
+async function deleteStory(req, res) {
+  try {
+    await Story.deleteOne({ _id: req.params.id })
+    makeResponse(res, 204, 'Success')
+  } catch (error) {
+    makeResponse(res, 500, 'There was a problem delete story')
+  }
+}
+
+module.exports = {
+  getStories,
+  getStory,
+  createStory,
+  updateStory,
+  deleteStory,
+}

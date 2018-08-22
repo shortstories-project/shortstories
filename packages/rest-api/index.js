@@ -8,6 +8,8 @@ const bodyParser = require('body-parser')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const authRoutes = require('./routes/auth')
+const userRoutes = require('./routes/users')
+const storiesRoutes = require('./routes/stories')
 const config = require('./config')
 
 /* DATABASE */
@@ -44,7 +46,6 @@ app.use(
     saveUninitialized: false,
     cookie: {
       maxAge: 2147483647,
-      secure: true,
     },
     store: new MongoStore({ mongooseConnection: mongoose.connection }),
   })
@@ -57,6 +58,8 @@ app.get('/api', (req, res) => {
 })
 
 app.use('/api/auth', authRoutes)
+app.use('/api/users', userRoutes)
+app.use('/api/stories', storiesRoutes)
 
 app.set('port', config.PORT || 7777)
 const server = app.listen(app.get('port'), () => {
