@@ -1,50 +1,71 @@
-const passport = require('passport')
-const { promisify } = require('es6-promisify')
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const User = require('../models/user')
+const makeResponse = require('../utils/make-response')
+const config = require('../config')
 
-exports.validateRegister = (req, res, next) => {
-  req.sanitizeBody('name')
-  req.checkBody('name', 'You must supply a name!').notEmpty()
-  req.checkBody('email', 'That Email is not valid!').isEmail()
-  req.sanitizeBody('email').normalizeEmail({
-    gmail_remove_dots: false,
-    remove_extension: false,
-    gmail_remove_subaddress: false,
-  })
-  req.checkBody('password', 'Password Cannot be Blank!').notEmpty()
-  req.checkBody('password-confirm', 'Confirmed Password cannot be blank!').notEmpty()
-  req.checkBody('password-confirm', 'Oops! Your passwords do not match').equals(req.body.password)
-
-  const errors = req.validationErrors()
-  if (errors) {
-    res.status(422).send({
-      code: 422,
-      data: errors,
-      message: 'Errors',
+async function login(req, res) {
+  try {
+    const user = await User.findOne({ email: req.body.email })
+    if (!user) {
+      return makeResponse(res, 404, 'User not found')
+    }
+    const passwordIsValid = await bcrypt.compare(req.body.password, user.password)
+    if (!passwordIsValid) {
+      return makeResponse(res, 401, 'Incorrect password', { auth: false, token: null })
+    }
+    const token = jwt.sign({ id: user._id }, config.SECRET, {
+      expiresIn: 86400,
     })
-    return
+    res
+      .status(200)
+      .cookie('token', token, { maxAge: 86400 })
+      .send({
+        code: 200,
+        data: { auth: true, token },
+        message: 'Logged in',
+      })
+  } catch (error) {
+    makeResponse(res, 500, 'Failure login on the server')
   }
-  next()
 }
 
-exports.register = async (req, res, next) => {
-  const user = new User({ email: req.body.email, name: req.body.name })
-  const register = promisify(User.register.bind(User))
-  await register(user, req.body.password)
-  next()
+function logout(req, res) {
+  makeResponse(res, 200, { auth: false, token: null })
 }
 
-exports.login = passport.authenticate('local')
-
-exports.logout = (req, res) => {
-  req.logout()
-  res.redirect('/auth/login')
-}
-
-exports.isLoggedIn = (req, res, next) => {
-  if (req.isAuthenticated()) {
-    next()
-    return
+async function register(req, res) {
+  try {
+    const hashedPassword = await bcrypt.hash(req.body.password, 8)
+    const user = await User.create({
+      name: req.body.name,
+      email: req.body.email,
+      password: hashedPassword,
+    })
+    const token = jwt.sign({ id: user._id }, config.SECRET, {
+      expiresIn: 86400,
+    })
+    makeResponse(res, 200, 'User has successfully registered', { auth: true, token })
+  } catch (error) {
+    makeResponse(res, 500, 'Failure register on the server')
   }
-  res.redirect('/auth/login')
+}
+
+async function getProfile(req, res) {
+  try {
+    const user = await User.findById(req.userId, { password: 0 })
+    if (!user) {
+      return makeResponse(res, 404, 'User not found')
+    }
+    makeResponse(res, 200, 'User was found', user)
+  } catch (error) {
+    makeResponse(res, 500, 'Failure get profile on the server')
+  }
+}
+
+module.exports = {
+  login,
+  logout,
+  register,
+  getProfile,
 }

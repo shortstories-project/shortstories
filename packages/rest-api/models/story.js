@@ -1,27 +1,19 @@
 const mongoose = require('mongoose')
 
-const { Schema } = mongoose
-mongoose.Promise = global.Promise
-
-const storySchema = new Schema({
+const storySchema = mongoose.Schema({
   title: {
     type: String,
     trim: true,
-    required: true,
+    required: 'Title is required',
   },
   body: {
     type: String,
     trim: true,
-    required: true,
+    required: 'Story text is required',
   },
   author: {
-    type: Schema.ObjectId,
+    type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: 'You must supply an author',
-  },
-  created: {
-    type: Date,
-    default: Date.now,
   },
   meta: {
     views: {
@@ -37,14 +29,12 @@ const storySchema = new Schema({
       default: 0,
     },
   },
+  created: {
+    type: Date,
+    default: Date.now,
+  },
 })
 
-function autopopulate(next) {
-  this.populate('author')
-  next()
-}
+const Story = mongoose.model('Story', storySchema)
 
-storySchema.pre('find', autopopulate)
-storySchema.pre('findOne', autopopulate)
-
-module.exports = mongoose.model('Story', storySchema)
+module.exports = Story
