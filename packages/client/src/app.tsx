@@ -1,35 +1,49 @@
 import * as React from 'react'
 import { Provider } from 'react-redux'
-import { ConnectedRouter } from 'connected-react-router'
-import { Route, Switch } from 'react-router-dom'
+import { ApolloProvider } from 'react-apollo'
+import { ApolloClient } from 'apollo-client'
+import { createHttpLink } from 'apollo-link-http'
+import { setContext } from 'apollo-link-context'
+import { InMemoryCache } from 'apollo-cache-inmemory'
 import { hot } from 'react-hot-loader'
 import { injectGlobal } from 'styled-components'
-import { Auth, CreateStory, Main, NotFound, Profile, Story, User } from 'pages'
-import { store, history } from './store'
+import Router from './pages'
+import store from './store'
 import style from './style'
 
-/* tslint:disable */
-injectGlobal`${style}`
-/* tslint:enable */
+injectGlobal`${style}` // tslint:disable-line
+
+const httpLink = createHttpLink({
+  uri: 'http://localhost:8000/graphql',
+})
+
+const authLink = setContext((_, { headers }) => {
+  const token = localStorage.getItem('token')
+  return {
+    headers: {
+      ...headers,
+      'x-token': token || '',
+    },
+  }
+})
+
+const link = authLink.concat(httpLink)
+
+const cache = new InMemoryCache()
+
+const client = new ApolloClient({
+  link,
+  cache,
+})
 
 class App extends React.PureComponent<any, any> {
   public render() {
     return (
-      <Provider store={store}>
-        <ConnectedRouter history={history}>
-          <div>
-            <Switch>
-              <Route exact path="/" component={Main} />
-              <Route path="/auth" component={Auth} />
-              <Route path="/create-story" component={CreateStory} />
-              <Route path="/profile" component={Profile} />
-              <Route path="/story/:id" component={Story} />
-              <Route path="/user/:id" component={User} />
-              <Route component={NotFound} />
-            </Switch>
-          </div>
-        </ConnectedRouter>
-      </Provider>
+      <ApolloProvider client={client}>
+        <Provider store={store}>
+          <Router />
+        </Provider>
+      </ApolloProvider>
     )
   }
 }

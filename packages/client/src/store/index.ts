@@ -1,11 +1,9 @@
 import { applyMiddleware, createStore } from 'redux'
-import { createBrowserHistory } from 'history'
 import thunkMiddleware from 'redux-thunk'
 import { connectRouter, routerMiddleware } from 'connected-react-router'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import history from '../constants/history'
 import rootReducer from '../reducers'
-
-const history = createBrowserHistory()
 
 function configureStore(preloadedState?: object) {
   const reducerWithHistory = connectRouter(history)(rootReducer)
@@ -13,7 +11,11 @@ function configureStore(preloadedState?: object) {
   const middlewareEnhancer = applyMiddleware(...middlewares)
   const enhancers = [middlewareEnhancer]
   const composedEnhancers = composeWithDevTools(...enhancers)
-  const store = createStore(reducerWithHistory, preloadedState, composedEnhancers)
+  const store = createStore(
+    reducerWithHistory,
+    preloadedState,
+    composedEnhancers
+  )
   if (process.env.NODE_ENV !== 'production' && module.hot) {
     module.hot.accept('../reducers', () => {
       store.replaceReducer(reducerWithHistory)
@@ -24,4 +26,4 @@ function configureStore(preloadedState?: object) {
 
 const configuredStore = configureStore()
 
-export { configuredStore as store, history }
+export default configuredStore

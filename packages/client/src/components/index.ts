@@ -1,6 +1,17 @@
 import Button from './button'
+import ErrorMessage from './error-message'
 import { GridColumn, GridContainer, GridRow } from './grid'
 import Input from './input'
 import Logo from './logo'
+import SignOutButton from './sign-out-button'
 
-export { Button, GridColumn, GridContainer, GridRow, Input, Logo }
+export {
+  Button,
+  ErrorMessage,
+  GridColumn,
+  GridContainer,
+  GridRow,
+  Input,
+  Logo,
+  SignOutButton,
+}
