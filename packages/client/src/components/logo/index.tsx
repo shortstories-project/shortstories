@@ -8,7 +8,6 @@ interface IProps {
 const StyledLogo = styled.p`
   text-decoration: none;
   color: black;
-  cursor: ${(props: IProps) => (props.full ? 'pointer' : 'default')};
   font-family: 'Caveat', sans-serif;
   font-size: 2rem;
   text-align: center;

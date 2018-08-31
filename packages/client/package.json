@@ -27,6 +27,7 @@
     "graphql": "^0.13.2",
     "graphql-tag": "^2.9.2",
     "history": "^4.7.2",
+    "idx": "^2.4.0",
     "immutable": "^3.8.2",
     "masonry-layout": "^4.2.2",
     "prop-types": "^15.6.2",

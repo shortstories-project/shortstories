@@ -7,6 +7,11 @@ export default `
   --purple: #6d47d9;
 }
 
+a {
+  text-decoration: none;
+  color: var(--black);
+}
+
 html {
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,

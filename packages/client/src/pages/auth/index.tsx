@@ -1,6 +1,13 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import { GridContainer, GridRow, GridColumn, Logo, Input, Button } from 'components'
+import {
+  GridContainer,
+  GridRow,
+  GridColumn,
+  Logo,
+  Input,
+  Button,
+} from 'components'
 
 const AuthContainer = styled.div`
   background-color: var(--white);

@@ -40,7 +40,7 @@ class SignUpForm extends React.PureComponent<any, any> {
       this.setState({ ...INITIAL_STATE })
       localStorage.setItem('token', data.signUp.token)
       await this.props.refetch()
-      this.props.history.push(routes.MAIN)
+      this.props.history.push(routes.STORIES)
     })
     event.preventDefault()
   }

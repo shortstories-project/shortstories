@@ -8,7 +8,7 @@ import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { injectGlobal } from 'styled-components'
 import { hot } from 'react-hot-loader'
-import App from './app'
+import App from 'pages/app'
 import style from './style'
 
 injectGlobal`${style}` // tslint:disable-line
@@ -18,9 +18,10 @@ const httpLink = createHttpLink({
 })
 
 const authLink = new ApolloLink((operation, forward) => {
+  const token = localStorage.getItem('token')
   operation.setContext({
     headers: {
-      'x-token': localStorage.getItem('token'),
+      'x-token': token || '',
     },
   })
   return forward(operation)
@@ -28,7 +29,7 @@ const authLink = new ApolloLink((operation, forward) => {
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
-    graphQLErrors.map(({ message, locations, path }) =>
+    graphQLErrors.forEach(({ message, locations, path }) =>
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       )

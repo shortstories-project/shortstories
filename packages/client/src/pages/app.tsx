@@ -1,22 +1,21 @@
 import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
-import withSession from './higher-order-components/with-session'
+import withSession from '../higher-order-components/with-session'
 import Main from 'pages/main'
 import SignUp from 'pages/sign-up'
 import SignIn from 'pages/sign-in'
-import Navigation from 'components/navigation'
+import { Header } from 'components'
 import CreateStory from 'pages/create-story'
 import NotFound from 'pages/not-found'
-import * as routes from './constants/routes'
-import history from './constants/history'
+import * as routes from '../constants/routes'
+import history from '../constants/history'
 
 const App = ({ session, refetch }: any) => (
   <Router history={history}>
     <div>
-      <Navigation session={session} />
-      <hr />
+      <Header session={session} />
       <Switch>
-        <Route exact path={routes.MAIN} render={() => <Main />} />
+        <Route exact path={routes.STORIES} render={() => <Main />} />
         <Route
           exact
           path={routes.SIGN_UP}
