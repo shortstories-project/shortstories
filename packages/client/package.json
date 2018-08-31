@@ -30,6 +30,7 @@
     "idx": "^2.4.0",
     "immutable": "^3.8.2",
     "masonry-layout": "^4.2.2",
+    "mauerwerk": "^2.0.0",
     "prop-types": "^15.6.2",
     "react": "^16.4.2",
     "react-apollo": "^2.1.11",

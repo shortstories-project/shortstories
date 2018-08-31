@@ -13,7 +13,7 @@ const Row = styled.div`
   ${(props: IProps) =>
     props.center &&
     `
-    height: 100vh;
+    height: calc(100vh - 80px);
     align-items: center;
     justify-content: center;
   `};

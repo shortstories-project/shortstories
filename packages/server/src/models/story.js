@@ -5,7 +5,7 @@ const story = (sequelize, DataTypes) => {
       validate: { notEmpty: true },
     },
     body: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT('long'),
       validate: { notEmpty: true },
     },
   })

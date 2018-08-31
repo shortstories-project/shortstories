@@ -2,7 +2,16 @@ import * as React from 'react'
 import { withRouter, Link } from 'react-router-dom'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import { ErrorMessage } from 'components'
+import styled from 'styled-components'
+import {
+  GridContainer,
+  GridRow,
+  GridColumn,
+  Logo,
+  Input,
+  Button,
+  ErrorMessage,
+} from 'components'
 import * as routes from '../../constants/routes'
 
 const SIGN_IN = gql`
@@ -13,22 +22,26 @@ const SIGN_IN = gql`
   }
 `
 
-const SignInPage = ({ history, refetch }: any) => (
-  <div>
-    <h1>Sign In</h1>
-    <SignInForm history={history} refetch={refetch} />
-    <p>
-      Don't have an account? <Link to={routes.SIGN_UP}>Sign Up</Link>
-    </p>
-  </div>
-)
+const AuthContainer = styled.div`
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 2px 10px;
+  padding: 36px;
+`
+
+const Form = styled.form`
+  height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
 
 const INITIAL_STATE = {
   login: '',
   password: '',
 }
 
-class SignInForm extends React.PureComponent<any, any> {
+class SignIn extends React.PureComponent<any, any> {
   public state = { ...INITIAL_STATE }
 
   public onChange = (event: any) => {
@@ -51,31 +64,41 @@ class SignInForm extends React.PureComponent<any, any> {
     const isInvalid = password === '' || login === ''
     return (
       <Mutation mutation={SIGN_IN} variables={{ login, password }}>
-        {(signIn, { data, loading, error }) => (
-          <form onSubmit={event => this.onSubmit(event, signIn)}>
-            <input
-              name="login"
-              value={login}
-              onChange={this.onChange}
-              type="text"
-              placeholder="Email or Username"
-            />
-            <input
-              name="password"
-              value={password}
-              onChange={this.onChange}
-              type="password"
-              placeholder="Password"
-            />
-            <button disabled={isInvalid || loading} type="submit">
-              Sign In
-            </button>
-            {error && <ErrorMessage error={error} />}
-          </form>
+        {signIn => (
+          <GridContainer>
+            <GridRow center>
+              <GridColumn lg={4} md={3} sm={2} xs={1} />
+              <GridColumn lg={4} md={6} sm={8} xs={10}>
+                <AuthContainer>
+                  <Logo full={false} />
+                  <Form onSubmit={event => this.onSubmit(event, signIn)}>
+                    <Input
+                      type="text"
+                      id="Login"
+                      label="Login"
+                      name="login"
+                      value={login}
+                      onChange={this.onChange}
+                    />
+                    <Input
+                      type="password"
+                      id="Password"
+                      label="Password"
+                      name="password"
+                      value={password}
+                      onChange={this.onChange}
+                    />
+                    <Button type="submit" title="LOGIN" />
+                  </Form>
+                </AuthContainer>
+              </GridColumn>
+              <GridColumn lg={4} md={3} sm={2} xs={1} />
+            </GridRow>
+          </GridContainer>
         )}
       </Mutation>
     )
   }
 }
 
-export default withRouter(SignInPage)
+export default withRouter(SignIn)

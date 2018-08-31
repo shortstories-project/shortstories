@@ -19,16 +19,8 @@ const StyledButton = styled.button`
 
 class Button extends React.PureComponent<any> {
   public render() {
-    const { title } = this.props
-    return (
-      <StyledButton
-        onClick={e => {
-          e.preventDefault()
-        }}
-      >
-        {title}
-      </StyledButton>
-    )
+    const { title, type } = this.props
+    return <StyledButton type={type}>{title}</StyledButton>
   }
 }
 

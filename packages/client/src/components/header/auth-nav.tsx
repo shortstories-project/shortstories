@@ -23,7 +23,7 @@ const AuthNav = ({ username }: IProps) => (
     </NavLink>
     <Items>
       <NavLink to={routes.CREATE_STORY}>Create Story</NavLink>
-      <NavLink to={routes.ACCOUNT}>{username}</NavLink>
+      <NavLink to={routes.ACCOUNT}>Account</NavLink>
       <ApolloConsumer>
         {client => (
           <NavLink

@@ -24,16 +24,17 @@ html {
 }
 
 body {
-  background-image: url("src/assets/images/topography.svg"),
-    linear-gradient(110deg, #38adae, #cd295a);
-  background-size: 340px, auto;
-  background-repeat: repeat;
-  min-height: calc(100vh);
-  background-attachment: fixed;
   font-size: 1rem;
   letter-spacing: -1px;
   margin: 0;
   padding: 0;
+}
+
+#app {
+  background-image: url(src/assets/images/topography.svg), linear-gradient(110deg,#38adae,#cd295a);
+  background-size: 340px,auto;
+  background-repeat: repeat;
+  background-attachment: fixed;
 }
 
 h1,

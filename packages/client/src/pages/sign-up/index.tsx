@@ -2,7 +2,16 @@ import * as React from 'react'
 import { withRouter } from 'react-router-dom'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
-import { ErrorMessage } from 'components'
+import styled from 'styled-components'
+import {
+  GridContainer,
+  GridRow,
+  GridColumn,
+  Logo,
+  Input,
+  Button,
+  ErrorMessage,
+} from 'components'
 import * as routes from '../../constants/routes'
 
 const SIGN_UP = gql`
@@ -13,6 +22,20 @@ const SIGN_UP = gql`
   }
 `
 
+const AuthContainer = styled.div`
+  background-color: var(--white);
+  border-radius: 8px;
+  box-shadow: rgba(0, 0, 0, 0.45) 0px 2px 10px;
+  padding: 36px;
+`
+
+const Form = styled.form`
+  height: 340px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+`
+
 const INITIAL_STATE = {
   username: '',
   email: '',
@@ -20,14 +43,7 @@ const INITIAL_STATE = {
   passwordConfirmation: '',
 }
 
-const SignUpPage = ({ history, refetch }: any) => (
-  <div>
-    <h1>Sign Up</h1>
-    <SignUpForm history={history} refetch={refetch} />
-  </div>
-)
-
-class SignUpForm extends React.PureComponent<any, any> {
+class SignUp extends React.PureComponent<any, any> {
   public state = { ...INITIAL_STATE }
 
   public onChange = (event: any) => {
@@ -54,46 +70,57 @@ class SignUpForm extends React.PureComponent<any, any> {
       username === ''
     return (
       <Mutation mutation={SIGN_UP} variables={{ username, email, password }}>
-        {(signUp, { data, loading, error }) => (
-          <form onSubmit={event => this.onSubmit(event, signUp)}>
-            <input
-              name="username"
-              value={username}
-              onChange={this.onChange}
-              type="text"
-              placeholder="Full Name"
-            />
-            <input
-              name="email"
-              value={email}
-              onChange={this.onChange}
-              type="email"
-              placeholder="Email Address"
-            />
-            <input
-              name="password"
-              value={password}
-              onChange={this.onChange}
-              type="password"
-              placeholder="Password"
-            />
-            <input
-              name="passwordConfirmation"
-              value={passwordConfirmation}
-              onChange={this.onChange}
-              type="password"
-              placeholder="Confirm Password"
-            />
-            <button disabled={isInvalid || loading} type="submit">
-              Sign Up
-            </button>
-
-            {error && <ErrorMessage error={error} />}
-          </form>
+        {signUp => (
+          <GridContainer>
+            <GridRow center>
+              <GridColumn lg={4} md={3} sm={2} xs={1} />
+              <GridColumn lg={4} md={6} sm={8} xs={10}>
+                <AuthContainer>
+                  <Logo full={false} />
+                  <Form onSubmit={event => this.onSubmit(event, signUp)}>
+                    <Input
+                      type="text"
+                      id="username"
+                      label="Username"
+                      name="username"
+                      value={username}
+                      onChange={this.onChange}
+                    />
+                    <Input
+                      type="email"
+                      id="email"
+                      label="Email"
+                      name="email"
+                      value={email}
+                      onChange={this.onChange}
+                    />
+                    <Input
+                      type="password"
+                      id="password"
+                      label="Password"
+                      name="password"
+                      value={password}
+                      onChange={this.onChange}
+                    />
+                    <Input
+                      type="password"
+                      id="passwordConfirmation"
+                      label="Confirm password"
+                      name="passwordConfirmation"
+                      value={passwordConfirmation}
+                      onChange={this.onChange}
+                    />
+                    <Button type="submit" title="REGISTER" />
+                  </Form>
+                </AuthContainer>
+              </GridColumn>
+              <GridColumn lg={4} md={3} sm={2} xs={1} />
+            </GridRow>
+          </GridContainer>
         )}
       </Mutation>
     )
   }
 }
 
-export default withRouter(SignUpPage)
+export default withRouter(SignUp)

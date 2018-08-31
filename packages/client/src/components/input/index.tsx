@@ -5,6 +5,9 @@ interface IProps {
   id: string
   type: string
   label: string
+  name?: string
+  value?: string
+  onChange?: (e: any) => void
 }
 
 interface IState {
@@ -48,11 +51,15 @@ const TextField: any = styled.input`
   }
   + label {
     color: ${(props: any) => (!props.isEmpty ? 'var(--black)' : '#6a7989')};
-    transform: ${(props: any) => (!props.isEmpty ? 'translate3d(0, -1.25em, 0) scale3d(0.75, 0.75, 1)' : 'initial')};
+    transform: ${(props: any) =>
+      !props.isEmpty
+        ? 'translate3d(0, -1.25em, 0) scale3d(0.75, 0.75, 1)'
+        : 'initial'};
   }
   ~ svg {
     stroke: ${(props: any) => (!props.isEmpty ? 'var(--black)' : '#92989e')};
-    transform: ${(props: any) => (!props.isEmpty ? 'translate3d(-66.6%, 0, 0)' : 'initial')};
+    transform: ${(props: any) =>
+      !props.isEmpty ? 'translate3d(-66.6%, 0, 0)' : 'initial'};
   }
 `
 
@@ -97,28 +104,30 @@ const Line = styled.svg`
 class Input extends React.PureComponent<IProps, IState> {
   public static defaultProps = {
     type: 'text',
-  }
-
-  public state = {
     value: '',
   }
 
-  public onChange = (e: any) => {
-    this.setState({
-      value: e.target.value,
-    })
-  }
-
   public render() {
-    const { id, type, label, ...rest } = this.props
-    const { value } = this.state
+    const { id, type, label, onChange, value, ...rest } = this.props
     return (
       <Container>
-        <TextField {...rest} isEmpty={value.length === 0} onChange={this.onChange} value={value} type={type} id={id} />
+        <TextField
+          {...rest}
+          isEmpty={value.length === 0}
+          onChange={onChange}
+          value={value}
+          type={type}
+          id={id}
+        />
         <Label htmlFor={id}>
           <span>{label}</span>
         </Label>
-        <Line width="300%" height="100%" viewBox="0 0 1200 60" preserveAspectRatio="none">
+        <Line
+          width="300%"
+          height="100%"
+          viewBox="0 0 1200 60"
+          preserveAspectRatio="none"
+        >
           <path d="M0,56.5c0,0,298.666,0,399.333,0C448.336,56.5,513.994,46,597,46c77.327,0,135,10.5,200.999,10.5c95.996,0,402.001,0,402.001,0" />
         </Line>
       </Container>
