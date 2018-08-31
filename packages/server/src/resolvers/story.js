@@ -35,7 +35,6 @@ export default {
     },
 
     story: async (parent, { id }, { models }) => {
-      console.log(models)
       const story = await models.Story.findById(id)
       return story
     },

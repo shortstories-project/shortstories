@@ -1,4 +1,5 @@
 import * as React from 'react'
+import withAuthorization from '../../higher-order-components/with-authorization'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 
@@ -68,4 +69,6 @@ class CreateStory extends React.PureComponent {
   }
 }
 
-export default CreateStory
+export default withAuthorization(session => Boolean(session && session.me))(
+  CreateStory
+)

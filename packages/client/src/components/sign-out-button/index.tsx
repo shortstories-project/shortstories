@@ -3,7 +3,7 @@ import { ApolloConsumer } from 'react-apollo'
 import history from '../../constants/history'
 import * as routes from '../../constants/routes'
 
-const signOut = (client: any) => {
+export const signOut = (client: any) => {
   localStorage.setItem('token', '')
   client.resetStore()
   history.push(routes.SIGN_IN)

@@ -19,7 +19,8 @@
     "jsx-no-lambda": false,
     "jsx-boolean-value": false,
     "object-literal-sort-keys": false,
-    "no-shadowed-variable": false
+    "no-shadowed-variable": false,
+    "no-console": false
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

@@ -26,7 +26,12 @@ const GET_STORIES = gql`
 const StoriesList = ({ stories, onLoadMore, hasNextPage }: any) => (
   <div>
     {stories.map((s: any) => (
-      <p>{JSON.stringify(s)}</p>
+      <div style={{ background: 'white' }}>
+        <h2>{s.title}</h2>
+        {s.body.split('\n').map((p: any) => (
+          <p>{p}</p>
+        ))}
+      </div>
     ))}
     {hasNextPage && <button onClick={onLoadMore}>more</button>}
   </div>

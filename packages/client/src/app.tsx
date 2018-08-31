@@ -1,51 +1,37 @@
 import * as React from 'react'
-import { Provider } from 'react-redux'
-import { ApolloProvider } from 'react-apollo'
-import { ApolloClient } from 'apollo-client'
-import { createHttpLink } from 'apollo-link-http'
-import { setContext } from 'apollo-link-context'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { hot } from 'react-hot-loader'
-import { injectGlobal } from 'styled-components'
-import Router from './pages'
-import store from './store'
-import style from './style'
+import { Router, Route, Switch } from 'react-router-dom'
+import withSession from './higher-order-components/with-session'
+import Main from 'pages/main'
+import SignUp from 'pages/sign-up'
+import SignIn from 'pages/sign-in'
+import Navigation from 'components/navigation'
+import CreateStory from 'pages/create-story'
+import NotFound from 'pages/not-found'
+import * as routes from './constants/routes'
+import history from './constants/history'
 
-injectGlobal`${style}` // tslint:disable-line
+const App = ({ session, refetch }: any) => (
+  <Router history={history}>
+    <div>
+      <Navigation session={session} />
+      <hr />
+      <Switch>
+        <Route exact path={routes.MAIN} render={() => <Main />} />
+        <Route
+          exact
+          path={routes.SIGN_UP}
+          render={() => <SignUp refetch={refetch} />}
+        />
+        <Route
+          exact
+          path={routes.SIGN_IN}
+          render={() => <SignIn refetch={refetch} />}
+        />
+        <Route path={routes.CREATE_STORY} component={CreateStory} />
+        <Route component={NotFound} />
+      </Switch>
+    </div>
+  </Router>
+)
 
-const httpLink = createHttpLink({
-  uri: 'http://localhost:8000/graphql',
-})
-
-const authLink = setContext((_, { headers }) => {
-  const token = localStorage.getItem('token')
-  return {
-    headers: {
-      ...headers,
-      'x-token': token || '',
-    },
-  }
-})
-
-const link = authLink.concat(httpLink)
-
-const cache = new InMemoryCache()
-
-const client = new ApolloClient({
-  link,
-  cache,
-})
-
-class App extends React.PureComponent<any, any> {
-  public render() {
-    return (
-      <ApolloProvider client={client}>
-        <Provider store={store}>
-          <Router />
-        </Provider>
-      </ApolloProvider>
-    )
-  }
-}
-
-export default hot(module)(App)
+export default withSession(App)
