@@ -12,7 +12,7 @@ import history from '../constants/history'
 
 const App = ({ session, refetch }: any) => (
   <Router history={history}>
-    <div>
+    <>
       <Header session={session} />
       <Switch>
         <Route exact path={routes.STORIES} render={() => <Main />} />
@@ -29,7 +29,7 @@ const App = ({ session, refetch }: any) => (
         <Route path={routes.CREATE_STORY} component={CreateStory} />
         <Route component={NotFound} />
       </Switch>
-    </div>
+    </>
   </Router>
 )
 

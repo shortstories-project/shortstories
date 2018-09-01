@@ -1,5 +1,6 @@
 import './style.css'
 import * as React from 'react'
+import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Grid, Fade, Slug } from 'mauerwerk'
@@ -23,6 +24,10 @@ const GET_STORIES = gql`
       }
     }
   }
+`
+
+const StyledGrid = styled(Grid)`
+  height: calc(100vh - 80px) !important;
 `
 
 const Cell = ({ toggle, title, body, maximized }: any) => {
@@ -67,8 +72,7 @@ const Cell = ({ toggle, title, body, maximized }: any) => {
 const StoriesList = ({ stories, onLoadMore, hasNextPage }: any) => {
   return (
     <>
-      <Grid
-        className="grid"
+      <StyledGrid
         data={stories}
         keys={(d: any) => d.id}
         columns={4}
@@ -82,7 +86,7 @@ const StoriesList = ({ stories, onLoadMore, hasNextPage }: any) => {
         {(data: any, maximized: any, toggle: any) => {
           return <Cell {...data} maximized={maximized} toggle={toggle} />
         }}
-      </Grid>
+      </StyledGrid>
       {hasNextPage && <button onClick={onLoadMore}>more</button>}
     </>
   )
@@ -99,7 +103,7 @@ const Stories = ({ session }: any) => (
 
       const { edges, pageInfo } = stories
       return (
-        <>
+        <main>
           <StoriesList
             session={session}
             stories={edges}
@@ -127,7 +131,7 @@ const Stories = ({ session }: any) => (
               })
             }
           />
-        </>
+        </main>
       )
     }}
   </Query>
