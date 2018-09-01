@@ -12,6 +12,7 @@ if (process.env.DATABASE_URL) {
     process.env.DATABASE_PASSWORD,
     {
       dialect: 'postgres',
+      operatorsAliases: false,
     }
   )
 }
@@ -19,6 +20,7 @@ if (process.env.DATABASE_URL) {
 const models = {
   User: sequelize.import('./user'),
   Story: sequelize.import('./story'),
+  Comment: sequelize.import('./comment'),
 }
 
 Object.keys(models).forEach(key => {

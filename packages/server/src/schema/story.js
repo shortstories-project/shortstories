@@ -8,15 +8,16 @@ export default gql`
 
   extend type Mutation {
     createStory(title: String!, body: String!): Story!
+    updateStory(title: String!, body: String!): Story!
     deleteStory(id: ID!): Boolean!
   }
 
   type StoryConnection {
     edges: [Story!]!
-    pageInfo: PageInfo!
+    pageInfo: StoriesPageInfo!
   }
 
-  type PageInfo {
+  type StoriesPageInfo {
     hasNextPage: Boolean!
     endCursor: String!
   }
@@ -27,5 +28,9 @@ export default gql`
     body: String!
     user: User!
     createdAt: String!
+    likes: Int!
+    dislikes: Int!
+    views: Int!
+    comments: [Comment!]
   }
 `

@@ -18,10 +18,16 @@ export const isStoryOwner = async (
   { models, me },
 ) => {
   const story = await models.Story.findById(id, { raw: true })
-
   if (story.userId !== me.id) {
     throw new ForbiddenError('Not authenticated as owner.')
   }
+  return skip
+}
 
+export const isCommentOwner = async (parent, { id }, { models, me }) => {
+  const comment = await models.Comment.findById(id, { raw: true })
+  if (comment.userId !== me.id) {
+    throw new ForbiddenError('Not authenticated as owner.')
+  }
   return skip
 }

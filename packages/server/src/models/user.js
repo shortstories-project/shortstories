@@ -34,6 +34,7 @@ const user = (sequelize, DataTypes) => {
 
   User.associate = models => {
     User.hasMany(models.Story)
+    User.hasMany(models.Comment)
   }
 
   User.findByLogin = async login => {

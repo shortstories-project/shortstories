@@ -4,11 +4,18 @@
   "description": "GraphQL API for shortstories",
   "main": "src/index.js",
   "repository": "https://github.com/shortstories-project/shortstories",
-  "keywords": ["graphql", "express", "apollo", "postgresql", "sequelize"],
+  "keywords": [
+    "graphql",
+    "express",
+    "apollo",
+    "postgresql",
+    "sequelize"
+  ],
   "author": "Shashkov Danil <shashkovdanil@gmail.com> (https://github.com/shashkovdanil)",
   "license": "MIT",
   "scripts": {
-    "start": "nodemon --exec babel-node src/index.js"
+    "start": "nodemon --exec babel-node src/index.js",
+    "test-server": "TEST_DATABASE=shortstoriestest npm start"
   },
   "dependencies": {
     "apollo-server": "^2.0.5",
