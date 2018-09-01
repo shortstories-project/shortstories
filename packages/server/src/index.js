@@ -63,55 +63,7 @@ const isTest = !!process.env.TEST_DATABASE
 const isProduction = !!process.env.DATABASE_URL
 const port = process.env.PORT || 8000
 
-const createUsersWithMessages = async date => {
-  await models.User.create(
-    {
-      username: 'shashkov0',
-      email: 'shashkovdanil@gmail.com',
-      password: '12345678',
-      role: 'ADMIN',
-      stories: [
-        {
-          title: 'Title 1',
-          body: 'Body 1',
-          createdAt: date.setSeconds(date.getSeconds() + 1),
-        },
-      ],
-    },
-    {
-      include: [models.Story],
-    }
-  )
-
-  await models.User.create(
-    {
-      username: 'ddavids',
-      email: 'hello@david.com',
-      password: 'ddavids',
-      stories: [
-        {
-          title: 'Title 2',
-          body: 'Body 2',
-          createdAt: date.setSeconds(date.getSeconds() + 1),
-        },
-        {
-          title: 'Title 3',
-          body: 'Body 3',
-          createdAt: date.setSeconds(date.getSeconds() + 1),
-        },
-      ],
-    },
-    {
-      include: [models.Story],
-    }
-  )
-}
-
 sequelize.sync({ force: isTest || isProduction }).then(async () => {
-  if (isTest || isProduction) {
-    createUsersWithMessages(new Date())
-  }
-
   app.listen({ port }, () => {
     console.log(`🚀 Server ready at http://localhost:${port}${server.graphqlPath}`)
   })

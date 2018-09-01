@@ -14,7 +14,7 @@ import style from './style'
 injectGlobal`${style}` // tslint:disable-line
 
 const httpLink = createHttpLink({
-  uri: 'http://localhost:8000/graphql',
+  uri: 'https://shortstories-graphql.herokuapp.com/graphql',
 })
 
 const authLink = new ApolloLink((operation, forward) => {
