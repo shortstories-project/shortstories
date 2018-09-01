@@ -1,12 +1,12 @@
 {
-  "name": "shortstories",
+  "name": "shortstories-react-app",
   "version": "1.0.0",
   "description": "Application for writing short stories",
-  "main": "index.js",
+  "main": "src/index.tsx",
   "repository": "https://github.com/shortstories-project/shortstories",
-  "author": "Shashkov <shashkovdanil@gmail.com>",
+  "author": "Shashkov Danil <shashkovdanil@gmail.com> (https://github.com/shashkovdanil)",
   "license": "MIT",
-  "private": false,
+  "keywords": ["react", "typescript", "graphql", "apollo", "styled-components"],
   "scripts": {
     "start": "webpack-dev-server --config ./webpack.config.js --mode development",
     "build": "webpack --mode production",
