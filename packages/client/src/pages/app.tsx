@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Router, Route, Switch } from 'react-router-dom'
 import withSession from '../higher-order-components/with-session'
-import Main from 'pages/main'
+import Stories from 'pages/stories'
 import SignUp from 'pages/sign-up'
 import SignIn from 'pages/sign-in'
 import { Header } from 'components'
@@ -15,7 +15,7 @@ const App = ({ session, refetch }: any) => (
     <>
       <Header session={session} />
       <Switch>
-        <Route exact path={routes.STORIES} render={() => <Main />} />
+        <Route exact path={routes.STORIES} render={() => <Stories />} />
         <Route
           exact
           path={routes.SIGN_UP}

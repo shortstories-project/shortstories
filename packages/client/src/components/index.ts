@@ -5,6 +5,7 @@ import Header from './header'
 import Input from './input'
 import Logo from './logo'
 import SignOutButton from './sign-out-button'
+import Story from './story'
 
 export {
   Button,
@@ -16,4 +17,5 @@ export {
   Input,
   Logo,
   SignOutButton,
+  Story,
 }
