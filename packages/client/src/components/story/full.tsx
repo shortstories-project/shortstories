@@ -1,5 +1,4 @@
 import * as React from 'react'
-import styled from 'styled-components'
 import { Fade, Slug } from 'mauerwerk'
 
 interface IProps {
@@ -8,16 +7,6 @@ interface IProps {
   title: string
   body: string
 }
-
-const CloseButton = styled.div`
-  position: absolute;
-  cursor: pointer;
-  user-select: none;
-  top: 40px;
-  right: 40px;
-  font-size: 26px;
-  color: #000;
-`
 
 const FullStory = ({ maximized, toggle, title, body }: IProps) => (
   <Fade show={maximized} delay={maximized ? 400 : 0}>

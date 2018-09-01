@@ -20,7 +20,7 @@ const StyledStory = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0.0625em 0.5em rgba(0, 0, 0, 0.3);
 `
 
 const Story = ({ toggle, title, body, maximized }: any) => (
