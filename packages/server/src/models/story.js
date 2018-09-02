@@ -24,7 +24,7 @@ const story = (sequelize, DataTypes) => {
 
   Story.associate = models => {
     Story.belongsTo(models.User)
-    Story.belongsTo(models.Comment)
+    Story.hasMany(models.Comment)
   }
 
   return Story

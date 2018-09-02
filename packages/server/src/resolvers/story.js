@@ -1,9 +1,7 @@
 import Sequelize from 'sequelize'
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isStoryOwner } from './authorization'
-
-const toCursorHash = string => Buffer.from(string).toString('base64')
-const fromCursorHash = string => Buffer.from(string, 'base64').toString('ascii')
+import { toCursorHash, fromCursorHash } from '../utils'
 
 export default {
   Query: {
@@ -24,7 +22,6 @@ export default {
       })
       const hasNextPage = stories.length > limit
       const edges = hasNextPage ? stories.slice(0, -1) : stories
-
       return {
         edges,
         pageInfo: {
@@ -46,8 +43,12 @@ export default {
         body,
         userId: me.id,
       })
-
       return story
+    }),
+
+    updateStory: combineResolvers(isAuthenticated, isStoryOwner, async (parent, { id, title, body }, { models }) => {
+      const story = await models.Story.findById(id)
+      return await story.update({ title, body })
     }),
 
     deleteStory: combineResolvers(isAuthenticated, isStoryOwner, async (parent, { id }, { models }) => {

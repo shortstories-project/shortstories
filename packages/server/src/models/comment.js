@@ -8,6 +8,7 @@ const comment = (sequelize, DataTypes) => {
 
   Comment.associate = models => {
     Comment.belongsTo(models.User)
+    Comment.belongsTo(models.Story)
   }
 
   return Comment
