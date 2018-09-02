@@ -7,7 +7,7 @@ export default gql`
   }
 
   extend type Mutation {
-    createComment(body: String!, storyId: ID!): Comment!
+    createComment(body: String!, id: ID!): Comment!
     updateComment(body: String!): Comment!
     deleteComment(id: ID!): Boolean!
   }
@@ -26,6 +26,7 @@ export default gql`
     id: ID!
     body: String!
     user: User!
+    story: Story!
     createdAt: String!
   }
 `

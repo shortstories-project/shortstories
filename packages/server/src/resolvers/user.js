@@ -13,38 +13,47 @@ const createToken = async (user, secret, expiresIn) => {
 export default {
   Query: {
     users: async (parent, args, { models }) => await models.User.findAll(),
+
     user: async (parent, { id }, { models }) => await models.User.findById(id),
-    me: async (parent, args, { models, me }) => (!me ? null : await models.User.findById(me.id)),
+
+    me: async (parent, args, { models, me }) =>
+      !me ? null : await models.User.findById(me.id),
   },
+
   Mutation: {
-    signUp: async (parent, { username, email, password }, { models, secret }) => {
+    signUp: async (
+      parent,
+      { username, email, password },
+      { models, secret }
+    ) => {
       const user = await models.User.create({
         username,
         email,
         password,
       })
-
       return { token: createToken(user, secret, '30m') }
     },
+
     signIn: async (parent, { login, password }, { models, secret }) => {
       const user = await models.User.findByLogin(login)
-
       if (!user) {
         throw new UserInputError('No user found with this login credentials.')
       }
-
       const isValid = await user.validatePassword(password)
-
       if (!isValid) {
         throw new AuthenticationError('Invalid password.')
       }
-
       return { token: createToken(user, secret, '30m') }
     },
-    updateUser: combineResolvers(isAuthenticated, async (parent, { username }, { models, me }) => {
-      const user = await models.User.findById(me.id)
-      return await user.update({ username })
-    }),
+
+    updateUser: combineResolvers(
+      isAuthenticated,
+      async (parent, { username }, { models, me }) => {
+        const user = await models.User.findById(me.id)
+        return await user.update({ username })
+      }
+    ),
+
     deleteUser: combineResolvers(
       isAdmin,
       async (parent, { id }, { models }) =>
@@ -53,9 +62,17 @@ export default {
         })
     ),
   },
+
   User: {
     stories: async (user, args, { models }) =>
       await models.Story.findAll({
+        where: {
+          userId: user.id,
+        },
+      }),
+
+    comments: async (user, args, { models }) =>
+      await models.Comment.findAll({
         where: {
           userId: user.id,
         },

@@ -24,5 +24,6 @@ export default gql`
     email: String!
     role: String
     stories: [Story!]
+    comments: [Comment!]
   }
 `

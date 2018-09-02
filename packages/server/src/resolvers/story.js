@@ -36,28 +36,48 @@ export default {
       return story
     },
   },
+
   Mutation: {
-    createStory: combineResolvers(isAuthenticated, async (parent, { title, body }, { models, me }) => {
-      const story = await models.Story.create({
-        title,
-        body,
-        userId: me.id,
-      })
-      return story
-    }),
+    createStory: combineResolvers(
+      isAuthenticated,
+      async (parent, { title, body }, { models, me }) => {
+        const story = await models.Story.create({
+          title,
+          body,
+          userId: me.id,
+        })
+        return story
+      }
+    ),
 
-    updateStory: combineResolvers(isAuthenticated, isStoryOwner, async (parent, { id, title, body }, { models }) => {
-      const story = await models.Story.findById(id)
-      return await story.update({ title, body })
-    }),
+    updateStory: combineResolvers(
+      isAuthenticated,
+      isStoryOwner,
+      async (parent, { id, title, body }, { models }) => {
+        const story = await models.Story.findById(id)
+        return await story.update({ title, body })
+      }
+    ),
 
-    deleteStory: combineResolvers(isAuthenticated, isStoryOwner, async (parent, { id }, { models }) => {
-      const isDeleted = await models.Story.destroy({ where: { id } })
-      return isDeleted
-    }),
+    deleteStory: combineResolvers(
+      isAuthenticated,
+      isStoryOwner,
+      async (parent, { id }, { models }) => {
+        const isDeleted = await models.Story.destroy({ where: { id } })
+        return isDeleted
+      }
+    ),
   },
+
   Story: {
     user: async (story, args, { loaders }) =>
       await loaders.user.load(story.userId),
+
+    comments: async (story, args, { models }) =>
+      await models.Comment.findAll({
+        where: {
+          storyId: story.id,
+        },
+      }),
   },
 }

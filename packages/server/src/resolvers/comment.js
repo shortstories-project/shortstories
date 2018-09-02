@@ -39,11 +39,11 @@ export default {
     },
   },
   Mutation: {
-    createComment: combineResolvers(isAuthenticated, async (parent, { body, storyId }, { models, me }) => {
+    createComment: combineResolvers(isAuthenticated, async (parent, { body, id }, { models, me }) => {
       const comment = await models.Comment.create({
         body,
         userId: me.id,
-        storyId,
+        storyId: id,
       })
       return comment
     }),
