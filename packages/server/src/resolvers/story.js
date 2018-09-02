@@ -22,11 +22,15 @@ export default {
       })
       const hasNextPage = stories.length > limit
       const edges = hasNextPage ? stories.slice(0, -1) : stories
+      const lastStory = edges[edges.length - 1]
+      const endCursor = lastStory
+        ? toCursorHash(edges[edges.length - 1].createdAt.toString())
+        : ''
       return {
         edges,
         pageInfo: {
           hasNextPage,
-          endCursor: toCursorHash(edges[edges.length - 1].createdAt.toString()),
+          endCursor,
         },
       }
     },
@@ -53,9 +57,19 @@ export default {
     updateStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
-      async (parent, { id, title, body }, { models }) => {
+      async (
+        parent,
+        { id, title, body, likes, dislikes, views },
+        { models }
+      ) => {
         const story = await models.Story.findById(id)
-        return await story.update({ title, body })
+        const fields = [title, body, likes, dislikes, views]
+        fields.forEach(field => {
+          if (field !== undefined) {
+            story[field] = field
+          }
+        })
+        return await story.save()
       }
     ),
 

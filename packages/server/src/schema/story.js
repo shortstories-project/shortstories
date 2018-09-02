@@ -8,7 +8,7 @@ export default gql`
 
   extend type Mutation {
     createStory(title: String!, body: String!): Story!
-    updateStory(title: String!, body: String!): Story!
+    updateStory(id: ID!, title: String, body: String): Story!
     deleteStory(id: ID!): Boolean!
   }
 
