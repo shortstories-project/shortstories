@@ -21,6 +21,8 @@ const models = {
   User: sequelize.import('./user'),
   Story: sequelize.import('./story'),
   Comment: sequelize.import('./comment'),
+  Reaction: sequelize.import('./reaction'),
+  View: sequelize.import('./view'),
 }
 
 Object.keys(models).forEach(key => {

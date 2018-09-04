@@ -44,11 +44,11 @@ export default {
   Mutation: {
     createStory: combineResolvers(
       isAuthenticated,
-      async (parent, { title, body }, { models, me }) => {
+      async (parent, { title, body }, { models, req }) => {
         const story = await models.Story.create({
           title,
           body,
-          userId: me.id,
+          userId: req.user.id,
         })
         return story
       }

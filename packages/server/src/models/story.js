@@ -8,23 +8,13 @@ const story = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       validate: { notEmpty: true },
     },
-    likes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    dislikes: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    views: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
   })
 
   Story.associate = models => {
     Story.belongsTo(models.User)
     Story.hasMany(models.Comment)
+    Story.hasMany(models.Reaction)
+    Story.hasMany(models.View)
   }
 
   return Story

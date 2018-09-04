@@ -54,6 +54,12 @@ module.exports = {
     overlay: true,
     progress: true,
     historyApiFallback: true,
+    proxy: {
+      '/graphql': {
+        target: 'http://localhost:8000',
+        changeOrigin: true,
+      },
+    },
   },
   plugins: [
     new HtmlWebpackPlugin({

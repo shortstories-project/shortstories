@@ -14,15 +14,12 @@ import style from './style'
 injectGlobal`${style}` // tslint:disable-line
 
 const httpLink = createHttpLink({
-  uri: 'https://shortstories-graphql.herokuapp.com/graphql',
+  uri: '/graphql',
 })
 
 const authLink = new ApolloLink((operation, forward) => {
-  const token = localStorage.getItem('token')
   operation.setContext({
-    headers: {
-      'x-token': token || '',
-    },
+    credentials: 'same-origin',
   })
   return forward(operation)
 })
