@@ -1,0 +1,22 @@
+{
+  "name": "shortstories",
+  "scripts": {
+    "bootstrap": "lerna bootstrap",
+    "start:web-app": "lerna exec --scope web-app -- npm run start",
+    "start:graphql-api": "lerna exec --scope graphql-api -- npm run start",
+    "start": "lerna run start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shortstories-project/shortstories.git"
+  },
+  "author": "Shashkov Danil <shashkovdanil@gmail.com> (https://github.com/shashkovdanil)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/shortstories-project/shortstories/issues"
+  },
+  "homepage": "https://github.com/shortstories-project/shortstories#readme",
+  "devDependencies": {
+    "lerna": "^3.2.1"
+  }
+}
