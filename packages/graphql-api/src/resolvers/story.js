@@ -73,6 +73,45 @@ export default {
       }
     ),
 
+    likeStory: combineResolvers(
+      isAuthenticated,
+      isStoryOwner,
+      async (parent, { id }, { models, me }) => {
+        const story = await models.Story.findById(id)
+        await models.Like.create({
+          userId: me.id,
+          storyId: id,
+        })
+        return story
+      }
+    ),
+
+    dislikeStory: combineResolvers(
+      isAuthenticated,
+      isStoryOwner,
+      async (parent, { id }, { models, me }) => {
+        const story = await models.Story.findById(id)
+        await models.Dislike.create({
+          userId: me.id,
+          storyId: id,
+        })
+        return story
+      }
+    ),
+
+    viewStory: combineResolvers(
+      isAuthenticated,
+      isStoryOwner,
+      async (parent, { id }, { models, me }) => {
+        const story = await models.Story.findById(id)
+        await models.View.create({
+          userId: me.id,
+          storyId: id,
+        })
+        return story
+      }
+    ),
+
     deleteStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
@@ -93,5 +132,47 @@ export default {
           storyId: story.id,
         },
       }),
+
+    likedBy: async (story, args, { models }) => {
+      const likes = await models.Like.findAll({
+        where: {
+          storyId: story.id,
+        },
+      })
+      const userIds = likes.map(like => like.userId)
+      return await models.User.findAll({
+        where: {
+          id: userIds,
+        },
+      })
+    },
+
+    dislikedBy: async (story, args, { models }) => {
+      const dislikes = await models.Dislike.findAll({
+        where: {
+          storyId: story.id,
+        },
+      })
+      const userIds = dislikes.map(dislike => dislike.userId)
+      return await models.User.findAll({
+        where: {
+          id: userIds,
+        },
+      })
+    },
+
+    viewedBy: async (story, args, { models }) => {
+      const views = await models.View.findAll({
+        where: {
+          storyId: story.id,
+        },
+      })
+      const userIds = views.map(view => view.userId)
+      return await models.User.findAll({
+        where: {
+          id: userIds,
+        },
+      })
+    },
   },
 }

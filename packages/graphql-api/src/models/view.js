@@ -1,10 +1,5 @@
-const view = (sequelize, DataTypes) => {
-  const View = sequelize.define('view', {
-    hasViewed: {
-      type: DataTypes.BOOLEAN,
-      defaultValue: false,
-    },
-  })
+const view = (sequelize) => {
+  const View = sequelize.define('view')
 
   View.associate = models => {
     View.belongsTo(models.User)

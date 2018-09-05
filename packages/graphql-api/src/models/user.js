@@ -35,7 +35,8 @@ const user = (sequelize, DataTypes) => {
   User.associate = models => {
     User.hasMany(models.Story)
     User.hasMany(models.Comment)
-    User.hasMany(models.Reaction)
+    User.hasMany(models.Like)
+    User.hasMany(models.Dislike)
     User.hasMany(models.View)
   }
 

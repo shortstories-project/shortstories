@@ -1,3 +1,3 @@
-import user from './user'
+import batchUsers from './user'
 
-export default { user }
+export default { batchUsers }

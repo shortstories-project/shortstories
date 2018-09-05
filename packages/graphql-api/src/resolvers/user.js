@@ -49,12 +49,5 @@ export default {
           userId: user.id,
         },
       }),
-
-    comments: async (user, args, { models }) =>
-      await models.Comment.findAll({
-        where: {
-          userId: user.id,
-        },
-      }),
   },
 }

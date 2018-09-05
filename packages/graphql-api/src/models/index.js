@@ -1,6 +1,7 @@
 import Sequelize from 'sequelize'
 
 let sequelize
+
 if (process.env.DATABASE_URL) {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect: 'postgres',
@@ -21,7 +22,8 @@ const models = {
   User: sequelize.import('./user'),
   Story: sequelize.import('./story'),
   Comment: sequelize.import('./comment'),
-  Reaction: sequelize.import('./reaction'),
+  Like: sequelize.import('./like'),
+  Dislike: sequelize.import('./dislike'),
   View: sequelize.import('./view'),
 }
 

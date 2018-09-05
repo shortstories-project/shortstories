@@ -63,7 +63,7 @@ const server = new ApolloServer({
         me: req.user,
         req,
         loaders: {
-          user: new DataLoader(keys => loaders.user.batchUsers(keys, models)),
+          user: new DataLoader(keys => loaders.batchUsers(keys, models)),
         },
       }
     }
