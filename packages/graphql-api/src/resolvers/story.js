@@ -77,12 +77,31 @@ export default {
       isAuthenticated,
       isStoryOwner,
       async (parent, { id }, { models, me }) => {
+        const selector = {
+          where: {
+            userId: me.id,
+            storyId: id,
+          },
+        }
         const story = await models.Story.findById(id)
-        await models.Like.create({
-          userId: me.id,
-          storyId: id,
-        })
-        return story
+        const createLike = async () => {
+          await models.Like.create({
+            userId: me.id,
+            storyId: id,
+          })
+          return story
+        }
+        const like = await models.Like.findOne(selector)
+        const dislike = await models.Dislike.findOne(selector)
+        if (like) {
+          await models.Like.destroy(selector)
+          return story
+        }
+        if (dislike) {
+          await models.Dislike.destroy(selector)
+          return createLike()
+        }
+        return createLike()
       }
     ),
 
@@ -90,12 +109,31 @@ export default {
       isAuthenticated,
       isStoryOwner,
       async (parent, { id }, { models, me }) => {
+        const selector = {
+          where: {
+            userId: me.id,
+            storyId: id,
+          },
+        }
         const story = await models.Story.findById(id)
-        await models.Dislike.create({
-          userId: me.id,
-          storyId: id,
-        })
-        return story
+        const createDislike = async () => {
+          await models.Dislike.create({
+            userId: me.id,
+            storyId: id,
+          })
+          return story
+        }
+        const like = await models.Like.findOne(selector)
+        const dislike = await models.Dislike.findOne(selector)
+        if (dislike) {
+          await models.Dislike.destroy(selector)
+          return story
+        }
+        if (like) {
+          await models.Like.destroy(selector)
+          return createDislike()
+        }
+        return createDislike()
       }
     ),
 
