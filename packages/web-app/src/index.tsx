@@ -27,8 +27,6 @@ const authLink = new ApolloLink((operation, forward) => {
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
     graphQLErrors.forEach(({ message, locations, path }) => {
-      console.log(graphQLErrors)
-      console.log(location)
       console.log(
         `[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`
       )

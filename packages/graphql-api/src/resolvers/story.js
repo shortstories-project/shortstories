@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize'
+import { Op } from 'sequelize'
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isStoryOwner } from './authorization'
 import { toCursorHash, fromCursorHash } from '../utils'
@@ -10,7 +10,7 @@ export default {
         ? {
             where: {
               createdAt: {
-                [Sequelize.Op.lt]: fromCursorHash(cursor),
+                [Op.lt]: fromCursorHash(cursor),
               },
             },
           }

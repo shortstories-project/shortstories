@@ -6,9 +6,10 @@ interface IProps {
   toggle: (e: any) => void
   title: string
   body: string
+  id: any
 }
 
-const FullStory = ({ maximized, toggle, title, body }: IProps) => (
+const FullStory = ({ maximized, toggle, id, title, body }: IProps) => (
   <Fade show={maximized} delay={maximized ? 400 : 0}>
     <div className="story-full">
       <Slug delay={600}>

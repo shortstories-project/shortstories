@@ -15,6 +15,14 @@ const GET_STORIES = gql`
         title
         body
         createdAt
+        likedBy {
+          id
+          username
+        }
+        dislikedBy {
+          id
+          username
+        }
         user {
           id
           username
