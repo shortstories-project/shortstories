@@ -21,6 +21,12 @@ const Container = styled.div`
     border: none;
     cursor: pointer;
     padding: 0;
+    transform: scale(1);
+    transition: transform 0.25s ease-in-out;
+    outline: none;
+    &:hover {
+      transform: scale(1.2);
+    }
     & svg {
       fill: black;
     }
