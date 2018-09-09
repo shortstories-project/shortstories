@@ -9,9 +9,9 @@ export default gql`
   extend type Mutation {
     createStory(title: String!, body: String!): Story!
     updateStory(id: ID!, title: String, body: String): Story!
-    likeStory(id: ID!): Story!
-    dislikeStory(id: ID!): Story!
-    viewStory(id: ID!): Story!
+    likeStory(id: ID!): StoryInfo!
+    dislikeStory(id: ID!): StoryInfo!
+    viewStory(id: ID!): StoryInfo!
     deleteStory(id: ID!): Boolean!
   }
 
@@ -25,22 +25,10 @@ export default gql`
     endCursor: String!
   }
 
-  type StoryLike {
+  type StoryInfo {
     id: ID!
-    user: User
-    story: Story
-  }
-
-   type StoryDislike {
-    id: ID!
-    user: User
-    story: Story
-  }
-
-   type StoryView {
-    id: ID!
-    user: User
-    story: Story
+    user: User!
+    storyId: ID!
   }
 
   type Story {
@@ -49,9 +37,9 @@ export default gql`
     body: String!
     user: User!
     createdAt: String!
-    likedBy: [StoryLike!]
-    dislikedBy: [StoryDislike!]
-    viewedBy: [StoryView!]
+    likedBy: [StoryInfo!]
+    dislikedBy: [StoryInfo!]
+    viewedBy: [StoryInfo!]
     comments: [Comment!]
   }
 `

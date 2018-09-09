@@ -83,19 +83,27 @@ export default {
             storyId: id,
           },
         }
-        const story = await models.Story.findById(id)
         const createLike = async () => {
-          await models.Like.create({
+          const newLike = await models.Like.create({
             userId: me.id,
             storyId: id,
           })
-          return story
+          return {
+            id: newLike.id,
+            user: me,
+            storyId: id,
+          }
         }
         const like = await models.Like.findOne(selector)
         const dislike = await models.Dislike.findOne(selector)
         if (like) {
+          const { id, storyId } = like
           await models.Like.destroy(selector)
-          return story
+          return {
+            id,
+            user: me,
+            storyId,
+          }
         }
         if (dislike) {
           await models.Dislike.destroy(selector)
@@ -115,19 +123,27 @@ export default {
             storyId: id,
           },
         }
-        const story = await models.Story.findById(id)
         const createDislike = async () => {
-          await models.Dislike.create({
+          const newDislike = await models.Dislike.create({
             userId: me.id,
             storyId: id,
           })
-          return story
+          return {
+            id: newDislike.id,
+            user: me,
+            storyId: id,
+          }
         }
         const like = await models.Like.findOne(selector)
         const dislike = await models.Dislike.findOne(selector)
         if (dislike) {
+          const { id, storyId } = dislike
           await models.Dislike.destroy(selector)
-          return story
+          return {
+            id,
+            user: me,
+            storyId,
+          }
         }
         if (like) {
           await models.Like.destroy(selector)
@@ -141,12 +157,15 @@ export default {
       isAuthenticated,
       isStoryOwner,
       async (parent, { id }, { models, me }) => {
-        const story = await models.Story.findById(id)
-        await models.View.create({
+        const newView = await models.View.create({
           userId: me.id,
           storyId: id,
         })
-        return story
+        return {
+          id: newView.id,
+          user: me,
+          storyId: id,
+        }
       }
     ),
 
@@ -171,45 +190,37 @@ export default {
         },
       }),
 
-    likedBy: async (story, args, { models }) => {
-      const likes = await models.Like.findAll({
+    likedBy: async (story, args, { models, loaders }) =>
+      await models.Like.findAll({
         where: {
           storyId: story.id,
         },
-      })
-      const userIds = likes.map(like => like.userId)
-      return await models.User.findAll({
-        where: {
-          id: userIds,
-        },
-      })
-    },
+      }).map(async i => ({
+        id: i.id,
+        user: await loaders.user.load(i.userId),
+        storyId: i.storyId,
+      })),
 
-    dislikedBy: async (story, args, { models }) => {
-      const dislikes = await models.Dislike.findAll({
+    dislikedBy: async (story, args, { models, loaders }) =>
+      await models.Dislike.findAll({
         where: {
           storyId: story.id,
         },
-      })
-      const userIds = dislikes.map(dislike => dislike.userId)
-      return await models.User.findAll({
-        where: {
-          id: userIds,
-        },
-      })
-    },
+      }).map(async i => ({
+        id: i.id,
+        user: await loaders.user.load(i.userId),
+        storyId: i.storyId,
+      })),
 
-    viewedBy: async (story, args, { models }) => {
-      const views = await models.View.findAll({
+    viewedBy: async (story, args, { models, loaders }) =>
+      await models.View.findAll({
         where: {
           storyId: story.id,
         },
-      })
-      return views.map(async v => ({
-        id: v.id,
-        user: await models.User.findById(v.userId),
-        story,
-      }))
-    },
+      }).map(async i => ({
+        id: i.id,
+        user: await loaders.user.load(i.userId),
+        storyId: i.storyId,
+      })),
   },
 }

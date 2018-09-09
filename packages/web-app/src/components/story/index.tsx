@@ -1,7 +1,6 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
-import { find, propEq, contains } from 'ramda'
 import { compose, withProps } from 'recompose'
 import { format } from 'date-fns'
 import withSession from '../../higher-order-components/with-session'
@@ -9,7 +8,6 @@ import FullStory from './full'
 import InGridStory from './in-grid'
 import { VIEW_STORY } from '../../constants/mutations'
 import { GET_STORIES } from '../../constants/queries'
-import findAndUpdate from '../../utils/find-and-update'
 
 interface IProps {
   id: any
@@ -32,37 +30,16 @@ const StyledStory = styled.div`
   box-shadow: 0 0.0625em 0.5em rgba(0, 0, 0, 0.3);
 `
 
-const updateCache = (cache: any, viewStory: any, props: any) => {
+const updateCache = (cache: any, { data: { viewStory } }: any) => {
   const data = cache.readQuery({
     query: GET_STORIES,
   })
-  const list = data.stories.edges
-  const story = find(propEq('id', viewStory.id))(list)
-  // if (contains(props.me, story.viewedBy)) {
-  //   cache.writeQuery({
-  //     query: GET_STORIES,
-  //     data: {
-  //       ...data,
-  //     },
-  //   })
-  //   return
-  // }
-  const updatedStories = findAndUpdate(
-    viewStory.id,
-    {
-      viewedBy: [...story.viewedBy, { ...props.me }],
-    },
-    list
-  )
+  data.stories.edges
+    .find((i: any) => i.id === viewStory.storyId)
+    .viewedBy.push(viewStory)
   cache.writeQuery({
     query: GET_STORIES,
-    data: {
-      ...data,
-      stories: {
-        ...data.stories,
-        edges: updatedStories,
-      },
-    },
+    data,
   })
 }
 
@@ -81,9 +58,7 @@ const Story = enhance((props: any) => (
   <Mutation
     mutation={VIEW_STORY}
     variables={{ id: props.id }}
-    update={(cache, { data: { viewStory } }) => {
-      updateCache(cache, viewStory, props)
-    }}
+    update={updateCache}
   >
     {viewStory => (
       <StyledStory
@@ -95,11 +70,8 @@ const Story = enhance((props: any) => (
           }
         }}
       >
-        <FullStory {...props} />
-        <InGridStory {...props} />
-        <div style={{ fontWeight: 'bold', color: 'black' }}>
-          {JSON.stringify(props.viewedBy.length)}
-        </div>
+        <FullStory {...props} views={props.viewedBy.length} />
+        <InGridStory {...props} views={props.viewedBy.length} />
       </StyledStory>
     )}
   </Mutation>

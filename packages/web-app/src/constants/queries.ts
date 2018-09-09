@@ -50,28 +50,25 @@ export const GET_STORIES = gql`
           id
           user {
             id
+            username
           }
-          story {
-            id
-          }
+          storyId
         }
         dislikedBy {
           id
           user {
             id
+            username
           }
-          story {
-            id
-          }
+          storyId
         }
         viewedBy {
           id
           user {
             id
+            username
           }
-          story {
-            id
-          }
+          storyId
         }
         comments {
           id
@@ -94,30 +91,49 @@ export const GET_STORIES = gql`
   }
 `
 export const GET_STORY = gql`
-  query Story($id: ID!) {
+  fragment Author on User {
+    id
+    username
+    email
+  }
+
+  query($id: ID!) {
     story(id: $id) {
       id
       title
       body
       user {
-        id
-        username
+        ...Author
       }
       likedBy {
         id
+        user {
+          id
+          username
+        }
+        storyId
       }
       dislikedBy {
         id
+        user {
+          id
+          username
+        }
+        storyId
       }
       viewedBy {
         id
+        user {
+          id
+          username
+        }
+        storyId
       }
       comments {
         id
         body
         user {
-          id
-          username
+          ...Author
         }
         story {
           id
