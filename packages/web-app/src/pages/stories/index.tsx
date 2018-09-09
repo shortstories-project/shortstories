@@ -2,39 +2,10 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Query } from 'react-apollo'
 import Measure from 'react-measure'
-import gql from 'graphql-tag'
 import { Grid } from 'mauerwerk'
 import { Story } from 'components'
+import { GET_STORIES } from '../../constants/queries'
 import { IStory } from '../../interfaces/story'
-
-const GET_STORIES = gql`
-  query($cursor: String) {
-    stories(cursor: $cursor, limit: 100) @connection(key: "StoriesConnection") {
-      edges {
-        id
-        title
-        body
-        createdAt
-        likedBy {
-          id
-          username
-        }
-        dislikedBy {
-          id
-          username
-        }
-        user {
-          id
-          username
-        }
-      }
-      pageInfo {
-        hasNextPage
-        endCursor
-      }
-    }
-  }
-`
 
 const StyledGrid = styled(Grid)`
   height: calc(100vh - 80px) !important;
@@ -100,7 +71,7 @@ class StoriesList extends React.PureComponent<any> {
   }
 }
 
-const Stories = () => (
+const Stories = ({ me }: any) => (
   <Query query={GET_STORIES}>
     {({ data, loading, fetchMore, refetch }) => {
       const { stories } = data
@@ -112,6 +83,7 @@ const Stories = () => (
       const { edges, pageInfo } = stories
       return (
         <StoriesList
+          me={me}
           hasNextPage={pageInfo.hasNextPage}
           stories={edges}
           loadMore={() =>

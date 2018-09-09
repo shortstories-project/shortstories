@@ -49,7 +49,6 @@ class Header extends React.Component<IProps> {
 
   public render() {
     const { session } = this.props
-    console.log(session)
     return (
       <StyledHeader>
         <GridContainer>

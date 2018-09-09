@@ -205,12 +205,11 @@ export default {
           storyId: story.id,
         },
       })
-      const userIds = views.map(view => view.userId)
-      return await models.User.findAll({
-        where: {
-          id: userIds,
-        },
-      })
+      return views.map(async v => ({
+        id: v.id,
+        user: await models.User.findById(v.userId),
+        story,
+      }))
     },
   },
 }

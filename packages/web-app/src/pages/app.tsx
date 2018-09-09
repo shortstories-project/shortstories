@@ -15,7 +15,11 @@ const App = ({ session, refetch }: any) => (
     <>
       <Header session={session} />
       <Switch>
-        <Route exact path={routes.STORIES} render={() => <Stories />} />
+        <Route
+          exact
+          path={routes.STORIES}
+          render={() => <Stories me={session.me} />}
+        />
         <Route
           exact
           path={routes.SIGN_UP}

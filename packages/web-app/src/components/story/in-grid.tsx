@@ -54,36 +54,7 @@ function StoryInGrid({ maximized, title, body, id, likedBy, dislikedBy }: any) {
         {body.split('\n').map((paragraph: string, index: number) => (
           <p key={`story-in-grid-paragraph-${index}`}>{paragraph}</p>
         ))}
-        <BottomGradient>
-          {/* <Mutation
-            mutation={
-              likeStory: LIKE,
-              dislikeStory: DISLIKE,
-            }
-            variables={{ id }}
-          >
-            {({ likeStory, dislikeStory }: any, { data }) => (
-              <div>
-                <button
-                  onClick={e => {
-                    e.stopPropagation()
-                    likeStory()
-                  }}
-                >
-                  LIKE ({likedBy.length})
-                </button>
-                <button
-                  onClick={e => {
-                    e.stopPropagation()
-                    dislikeStory()
-                  }}
-                >
-                  DISLIKE ({dislikedBy.length})
-                </button>
-              </div>
-            )}
-          </Mutation> */}
-        </BottomGradient>
+        <BottomGradient />
       </div>
     </Fade>
   )

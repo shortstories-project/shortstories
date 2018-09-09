@@ -25,15 +25,33 @@ export default gql`
     endCursor: String!
   }
 
+  type StoryLike {
+    id: ID!
+    user: User
+    story: Story
+  }
+
+   type StoryDislike {
+    id: ID!
+    user: User
+    story: Story
+  }
+
+   type StoryView {
+    id: ID!
+    user: User
+    story: Story
+  }
+
   type Story {
     id: ID!
     title: String!
     body: String!
     user: User!
     createdAt: String!
-    likedBy: [User!]
-    dislikedBy: [User!]
-    viewedBy: [User!]
+    likedBy: [StoryLike!]
+    dislikedBy: [StoryDislike!]
+    viewedBy: [StoryView!]
     comments: [Comment!]
   }
 `

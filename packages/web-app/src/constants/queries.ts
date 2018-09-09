@@ -31,6 +31,12 @@ export const GET_USER = gql`
 
 /* Stories */
 export const GET_STORIES = gql`
+  fragment Author on User {
+    id
+    username
+    email
+  }
+
   query Stories($cursor: String) {
     stories(cursor: $cursor, limit: 100) @connection(key: "StoriesConnection") {
       edges {
@@ -38,24 +44,40 @@ export const GET_STORIES = gql`
         title
         body
         user {
-          id
-          username
+          ...Author
         }
         likedBy {
           id
+          user {
+            id
+          }
+          story {
+            id
+          }
         }
         dislikedBy {
           id
+          user {
+            id
+          }
+          story {
+            id
+          }
         }
         viewedBy {
           id
+          user {
+            id
+          }
+          story {
+            id
+          }
         }
         comments {
           id
           body
           user {
-            id
-            username
+            ...Author
           }
           story {
             id
