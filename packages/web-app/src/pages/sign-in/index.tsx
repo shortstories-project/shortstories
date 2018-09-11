@@ -10,7 +10,6 @@ import {
   Logo,
   Input,
   Button,
-  ErrorMessage,
 } from 'components'
 import * as routes from '../../constants/routes'
 
@@ -20,6 +19,13 @@ const SIGN_IN = gql`
       id
       username
       email
+    }
+  }
+`
+const ADD_AVATAR = gql`
+  mutation addAvatar($avatarImage: Upload!) {
+    addAvatar(avatarImage: $avatarImage) {
+      avatar
     }
   }
 `
@@ -41,6 +47,7 @@ const Form = styled.form`
 const INITIAL_STATE = {
   login: '',
   password: '',
+  file: '',
 }
 
 class SignIn extends React.PureComponent<any, any> {
@@ -52,9 +59,8 @@ class SignIn extends React.PureComponent<any, any> {
   }
 
   public onSubmit = (event: any, signIn: any) => {
-    signIn().then(async ({ data }: any) => {
+    signIn().then(async () => {
       this.setState({ ...INITIAL_STATE })
-      localStorage.setItem('token', data.signIn.token)
       await this.props.refetch()
       this.props.history.push(routes.STORIES)
     })
@@ -91,6 +97,26 @@ class SignIn extends React.PureComponent<any, any> {
                       onChange={this.onChange}
                     />
                     <Button type="submit" title="LOGIN" />
+                    <div>
+                      <img src="/img/photos/P7F3n3CydUkuRHvG~QyGX.jpg" alt="" />
+                    </div>
+                    <Mutation mutation={ADD_AVATAR}>
+                      {addAvatar => (
+                        <input
+                          type="file"
+                          required
+                          onChange={({
+                            target: {
+                              validity,
+                              files: [file],
+                            },
+                          }) =>
+                            validity.valid &&
+                            addAvatar({ variables: { avatarImage: file } })
+                          }
+                        />
+                      )}
+                    </Mutation>
                   </Form>
                 </AuthContainer>
               </GridColumn>

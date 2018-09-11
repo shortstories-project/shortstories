@@ -1,15 +1,11 @@
 import { gql } from 'apollo-server-express'
 
 export default gql`
-  extend type Query {
-    comments(cursor: String, limit: Int): CommentConnection!
-    comment(id: ID!): Comment!
-  }
-
-  extend type Mutation {
-    createComment(body: String!, id: ID!): Comment!
-    updateComment(id: ID!, body: String!): Comment!
-    deleteComment(id: ID!): Boolean!
+  type Comment {
+    id: ID!
+    body: String!
+    user: User!
+    createdAt: String!
   }
 
   type CommentConnection {
@@ -22,11 +18,29 @@ export default gql`
     endCursor: String!
   }
 
-  type Comment {
+  input CommentsInput {
+    cursor: String
+    limit: Int = 10
+  }
+
+  input CreateComment {
     id: ID!
     body: String!
-    user: User!
-    story: Story!
-    createdAt: String!
+  }
+
+  input UpdateComment {
+    id: ID!
+    body: String!
+  }
+
+  extend type Query {
+    comments(input: CommentsInput): CommentConnection!
+    comment(id: ID!): Comment!
+  }
+
+  extend type Mutation {
+    createComment(input: CreateComment!): Comment!
+    updateComment(input: UpdateComment!): Comment!
+    deleteComment(id: ID!): Boolean!
   }
 `

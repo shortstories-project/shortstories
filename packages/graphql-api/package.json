@@ -20,6 +20,7 @@
   "dependencies": {
     "apollo-server": "^2.0.5",
     "apollo-server-express": "^2.0.4",
+    "apollo-upload-server": "^7.1.0",
     "bcrypt": "^3.0.0",
     "body-parser": "^1.18.3",
     "connect-redis": "^3.3.3",
@@ -30,8 +31,10 @@
     "express": "^4.16.3",
     "express-session": "^1.15.6",
     "graphql": "^0.13.2",
+    "graphql-custom-types": "^1.4.0",
     "graphql-resolvers": "^0.2.2",
     "jsonwebtoken": "^8.3.0",
+    "nanoid": "^1.2.3",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.4.3",

@@ -37,7 +37,7 @@ passport.use(
   )
 )
 
-async function signUp({ email, username, password, req }) {
+async function signUp({ email, username, password }, req) {
   await models.User.create({
     username,
     email,
@@ -59,7 +59,7 @@ async function signUp({ email, username, password, req }) {
   )
 }
 
-function signIn({ login, password, req }) {
+function signIn({ login, password }, req) {
   return new Promise((resolve, reject) => {
     passport.authenticate('local', (err, user) => {
       if (err) reject(new Error(err))

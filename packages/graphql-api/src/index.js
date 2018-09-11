@@ -1,5 +1,6 @@
 import 'dotenv/config'
 import './services/auth'
+import path from 'path'
 import express from 'express'
 import session from 'express-session'
 import passport from 'passport'
@@ -73,12 +74,15 @@ const server = new ApolloServer({
 
 server.applyMiddleware({ app, path: '/graphql' })
 
+app.use('/img/photos', express.static(path.join(__dirname, 'uploads')))
+
 const isTest = !!process.env.TEST_DATABASE
 const isProduction = !!process.env.DATABASE_URL
 const port = process.env.PORT || 8000
 
 sequelize.sync({ force: isTest || isProduction }).then(async () => {
   app.listen({ port }, () => {
+    // eslint-disable-next-line
     console.log(
       `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
     )

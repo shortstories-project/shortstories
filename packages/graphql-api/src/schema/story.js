@@ -1,18 +1,34 @@
 import { gql } from 'apollo-server-express'
 
 export default gql`
-  extend type Query {
-    stories(cursor: String, limit: Int): StoryConnection!
-    story(id: ID!): Story!
+  type Story {
+    id: ID!
+    title: String!
+    body: String!
+    user: User!
+    likedBy: [Like!]!
+    dislikedBy: [Dislike!]!
+    viewedBy: [View!]!
+    comments: [Comment!]!
+    createdAt: String!
   }
 
-  extend type Mutation {
-    createStory(title: String!, body: String!): Story!
-    updateStory(id: ID!, title: String, body: String): Story!
-    likeStory(id: ID!): StoryInfo!
-    dislikeStory(id: ID!): StoryInfo!
-    viewStory(id: ID!): StoryInfo!
-    deleteStory(id: ID!): Boolean!
+  type Like {
+    id: ID!
+    user: User!
+    storyId: ID!
+  }
+
+  type Dislike {
+    id: ID!
+    user: User!
+    storyId: ID!
+  }
+
+  type View {
+    id: ID!
+    user: User!
+    storyId: ID!
   }
 
   type StoryConnection {
@@ -25,21 +41,33 @@ export default gql`
     endCursor: String!
   }
 
-  type StoryInfo {
-    id: ID!
-    user: User!
-    storyId: ID!
+  input StoriesInput {
+    cursor: String
+    limit: Int = 100
   }
 
-  type Story {
-    id: ID!
+  input CreateStoryInput {
     title: String!
     body: String!
-    user: User!
-    createdAt: String!
-    likedBy: [StoryInfo!]
-    dislikedBy: [StoryInfo!]
-    viewedBy: [StoryInfo!]
-    comments: [Comment!]
+  }
+
+  input UpdateStoryInput {
+    id: ID!
+    title: String
+    body: String
+  }
+
+  extend type Query {
+    stories(input: StoriesInput): StoryConnection!
+    story(id: ID!): Story!
+  }
+
+  extend type Mutation {
+    createStory(input: CreateStoryInput!): Story!
+    updateStory(input: UpdateStoryInput!): Story!
+    likeStory(id: ID!): Like!
+    dislikeStory(id: ID!): Dislike!
+    viewStory(id: ID!): View!
+    deleteStory(id: ID!): Boolean!
   }
 `

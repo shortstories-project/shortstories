@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom'
 import { ApolloProvider } from 'react-apollo'
 import { ApolloClient } from 'apollo-client'
 import { ApolloLink } from 'apollo-link'
-import { createHttpLink } from 'apollo-link-http'
+import { createUploadLink } from 'apollo-upload-client'
 import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { injectGlobal } from 'styled-components'
@@ -13,7 +13,7 @@ import style from './style'
 
 injectGlobal`${style}` // tslint:disable-line
 
-const httpLink = createHttpLink({
+const httpLink = createUploadLink({
   uri: '/graphql',
 })
 

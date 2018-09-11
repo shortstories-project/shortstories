@@ -27,7 +27,7 @@ const user = (sequelize, DataTypes) => {
         len: [7, 42],
       },
     },
-    role: {
+    avatar: {
       type: DataTypes.STRING,
     },
   })

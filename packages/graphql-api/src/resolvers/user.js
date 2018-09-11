@@ -1,53 +1,86 @@
 import { combineResolvers } from 'graphql-resolvers'
-import { isAuthenticated, isAdmin } from './authorization'
+import { isAuthenticated } from './authorization'
 import authService from '../services/auth'
+import { uploadAvatar } from '../utils'
 
 export default {
   Query: {
-    users: async (parent, args, { models }) => await models.User.findAll(),
+    me: (parent, args, { me }) => me,
 
     user: async (parent, { id }, { models }) => await models.User.findById(id),
-
-    me: async (parent, args, { me }) => me || null,
   },
 
   Mutation: {
-    signUp: async (parent, { username, email, password }, { req }) =>
-      await authService.signUp({ username, email, password, req }),
+    signUp: async (parent, args, { req }) =>
+      await authService.signUp(args, req),
 
-    signIn: async (parent, { login, password }, { req }) =>
-      await authService.signIn({ login, password, req }),
+    signIn: async (parent, args, { req }) =>
+      await authService.signIn(args, req),
 
-    signOut: (parent, args, { req }) => {
-      const { user } = req
-      req.session.destroy()
-      req.logout()
-      return user
-    },
+    signOut: combineResolvers(isAuthenticated, (parent, args, { req }) => {
+      try {
+        req.session.destroy()
+        req.logout()
+        return true
+      } catch (e) {
+        return false
+      }
+    }),
 
     updateUser: combineResolvers(
       isAuthenticated,
-      async (parent, { username }, { models, me }) => {
+      async (parent, args, { models, me }) => {
         const user = await models.User.findById(me.id)
-        return await user.update({ username })
+        return await user.update(args)
       }
     ),
 
-    deleteUser: combineResolvers(
-      isAdmin,
-      async (parent, { id }, { models }) =>
-        await models.User.destroy({
-          where: { id },
-        })
+    addAvatar: combineResolvers(
+      isAuthenticated,
+      async (parent, args, { models, me }) => {
+        const user = await models.User.findById(me.id)
+        const { stream } = await args.avatarImage
+        const url = await uploadAvatar(stream)
+        return await user.update({ avatar: url })
+      }
     ),
   },
 
   User: {
-    stories: async (user, args, { models }) =>
+    writtenStories: async (user, args, { models }) =>
       await models.Story.findAll({
         where: {
           userId: user.id,
         },
       }),
+  },
+
+  Me: {
+    writtenStories: async (parent, args, { models, me }) =>
+      await models.Story.findAll({
+        where: {
+          userId: me.id,
+        },
+      }),
+    likedStories: async (parent, args, { models, me }) => {
+      const likes = await models.Like.findAll({
+        where: {
+          userId: me.id,
+        },
+      })
+      return await models.Story.findAll({
+        where: likes.map(like => like.storyId),
+      })
+    },
+    viewedStories: async (user, args, { models, me }) => {
+      const views = await models.View.findAll({
+        where: {
+          userId: me.id,
+        },
+      })
+      return await models.Story.findAll({
+        where: views.map(view => view.storyId),
+      })
+    },
   },
 }
