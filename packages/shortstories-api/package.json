@@ -1,5 +1,5 @@
 {
-  "name": "graphql-api",
+  "name": "shortstories-api",
   "version": "1.0.0",
   "description": "GraphQL API for shortstories",
   "main": "src/index.js",
