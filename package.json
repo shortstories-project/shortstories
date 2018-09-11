@@ -2,8 +2,8 @@
   "name": "shortstories",
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "start:web-app": "lerna exec --scope web-app -- npm run start",
-    "start:graphql-api": "lerna exec --scope graphql-api -- npm run start",
+    "start:client": "lerna exec --scope shortstories-web-app -- npm run start",
+    "start:server": "lerna exec --scope shortstories-api -- npm run start",
     "start": "lerna run start"
   },
   "repository": {
