@@ -39,6 +39,7 @@ passport.use(
 
 async function signUp({ email, username, password }, req) {
   await models.User.create({
+    avatar: '/img/assets/default.jpg',
     username,
     email,
     password,

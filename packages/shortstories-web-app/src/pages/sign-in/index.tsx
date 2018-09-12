@@ -10,6 +10,7 @@ import {
   Logo,
   Input,
   Button,
+  ImageUploader,
 } from 'components'
 import * as routes from '../../constants/routes'
 
@@ -97,26 +98,6 @@ class SignIn extends React.PureComponent<any, any> {
                       onChange={this.onChange}
                     />
                     <Button type="submit" title="LOGIN" />
-                    <div>
-                      <img src="/img/photos/P7F3n3CydUkuRHvG~QyGX.jpg" alt="" />
-                    </div>
-                    <Mutation mutation={ADD_AVATAR}>
-                      {addAvatar => (
-                        <input
-                          type="file"
-                          required
-                          onChange={({
-                            target: {
-                              validity,
-                              files: [file],
-                            },
-                          }) =>
-                            validity.valid &&
-                            addAvatar({ variables: { avatarImage: file } })
-                          }
-                        />
-                      )}
-                    </Mutation>
                   </Form>
                 </AuthContainer>
               </GridColumn>

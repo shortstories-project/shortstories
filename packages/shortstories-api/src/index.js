@@ -75,6 +75,7 @@ const server = new ApolloServer({
 server.applyMiddleware({ app, path: '/graphql' })
 
 app.use('/img/photos', express.static(path.join(__dirname, 'uploads')))
+app.use('/img/assets', express.static(path.join(__dirname, 'assets')))
 
 const isTest = !!process.env.TEST_DATABASE
 const isProduction = !!process.env.DATABASE_URL

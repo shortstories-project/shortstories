@@ -4,7 +4,7 @@ export default gql`
   type Me {
     id: ID!
     username: String!
-    avatar: String
+    photo: String!
     email: String!
     writtenStories: [Story!]!
     likedStories: [Story!]!
@@ -14,7 +14,7 @@ export default gql`
   type User {
     id: ID!
     username: String!
-    avatar: String
+    photo: String
     writtenStories: [Story!]!
   }
 
@@ -28,10 +28,17 @@ export default gql`
       username: String!
       email: String!
       password: String!
+      avatar: String!
     ): Me!
     signIn(login: String!, password: String!): Me!
     signOut: Boolean!
     updateUser(username: String, avatar: String): Me!
-    addAvatar(avatarImage: Upload!): Me!
+    postPhoto(
+      file: Upload!
+      width: Float!
+      height: Float!
+      x: Float!
+      y: Float!
+    ): Me!
   }
 `

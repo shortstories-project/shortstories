@@ -35,6 +35,20 @@ export const UPDATE_ACCOUNT = gql`
   }
 `
 
+export const POST_PHOTO = gql`
+  mutation postPhoto(
+    $file: Upload!
+    $width: Float!
+    $height: Float!
+    $x: Float!
+    $y: Float!
+  ) {
+    postPhoto(file: $file, width: $width, height: $height, x: $x, y: $y) {
+      avatar
+    }
+  }
+`
+
 /* Story */
 export const CREATE_STORY = gql`
   mutation createStory($title: String!, $body: String!) {

@@ -1,7 +1,9 @@
+import path from 'path'
+import fs from 'fs'
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated } from './authorization'
 import authService from '../services/auth'
-import { uploadAvatar } from '../utils'
+import { uploadPhoto } from '../utils'
 
 export default {
   Query: {
@@ -35,13 +37,23 @@ export default {
       }
     ),
 
-    addAvatar: combineResolvers(
+    postPhoto: combineResolvers(
       isAuthenticated,
       async (parent, args, { models, me }) => {
         const user = await models.User.findById(me.id)
-        const { stream } = await args.avatarImage
-        const url = await uploadAvatar(stream)
-        return await user.update({ avatar: url })
+        if (me.photo && me.photo !== '/img/assets/default.jpg') {
+          const { base } = path.parse(me.photo)
+          const photoPath = path.join(__dirname, '..', 'uploads', base)
+          fs.unlinkSync(photoPath)
+        }
+        const { stream, filename } = await args.file
+        const url = await uploadPhoto(stream, filename, {
+          width: args.width,
+          height: args.height,
+          x: args.x,
+          y: args.y,
+        })
+        return await user.update({ photo: url })
       }
     ),
   },
