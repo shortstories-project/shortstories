@@ -9,7 +9,7 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
   try {
-    const user = await models.User.findById(id)
+    const user = await models.User.query().findById(id)
     done(null, user)
   } catch (e) {
     done(e)
@@ -38,18 +38,9 @@ passport.use(
 )
 
 async function signUp({ email, username, password }, req) {
-  await models.User.create({
-    avatar: '/img/assets/default.jpg',
-    username,
-    email,
-    password,
-  })
+  await models.User.query().insert({ email, username, password })
 
-  return models.User.findOne({
-    where: {
-      email,
-    },
-  }).then(
+  return models.User.query().findOne({ email }).then(
     user =>
       new Promise((resolve, reject) => {
         req.login(user, err => {

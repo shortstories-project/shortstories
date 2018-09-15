@@ -1,26 +1,26 @@
 import { Model } from 'objection'
 
-class Comment extends Model {
-  static tableName = 'comments'
+class Reaction extends Model {
+  static tableName = 'reactions'
 
   static relationMappings = {
     user: {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/User`,
       join: {
-        from: 'comments.user_id',
-        to: 'users.id',
+        from: 'reactions.user_id',
+        to: 'user.id',
       },
     },
     story: {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/Story`,
       join: {
-        from: 'comments.story_id',
+        from: 'reactions.story_id',
         to: 'story.id',
       },
     },
   }
 }
 
-export default Comment
+export default Reaction

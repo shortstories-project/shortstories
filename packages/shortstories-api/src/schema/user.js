@@ -28,11 +28,11 @@ export default gql`
       username: String!
       email: String!
       password: String!
-      avatar: String!
+      photo: String
     ): Me!
     signIn(login: String!, password: String!): Me!
     signOut: Boolean!
-    updateUser(username: String, avatar: String): Me!
+    updateUser(username: String, photo: String): Me!
     postPhoto(
       file: Upload!
       width: Float!

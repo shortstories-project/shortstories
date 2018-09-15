@@ -1,12 +1,26 @@
-const view = (sequelize) => {
-  const View = sequelize.define('view')
+import { Model } from 'objection'
 
-  View.associate = models => {
-    View.belongsTo(models.User)
-    View.belongsTo(models.Story)
+class View extends Model {
+  static tableName = 'views'
+
+  static relationMappings = {
+    user: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: `${__dirname}/User`,
+      join: {
+        from: 'views.user_id',
+        to: 'user.id',
+      },
+    },
+    story: {
+      relation: Model.BelongsToOneRelation,
+      modelClass: `${__dirname}/Story`,
+      join: {
+        from: 'views.story_id',
+        to: 'story.id',
+      },
+    },
   }
-
-  return View
 }
 
-export default view
+export default View

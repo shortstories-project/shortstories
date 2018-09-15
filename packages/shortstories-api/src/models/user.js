@@ -1,79 +1,52 @@
+import { Model } from 'objection'
 import bcrypt from 'bcrypt'
 
-const user = (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
-    username: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-      },
-    },
-    email: {
-      type: DataTypes.STRING,
-      unique: true,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        isEmail: true,
-      },
-    },
-    password: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true,
-        len: [7, 42],
-      },
-    },
-    avatar: {
-      type: DataTypes.STRING,
-    },
-  })
+const relationMappingHelper = (table, model) => ({
+  relation: Model.HasManyRelation,
+  modelClass: model,
+  join: {
+    from: 'users.id',
+    to: `${table}.user_id`,
+  },
+})
 
-  User.associate = models => {
-    User.hasMany(models.Story)
-    User.hasMany(models.Comment)
-    User.hasMany(models.Like)
-    User.hasMany(models.Dislike)
-    User.hasMany(models.View)
+class User extends Model {
+  static tableName = 'users'
+
+  static relationMappings = {
+    stories: relationMappingHelper('stories', `${__dirname}/Story`),
+    comments: relationMappingHelper('comments', `${__dirname}/Comment`),
+    reactions: relationMappingHelper('reactions', `${__dirname}/Reaction`),
+    views: relationMappingHelper('views', `${__dirname}/View`),
   }
 
-  User.findByLogin = async login => {
-    let user = await User.findOne({
-      where: {
-        username: login,
-      },
-    })
-
+  static findByLogin = async login => {
+    let user = await User.query().findOne({ username: login })
     if (!user) {
-      user = await User.findOne({
-        where: {
-          email: login,
-        },
-      })
+      user = await User.query().findOne({ email: login })
     }
-
     return user
   }
 
-  User.beforeCreate(async user => {
-    user.password = await user.generatePasswordHash()
-  })
+  async $beforeInsert() {
+    this.created_at = new Date().toISOString()
+    this.password = await this.generatePasswordHash()
+  }
 
-  User.prototype.generatePasswordHash = async function generatePasswordHash() {
+  $beforeUpdate() {
+    this.updated_at = new Date().toISOString()
+  }
+
+  async generatePasswordHash() {
     const saltRounds = 10
     const hash = await bcrypt.hash(this.password, saltRounds)
     return hash
   }
-
-  User.prototype.validatePassword = async function validatePassword(password) {
-    const isValid = await bcrypt.compare(password, this.password)
-    return isValid
-  }
-
-  return User
 }
 
-export default user
+User.prototype.validatePassword = async function validatePassword(password) {
+  const isValid = await bcrypt.compare(password, this.password)
+  return isValid
+}
+
+export default User

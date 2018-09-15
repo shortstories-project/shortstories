@@ -11,7 +11,7 @@ import DataLoader from 'dataloader'
 import { ApolloServer } from 'apollo-server-express'
 import schema from './schema'
 import resolvers from './resolvers'
-import models, { sequelize } from './models'
+import models from './models'
 import loaders from './loaders'
 
 const RedisStore = connectRedis(session)
@@ -77,15 +77,11 @@ server.applyMiddleware({ app, path: '/graphql' })
 app.use('/img/photos', express.static(path.join(__dirname, 'uploads')))
 app.use('/img/assets', express.static(path.join(__dirname, 'assets')))
 
-const isTest = !!process.env.TEST_DATABASE
-const isProduction = !!process.env.DATABASE_URL
 const port = process.env.PORT || 8000
 
-sequelize.sync({ force: isTest || isProduction }).then(async () => {
-  app.listen({ port }, () => {
-    // eslint-disable-next-line
-    console.log(
-      `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
-    )
-  })
+app.listen({ port }, () => {
+  // eslint-disable-next-line
+  console.log(
+    `🚀 Server ready at http://localhost:${port}${server.graphqlPath}`
+  )
 })
