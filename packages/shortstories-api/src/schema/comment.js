@@ -5,7 +5,7 @@ export default gql`
     id: ID!
     body: String!
     user: User!
-    createdAt: String!
+    created_at: String!
   }
 
   type CommentConnection {
@@ -18,29 +18,14 @@ export default gql`
     endCursor: String!
   }
 
-  input CommentsInput {
-    cursor: String
-    limit: Int = 10
-  }
-
-  input CreateComment {
-    id: ID!
-    body: String!
-  }
-
-  input UpdateComment {
-    id: ID!
-    body: String!
-  }
-
   extend type Query {
-    comments(input: CommentsInput): CommentConnection!
+    comments(cursor: String, limit: Int = 10): CommentConnection!
     comment(id: ID!): Comment!
   }
 
   extend type Mutation {
-    createComment(input: CreateComment!): Comment!
-    updateComment(input: UpdateComment!): Comment!
+    createComment(id: ID!, body: String!): Comment!
+    updateComment(id: ID!, body: String!): Comment!
     deleteComment(id: ID!): Boolean!
   }
 `

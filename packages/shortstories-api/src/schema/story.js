@@ -6,29 +6,23 @@ export default gql`
     title: String!
     body: String!
     user: User!
-    likedBy: [Like!]!
-    dislikedBy: [Dislike!]!
+    likedBy: [Reaction!]!
+    dislikedBy: [Reaction!]!
     viewedBy: [View!]!
     comments: [Comment!]!
-    createdAt: String!
+    created_at: String!
   }
 
-  type Like {
+  type Reaction {
     id: ID!
-    user: User!
-    storyId: ID!
-  }
-
-  type Dislike {
-    id: ID!
-    user: User!
-    storyId: ID!
+    user_id: Id!
+    story_id: ID!
   }
 
   type View {
     id: ID!
-    user: User!
-    storyId: ID!
+    user_id: ID!
+    story_id: ID!
   }
 
   type StoryConnection {
@@ -41,32 +35,16 @@ export default gql`
     endCursor: String!
   }
 
-  input StoriesInput {
-    cursor: String
-    limit: Int = 100
-  }
-
-  input CreateStoryInput {
-    title: String!
-    body: String!
-  }
-
-  input UpdateStoryInput {
-    id: ID!
-    title: String
-    body: String
-  }
-
   extend type Query {
-    stories(input: StoriesInput): StoryConnection!
+    stories(cursor: String, limit: Int = 100): StoryConnection!
     story(id: ID!): Story!
   }
 
   extend type Mutation {
     createStory(title: String!, body: String!): Story!
-    updateStory(input: UpdateStoryInput!): Story!
-    likeStory(id: ID!): Like!
-    dislikeStory(id: ID!): Dislike!
+    updateStory(id: ID!, title: String, body: String): Story!
+    likeStory(id: ID!): Reaction!
+    dislikeStory(id: ID!): Reaction!
     viewStory(id: ID!): View!
     deleteStory(id: ID!): Boolean!
   }
