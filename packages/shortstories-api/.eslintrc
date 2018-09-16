@@ -11,6 +11,7 @@
     "no-shadow": "off",
     "no-param-reassign": "off",
     "import/no-mutable-exports": "off",
-    "consistent-return": "off"
+    "consistent-return": "off",
+    "dot-notation":"off"
   }
 }

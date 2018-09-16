@@ -9,7 +9,8 @@ export default {
   Query: {
     me: (parent, args, { me }) => me,
 
-    user: async (parent, { id }, { models }) => await models.User.findById(id),
+    user: async (parent, { id }, { models }) =>
+      await models.User.query().findById(id),
   },
 
   Mutation: {
@@ -60,39 +61,30 @@ export default {
 
   User: {
     writtenStories: async (user, args, { models }) =>
-      await models.Story.findAll({
-        where: {
-          userId: user.id,
-        },
-      }),
+      await models.Story.query().where({ user_id: user.id }),
   },
 
   Me: {
     writtenStories: async (parent, args, { models, me }) =>
-      await models.Story.findAll({
-        where: {
-          userId: me.id,
-        },
-      }),
+      await models.Story.query().where({ user_id: me.id }),
+
     likedStories: async (parent, args, { models, me }) => {
-      const likes = await models.Like.findAll({
-        where: {
-          userId: me.id,
-        },
+      const likes = await models.Reaction.query().where({
+        user_id: me.id,
+        state: 'like',
       })
-      return await models.Story.findAll({
-        where: likes.map(like => like.storyId),
-      })
+      return await models.Story.query().findByIds(
+        likes.map(like => like['story_id'])
+      )
     },
+
     viewedStories: async (user, args, { models, me }) => {
-      const views = await models.View.findAll({
-        where: {
-          userId: me.id,
-        },
+      const views = await models.View.query().where({
+        user_id: me.id,
       })
-      return await models.Story.findAll({
-        where: views.map(view => view.storyId),
-      })
+      return await models.Story.query().findByIds(
+        views.map(view => view['story_id'])
+      )
     },
   },
 }

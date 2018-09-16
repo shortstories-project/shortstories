@@ -9,7 +9,7 @@ class Story extends Model {
       modelClass: `${__dirname}/User`,
       join: {
         from: 'stories.user_id',
-        to: 'user.id',
+        to: 'users.id',
       },
     },
     comments: {
@@ -40,33 +40,3 @@ class Story extends Model {
 }
 
 export default Story
-
-// const story = (sequelize, DataTypes) => {
-//   const Story = sequelize.define('story', {
-//     title: {
-//       type: DataTypes.STRING,
-//       validate: {
-//         notEmpty: true,
-//       },
-//     },
-//     body: {
-//       type: DataTypes.TEXT,
-//       validate: {
-//         notEmpty: true,
-//         len: [600, 4000],
-//       },
-//     },
-//   })
-
-//   Story.associate = models => {
-//     Story.belongsTo(models.User)
-//     Story.hasMany(models.Comment)
-//     Story.hasMany(models.Like)
-//     Story.hasMany(models.Dislike)
-//     Story.hasMany(models.View)
-//   }
-
-//   return Story
-// }
-
-// export default story

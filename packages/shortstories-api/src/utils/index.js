@@ -37,4 +37,31 @@ const uploadPhoto = (stream, filename, { width, height, x, y }) => {
   )
 }
 
-export { toCursorHash, fromCursorHash, uploadPhoto }
+const paginationHelper = (model) => async ({ cursor, limit }) => {
+  const items = cursor
+    ? await model
+        .query()
+        .orderBy('created_at', 'desc')
+        .limit(limit + 1)
+        .where('created_at', '<', fromCursorHash(cursor))
+    : await model
+        .query()
+        .orderBy('created_at', 'desc')
+        .limit(limit + 1)
+  const hasNextPage = items.length > limit
+  const edges = hasNextPage ? items.slice(0, -1) : items
+  const lastIndex = edges.length - 1
+  const lastItem = edges[lastIndex]
+  const endCursor = lastItem
+    ? toCursorHash(edges[lastIndex]['created_at'].toString())
+    : ''
+  return {
+    edges,
+    pageInfo: {
+      hasNextPage,
+      endCursor,
+    },
+  }
+}
+
+export { toCursorHash, fromCursorHash, uploadPhoto, paginationHelper }

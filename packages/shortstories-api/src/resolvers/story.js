@@ -1,113 +1,64 @@
-import { Op } from 'sequelize'
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isStoryOwner } from './authorization'
-import { toCursorHash, fromCursorHash } from '../utils'
+import { paginationHelper } from '../utils'
+import { LIKE, DISLIKE } from '../constants'
 
 export default {
   Query: {
-    stories: async (parent, { cursor, limit = 100 }, { models }) => {
-      const cursorOptions = cursor
-        ? {
-            where: {
-              createdAt: {
-                [Op.lt]: fromCursorHash(cursor),
-              },
-            },
-          }
-        : {}
-      const stories = await models.Story.findAll({
-        order: [['createdAt', 'DESC']],
-        limit: limit + 1,
-        ...cursorOptions,
-      })
-      const hasNextPage = stories.length > limit
-      const edges = hasNextPage ? stories.slice(0, -1) : stories
-      const lastStory = edges[edges.length - 1]
-      const endCursor = lastStory
-        ? toCursorHash(edges[edges.length - 1].createdAt.toString())
-        : ''
-      return {
-        edges,
-        pageInfo: {
-          hasNextPage,
-          endCursor,
-        },
-      }
-    },
+    stories: async (parens, { cursor, limit = 100 }, { models }) =>
+      paginationHelper(models.Story)({ cursor, limit }),
 
-    story: async (parent, { id }, { models }) => {
-      const story = await models.Story.findById(id)
-      return story
-    },
+    story: async (parent, { id }, { models }) =>
+      await models.Story.query().findById(id),
   },
 
   Mutation: {
     createStory: combineResolvers(
       isAuthenticated,
-      async (parent, { title, body }, { models, req }) => {
-        const story = await models.Story.create({
+      async (parent, { title, body }, { models, req }) =>
+        await models.Story.query().insert({
           title,
           body,
-          userId: req.user.id,
+          user_id: req.user.id,
         })
-        return story
-      }
     ),
 
     updateStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
-      async (
-        parent,
-        { id, title, body, likes, dislikes, views },
-        { models }
-      ) => {
-        const story = await models.Story.findById(id)
-        const fields = [title, body, likes, dislikes, views]
+      async (parent, { id, title, body }, { models }) => {
+        const changes = {}
+        const fields = [title, body]
         fields.forEach(field => {
           if (field !== undefined) {
-            story[field] = field
+            changes[field] = field
           }
         })
-        return await story.save()
+        return await models.Story.query().updateAndFetchById(id, changes)
       }
     ),
 
     likeStory: combineResolvers(
       isAuthenticated,
-      isStoryOwner,
       async (parent, { id }, { models, me }) => {
-        const selector = {
-          where: {
-            userId: me.id,
-            storyId: id,
-          },
-        }
-        const createLike = async () => {
-          const newLike = await models.Like.create({
-            userId: me.id,
-            storyId: id,
+        const reaction = await models.Reaction.query().where({
+          user_id: me.id,
+          story_id: id,
+        })
+        const createLike = async () =>
+          await models.Reaction.query().insert({
+            user_id: me.id,
+            story_id: id,
+            state: LIKE,
           })
-          return {
-            id: newLike.id,
-            user: me,
-            storyId: id,
+        if (reaction) {
+          await models.Reaction.query()
+            .delete()
+            .where({ user_id: me.id, story_id: id })
+          if (reaction.state === DISLIKE) {
+            return createLike()
           }
-        }
-        const like = await models.Like.findOne(selector)
-        const dislike = await models.Dislike.findOne(selector)
-        if (like) {
-          const { id, storyId } = like
-          await models.Like.destroy(selector)
-          return {
-            id,
-            user: me,
-            storyId,
-          }
-        }
-        if (dislike) {
-          await models.Dislike.destroy(selector)
-          return createLike()
+          return reaction
         }
         return createLike()
       }
@@ -115,39 +66,25 @@ export default {
 
     dislikeStory: combineResolvers(
       isAuthenticated,
-      isStoryOwner,
       async (parent, { id }, { models, me }) => {
-        const selector = {
-          where: {
-            userId: me.id,
-            storyId: id,
-          },
-        }
-        const createDislike = async () => {
-          const newDislike = await models.Dislike.create({
-            userId: me.id,
-            storyId: id,
+        const reaction = await models.Reaction.query().where({
+          user_id: me.id,
+          story_id: id,
+        })
+        const createDislike = async () =>
+          await models.Reaction.query().insert({
+            user_id: me.id,
+            story_id: id,
+            state: DISLIKE,
           })
-          return {
-            id: newDislike.id,
-            user: me,
-            storyId: id,
+        if (reaction) {
+          await models.Reaction.query()
+            .delete()
+            .where({ user_id: me.id, story_id: id })
+          if (reaction.state === LIKE) {
+            return createDislike()
           }
-        }
-        const like = await models.Like.findOne(selector)
-        const dislike = await models.Dislike.findOne(selector)
-        if (dislike) {
-          const { id, storyId } = dislike
-          await models.Dislike.destroy(selector)
-          return {
-            id,
-            user: me,
-            storyId,
-          }
-        }
-        if (like) {
-          await models.Like.destroy(selector)
-          return createDislike()
+          return reaction
         }
         return createDislike()
       }
@@ -155,72 +92,56 @@ export default {
 
     viewStory: combineResolvers(
       isAuthenticated,
-      isStoryOwner,
-      async (parent, { id }, { models, me }) => {
-        const newView = await models.View.create({
-          userId: me.id,
-          storyId: id,
+      async (parent, { id }, { models, me }) =>
+        await models.Reaction.query().insert({
+          user_id: me.id,
+          story_id: id,
+          state: DISLIKE,
         })
-        return {
-          id: newView.id,
-          user: me,
-          storyId: id,
-        }
-      }
     ),
 
     deleteStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
-      async (parent, { id }, { models }) => {
-        const isDeleted = await models.Story.destroy({ where: { id } })
-        return isDeleted
-      }
+      async (parent, { id }, { models }) =>
+        await models.Story.query()
+          .delete()
+          .where({ id })
     ),
   },
 
   Story: {
     user: async (story, args, { loaders }) =>
-      await loaders.user.load(story.userId),
+      await loaders.user.load(story['user_id']),
 
     comments: async (story, args, { models }) =>
-      await models.Comment.findAll({
-        where: {
-          storyId: story.id,
-        },
-      }),
+      await models.Comment.query().where({ story_id: story.id }),
 
     likedBy: async (story, args, { models, loaders }) =>
-      await models.Like.findAll({
-        where: {
-          storyId: story.id,
-        },
-      }).map(async i => ({
-        id: i.id,
-        user: await loaders.user.load(i.userId),
-        storyId: i.storyId,
-      })),
+      await models.Reaction.query()
+        .where({ story_id: story.id, state: LIKE })
+        .map(async like => ({
+          id: like.id,
+          user: await loaders.user.load(like['user_id']),
+          storyId: like['story_id'],
+        })),
 
     dislikedBy: async (story, args, { models, loaders }) =>
-      await models.Dislike.findAll({
-        where: {
-          storyId: story.id,
-        },
-      }).map(async i => ({
-        id: i.id,
-        user: await loaders.user.load(i.userId),
-        storyId: i.storyId,
-      })),
+      await models.Reaction.query()
+        .where({ story_id: story.id, state: DISLIKE })
+        .map(async dislike => ({
+          id: dislike.id,
+          user: await loaders.user.load(dislike['user_id']),
+          storyId: dislike['story_id'],
+        })),
 
     viewedBy: async (story, args, { models, loaders }) =>
-      await models.View.findAll({
-        where: {
-          storyId: story.id,
-        },
-      }).map(async i => ({
-        id: i.id,
-        user: await loaders.user.load(i.userId),
-        storyId: i.storyId,
-      })),
+      await models.View.query()
+        .where({ story_id: story.id })
+        .map(async view => ({
+          id: view.id,
+          user: await loaders.user.load(view['user_id']),
+          storyId: view['story_id'],
+        })),
   },
 }

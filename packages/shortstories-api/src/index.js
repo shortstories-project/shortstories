@@ -43,33 +43,14 @@ app.use(passport.session())
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
-  formatError: error => {
-    const message = error.message
-      .replace('SequelizeValidationError: ', '')
-      .replace('Validation error: ', '')
-    return {
-      ...error,
-      message,
-    }
-  },
-  context: async ({ req, connection }) => {
-    if (connection) {
-      return {
-        models,
-      }
-    }
-    if (req) {
-      return {
-        models,
-        me: req.user,
-        req,
-        loaders: {
-          user: new DataLoader(keys => loaders.batchUsers(keys, models)),
-        },
-      }
-    }
-    return undefined
-  },
+  context: async ({ req }) => ({
+      models,
+      me: req.user,
+      req,
+      loaders: {
+        user: new DataLoader(keys => loaders.batchUsers(keys, models)),
+      },
+    }),
 })
 
 server.applyMiddleware({ app, path: '/graphql' })

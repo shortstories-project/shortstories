@@ -8,8 +8,7 @@
     "graphql",
     "express",
     "apollo",
-    "postgresql",
-    "sequelize"
+    "postgresql"
   ],
   "author": "Shashkov Danil <shashkovdanil@gmail.com> (https://github.com/shashkovdanil)",
   "license": "MIT",
@@ -40,8 +39,7 @@
     "objection": "^1.2.6",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "pg": "^7.4.3",
-    "sequelize": "^4.38.0"
+    "pg": "^7.4.3"
   },
   "devDependencies": {
     "@babel/cli": "^7.0.0",

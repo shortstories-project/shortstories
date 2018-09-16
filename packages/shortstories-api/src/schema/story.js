@@ -63,7 +63,7 @@ export default gql`
   }
 
   extend type Mutation {
-    createStory(input: CreateStoryInput!): Story!
+    createStory(title: String!, body: String!): Story!
     updateStory(input: UpdateStoryInput!): Story!
     likeStory(id: ID!): Like!
     dislikeStory(id: ID!): Dislike!
