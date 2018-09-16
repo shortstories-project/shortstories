@@ -5,7 +5,7 @@ exports.up = function createStoriesTable(knex, Promise) {
       table.string('title').notNullable()
       table.text('body', 'longtext').notNullable()
       table.integer('user_id').references('users.id')
-      table.timestamps().defaultTo(knex.fn.now())
+      table.timestamps()
     }),
   ])
 }

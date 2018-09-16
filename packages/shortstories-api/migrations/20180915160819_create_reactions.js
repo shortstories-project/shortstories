@@ -5,7 +5,7 @@ exports.up = function createReactionsTable(knex, Promise) {
       table.enu('state', ['like', 'dislike'])
       table.integer('user_id').references('users.id')
       table.integer('story_id').references('stories.id')
-      table.timestamps().defaultTo(knex.fn.now())
+      table.timestamps()
     }),
   ])
 }

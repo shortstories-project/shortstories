@@ -4,7 +4,8 @@
   "plugins": ["prettier"],
   "env": {
     "node": true,
-    "es6": true
+    "es6": true,
+    "mocha": true
   },
   "rules": {
     "no-return-await": "off",
@@ -12,6 +13,8 @@
     "no-param-reassign": "off",
     "import/no-mutable-exports": "off",
     "consistent-return": "off",
-    "dot-notation":"off"
+    "dot-notation":"off",
+    "import/no-extraneous-dependencies": "off",
+    "import/prefer-default-export": "off"
   }
 }

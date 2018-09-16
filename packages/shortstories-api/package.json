@@ -14,7 +14,8 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon --exec babel-node src/index.js",
-    "test-server": "TEST_DATABASE=shortstoriestest npm start"
+    "test-server": "TEST_DATABASE=shortstoriestest npm start",
+    "test": "mocha --require @babel/register 'src/**/*.spec.js'"
   },
   "dependencies": {
     "apollo-server": "^2.0.5",
@@ -47,7 +48,10 @@
     "@babel/node": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.0.0",
     "@babel/preset-env": "^7.0.0",
+    "@babel/register": "^7.0.0",
+    "axios": "^0.18.0",
     "babel-eslint": "^9.0.0",
+    "chai": "^4.1.2",
     "eslint": "^5.5.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.0.1",
@@ -56,6 +60,7 @@
     "eslint-plugin-node": "^7.0.1",
     "eslint-plugin-prettier": "^2.6.2",
     "eslint-plugin-promise": "^4.0.0",
+    "mocha": "^5.2.0",
     "nodemon": "^1.18.3",
     "prettier": "^1.14.2"
   }

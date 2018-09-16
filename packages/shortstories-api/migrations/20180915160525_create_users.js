@@ -12,7 +12,7 @@ exports.up = function createUsersTable(knex, Promise) {
         .unique()
       table.string('password').notNullable()
       table.string('photo').defaultTo('/img/assets/default.jpg')
-      table.timestamps().defaultTo(knex.fn.now())
+      table.timestamps()
     }),
   ])
 }
