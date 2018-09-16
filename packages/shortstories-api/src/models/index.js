@@ -7,7 +7,16 @@ import Reaction from './reaction'
 import Comment from './comment'
 import View from './view'
 
-const knexConnection = Knex(connection)
+const { test, development, production } = connection
+let knexConnection
+
+if (process.env['NODE_ENV'] === 'development') {
+  knexConnection = Knex(development)
+} else if (process.env['NODE_ENV'] === 'test') {
+  knexConnection = Knex(test)
+} else {
+  knexConnection = Knex(production)
+}
 
 Model.knex(knexConnection)
 

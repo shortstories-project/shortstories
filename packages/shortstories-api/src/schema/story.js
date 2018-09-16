@@ -15,7 +15,7 @@ export default gql`
 
   type Reaction {
     id: ID!
-    user_id: Id!
+    user_id: ID!
     story_id: ID!
   }
 
