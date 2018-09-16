@@ -12,6 +12,10 @@ exports.up = function createUsersTable(knex, Promise) {
         .unique()
       table.string('password').notNullable()
       table.string('photo').defaultTo('/img/assets/default.jpg')
+      table
+        .boolean('is_verified')
+        .defaultTo(false)
+        .notNullable()
       table.timestamps()
     }),
   ])
