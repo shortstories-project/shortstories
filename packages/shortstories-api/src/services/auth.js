@@ -1,9 +1,12 @@
 import passport from 'passport'
+import redis from 'redis'
+import nanoid from 'nanoid'
 import { Strategy as LocalStrategy } from 'passport-local'
 import { AuthenticationError, UserInputError } from 'apollo-server'
 import nodemailer from 'nodemailer'
 import models from '../models'
-import { SENDER_EMAIL } from '../constants'
+
+const redisClient = redis.createClient()
 
 passport.serializeUser((user, done) => {
   done(null, user.id)
@@ -49,21 +52,34 @@ async function signUp({ email, username, password }, req) {
         new Promise((resolve, reject) => {
           req.login(user, async err => {
             if (err) reject(new Error(err))
+            const token = nanoid(16)
             const transporter = nodemailer.createTransport({
               service: 'gmail',
               auth: {
+                type: 'OAuth2',
                 user: process.env.SMTP_USER,
-                pass: process.env.SMTP_PASSWORD,
+                clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
+                clientSecret: process.env.GOOGLE_AUTH_SECRET,
+                refreshToken: process.env.GOOGLE_AUTH_REFRESH_TOKEN,
               },
             })
             const mailOptions = {
-              from: SENDER_EMAIL,
+              from: `Shortstories <${process.env.SMTP_USER}>`,
               to: user.email,
-              subject: 'Subject of your email',
-              html: '<p>Your html here</p>',
+              subject: 'Nodemailer test',
+              html: `
+                <h3>Shortstories</h3>
+                <p>Welcome to Shortstories</p>
+                <p>Verify we have the right email address by clicking on the button below:</p>
+                <a href="${
+                  process.env.HOST
+                }/verify?token=${token}">Verify my account!</a>
+              `,
             }
             transporter.sendMail(mailOptions, err => {
               if (err) reject(new Error(err))
+              redisClient.set(token, user.email)
+              redisClient.expire(token, 3600)
               resolve(user)
             })
           })
@@ -81,4 +97,13 @@ function signIn({ login, password }, req) {
   })
 }
 
-export default { signIn, signUp }
+function verifyUser(req, res, next) {
+  redisClient.get(req.query.token, async (err, email) => {
+    await models.User.query()
+      .where({ email })
+      .update({ is_verified: true })
+    next()
+  })
+}
+
+export default { signIn, signUp, verifyUser }

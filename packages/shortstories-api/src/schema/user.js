@@ -6,6 +6,7 @@ export default gql`
     username: String!
     photo: String!
     email: String!
+    is_verified: Boolean!
     writtenStories: [Story!]!
     likedStories: [Story!]!
     viewedStories: [Story!]!

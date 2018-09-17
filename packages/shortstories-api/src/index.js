@@ -1,5 +1,4 @@
 import 'dotenv/config'
-import './services/auth'
 import path from 'path'
 import express from 'express'
 import session from 'express-session'
@@ -12,6 +11,7 @@ import { ApolloServer } from 'apollo-server-express'
 import schema from './schema'
 import resolvers from './resolvers'
 import models from './models'
+import auth from './services/auth'
 import loaders from './loaders'
 
 const RedisStore = connectRedis(session)
@@ -57,6 +57,9 @@ server.applyMiddleware({ app, path: '/graphql' })
 
 app.use('/img/photos', express.static(path.join(__dirname, 'uploads')))
 app.use('/img/assets', express.static(path.join(__dirname, 'assets')))
+
+// Verify account
+app.get('/verify', auth.verifyUser)
 
 const port = process.env.PORT || 8000
 
