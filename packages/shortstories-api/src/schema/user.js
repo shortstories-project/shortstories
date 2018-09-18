@@ -33,6 +33,8 @@ export default gql`
     ): Me!
     signIn(login: String!, password: String!): Me!
     signOut: Boolean!
+    forgotPassword(email: String!): Boolean!
+    changePassword(token: String!, id: ID!, newPassword: String!): Me!
     updateUser(username: String, photo: String): Me!
     postPhoto(
       file: Upload!

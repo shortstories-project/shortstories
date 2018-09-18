@@ -3,11 +3,12 @@ import gm from 'gm'
 import nanoid from 'nanoid'
 import path from 'path'
 
-const toCursorHash = string => Buffer.from(string).toString('base64')
+export const toCursorHash = string => Buffer.from(string).toString('base64')
 
-const fromCursorHash = string => Buffer.from(string, 'base64').toString('ascii')
+export const fromCursorHash = string =>
+  Buffer.from(string, 'base64').toString('ascii')
 
-const uploadPhoto = (stream, filename, { width, height, x, y }) => {
+export const uploadPhoto = (stream, filename, { width, height, x, y }) => {
   const id = nanoid()
   const fileExt = path.extname(filename)
   const filePath = path.join(__dirname, '..', 'uploads', `${id}${fileExt}`)
@@ -37,7 +38,7 @@ const uploadPhoto = (stream, filename, { width, height, x, y }) => {
   )
 }
 
-const paginationHelper = (model) => async ({ cursor, limit }) => {
+export const paginationHelper = model => async ({ cursor, limit }) => {
   const items = cursor
     ? await model
         .query()
@@ -64,4 +65,5 @@ const paginationHelper = (model) => async ({ cursor, limit }) => {
   }
 }
 
-export { toCursorHash, fromCursorHash, uploadPhoto, paginationHelper }
+export const getJWTSecret = user =>
+  `${user.password}-${new Date(user.createdAt).getTime()}`

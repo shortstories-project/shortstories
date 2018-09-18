@@ -1,4 +1,5 @@
 import 'dotenv/config'
+import './config/passport'
 import path from 'path'
 import express from 'express'
 import session from 'express-session'

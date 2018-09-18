@@ -1,51 +1,22 @@
 import passport from 'passport'
 import redis from 'redis'
 import nanoid from 'nanoid'
-import { Strategy as LocalStrategy } from 'passport-local'
-import { AuthenticationError, UserInputError } from 'apollo-server'
-import nodemailer from 'nodemailer'
-import models from '../models'
+import bcrypt from 'bcrypt'
+import jwt from 'jwt-simple'
+import isEqual from 'lodash.isequal'
+import mailer from '../config/mailer'
+import User from '../models/user'
+import { getJWTSecret } from '../utils'
+import { resetPassword } from '../constants/templates'
 
 const redisClient = redis.createClient()
 
-passport.serializeUser((user, done) => {
-  done(null, user.id)
-})
-
-passport.deserializeUser(async (id, done) => {
-  try {
-    const user = await models.User.query().findById(id)
-    done(null, user)
-  } catch (e) {
-    done(e)
-  }
-})
-
-passport.use(
-  new LocalStrategy(
-    { usernameField: 'login' },
-    async (login, password, done) => {
-      try {
-        const user = await models.User.findByLogin(login)
-        if (!user) {
-          throw new UserInputError('No user found with this login credentials.')
-        }
-        const isValid = await user.validatePassword(password)
-        if (!isValid) {
-          throw new AuthenticationError('Invalid password.')
-        }
-        return done(null, user)
-      } catch (e) {
-        return done(e)
-      }
-    }
-  )
-)
+/* Scope functions [signUp, signIn, verify, sendConfirmEmail, restorePassword] */
 
 async function signUp({ email, username, password }, req) {
-  await models.User.query().insert({ email, username, password })
+  await User.query().insert({ email, username, password })
 
-  return models.User.query()
+  return User.query()
     .findOne({ email })
     .then(
       user =>
@@ -53,16 +24,6 @@ async function signUp({ email, username, password }, req) {
           req.login(user, async err => {
             if (err) reject(new Error(err))
             const token = nanoid(16)
-            const transporter = nodemailer.createTransport({
-              service: 'gmail',
-              auth: {
-                type: 'OAuth2',
-                user: process.env.SMTP_USER,
-                clientId: process.env.GOOGLE_AUTH_CLIENT_ID,
-                clientSecret: process.env.GOOGLE_AUTH_SECRET,
-                refreshToken: process.env.GOOGLE_AUTH_REFRESH_TOKEN,
-              },
-            })
             const mailOptions = {
               from: `Shortstories <${process.env.SMTP_USER}>`,
               to: user.email,
@@ -76,7 +37,7 @@ async function signUp({ email, username, password }, req) {
                 }/verify?token=${token}">Verify my account!</a>
               `,
             }
-            transporter.sendMail(mailOptions, err => {
+            mailer.sendMail(mailOptions, err => {
               if (err) reject(new Error(err))
               redisClient.set(token, user.email)
               redisClient.expire(token, 3600)
@@ -99,11 +60,54 @@ function signIn({ login, password }, req) {
 
 function verifyUser(req, res, next) {
   redisClient.get(req.query.token, async (err, email) => {
-    await models.User.query()
+    await User.query()
       .where({ email })
       .update({ is_verified: true })
     next()
   })
 }
 
-export default { signIn, signUp, verifyUser }
+async function forgotPassword(parent, { email }) {
+  const user = await User.query().where({ email })
+  const payload = {
+    id: user.id,
+    email,
+  }
+  const secret = getJWTSecret(user)
+  const token = jwt.encode(payload, secret)
+  const link = `${process.env.HOST}/reset/${payload.id}/${token}`
+  const mailOptions = {
+    from: `Shortstories <${process.env.SMTP_USER}>`,
+    to: user.email,
+    subject: 'Shortstories Password Reset',
+    text: resetPassword(link),
+  }
+  mailer.sendMail(mailOptions, err => {
+    if (err) return false
+    return true
+  })
+}
+
+async function changePassword(parent, { token, id, newPassword }) {
+  const user = await User.query().findById(id)
+  // TODO: Error handle
+  const secret = getJWTSecret(user)
+  const payload = {
+    id: user.id,
+    email: user.email,
+  }
+  if (isEqual(payload, jwt.decode(token, secret))) {
+    const saltRounds = 10
+    const hash = await bcrypt.hash(newPassword, saltRounds)
+    return await user.update({ password: hash })
+  }
+  // TODO: Error handle
+}
+
+export default {
+  signIn,
+  signUp,
+  verifyUser,
+  forgotPassword,
+  changePassword,
+}

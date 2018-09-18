@@ -30,6 +30,10 @@ export default {
       }
     }),
 
+    forgotPassword: authService.forgotPassword,
+
+    changePassword: authService.changePassword,
+
     updateUser: combineResolvers(
       isAuthenticated,
       async (parent, args, { models, me }) => {
