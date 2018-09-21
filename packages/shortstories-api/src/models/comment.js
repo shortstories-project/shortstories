@@ -8,7 +8,7 @@ class Comment extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/User`,
       join: {
-        from: 'comments.user_id',
+        from: 'comments.userId',
         to: 'users.id',
       },
     },
@@ -16,18 +16,18 @@ class Comment extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/Story`,
       join: {
-        from: 'comments.story_id',
+        from: 'comments.storyId',
         to: 'story.id',
       },
     },
   }
 
   $beforeInsert() {
-    this.created_at = new Date().toISOString()
+    this.createdAt = new Date().toISOString()
   }
 
   $beforeUpdate() {
-    this.updated_at = new Date().toISOString()
+    this.updatedAt = new Date().toISOString()
   }
 }
 

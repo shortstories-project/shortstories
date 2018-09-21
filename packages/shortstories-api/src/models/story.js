@@ -8,7 +8,7 @@ class Story extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/User`,
       join: {
-        from: 'stories.user_id',
+        from: 'stories.userId',
         to: 'users.id',
       },
     },
@@ -17,7 +17,7 @@ class Story extends Model {
       modelClass: `${__dirname}/Comment`,
       join: {
         from: 'stories.id',
-        to: 'comments.story_id',
+        to: 'comments.storyId',
       },
     },
     reactions: {
@@ -25,7 +25,7 @@ class Story extends Model {
       modelClass: `${__dirname}/Reaction`,
       join: {
         from: 'stories.id',
-        to: 'reactions.story_id',
+        to: 'reactions.storyId',
       },
     },
     views: {
@@ -33,17 +33,17 @@ class Story extends Model {
       modelClass: `${__dirname}/View`,
       join: {
         from: 'stories.id',
-        to: 'views.story_id',
+        to: 'views.storyId',
       },
     },
   }
 
   $beforeInsert() {
-    this.created_at = new Date().toISOString()
+    this.createdAt = new Date().toISOString()
   }
 
   $beforeUpdate() {
-    this.updated_at = new Date().toISOString()
+    this.updatedAt = new Date().toISOString()
   }
 }
 

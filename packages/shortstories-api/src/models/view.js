@@ -8,7 +8,7 @@ class View extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/User`,
       join: {
-        from: 'views.user_id',
+        from: 'views.userId',
         to: 'user.id',
       },
     },
@@ -16,18 +16,18 @@ class View extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/Story`,
       join: {
-        from: 'views.story_id',
+        from: 'views.storyId',
         to: 'story.id',
       },
     },
   }
 
   $beforeInsert() {
-    this.created_at = new Date().toISOString()
+    this.createdAt = new Date().toISOString()
   }
 
   $beforeUpdate() {
-    this.updated_at = new Date().toISOString()
+    this.updatedAt = new Date().toISOString()
   }
 }
 

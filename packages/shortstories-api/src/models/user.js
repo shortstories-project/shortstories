@@ -6,7 +6,7 @@ const relationMappingHelper = (table, model) => ({
   modelClass: model,
   join: {
     from: 'users.id',
-    to: `${table}.user_id`,
+    to: `${table}.userId`,
   },
 })
 
@@ -29,12 +29,12 @@ class User extends Model {
   }
 
   async $beforeInsert() {
-    this.created_at = new Date().toISOString()
+    this.createdAt = new Date().toISOString()
     this.password = await this.generatePasswordHash()
   }
 
   $beforeUpdate() {
-    this.updated_at = new Date().toISOString()
+    this.updatedAt = new Date().toISOString()
   }
 
   async generatePasswordHash() {

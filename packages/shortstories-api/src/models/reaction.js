@@ -8,7 +8,7 @@ class Reaction extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/User`,
       join: {
-        from: 'reactions.user_id',
+        from: 'reactions.userId',
         to: 'user.id',
       },
     },
@@ -16,18 +16,18 @@ class Reaction extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: `${__dirname}/Story`,
       join: {
-        from: 'reactions.story_id',
+        from: 'reactions.storyId',
         to: 'story.id',
       },
     },
   }
 
   $beforeInsert() {
-    this.created_at = new Date().toISOString()
+    this.createdAt = new Date().toISOString()
   }
 
   $beforeUpdate() {
-    this.updated_at = new Date().toISOString()
+    this.updatedAt = new Date().toISOString()
   }
 }
 
