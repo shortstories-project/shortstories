@@ -3,9 +3,10 @@ exports.up = function createCommentsTable(knex, Promise) {
     knex.schema.createTable('comments', table => {
       table.increments('id').primary()
       table.string('body').notNullable()
-      table.integer('user_id').references('users.id')
-      table.integer('story_id').references('stories.id')
-      table.timestamps()
+      table.integer('userId').references('users.id')
+      table.integer('storyId').references('stories.id')
+      table.timestamp('createdAt').defaultTo(knex.fn.now())
+      table.timestamp('updatedAt').defaultTo(knex.fn.now())
     }),
   ])
 }

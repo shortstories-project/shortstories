@@ -3,9 +3,10 @@ exports.up = function createReactionsTable(knex, Promise) {
     knex.schema.createTable('reactions', table => {
       table.increments('id').primary()
       table.enu('state', ['like', 'dislike'])
-      table.integer('user_id').references('users.id')
-      table.integer('story_id').references('stories.id')
-      table.timestamps()
+      table.integer('userId').references('users.id')
+      table.integer('storyId').references('stories.id')
+      table.timestamp('createdAt').defaultTo(knex.fn.now())
+      table.timestamp('updatedAt').defaultTo(knex.fn.now())
     }),
   ])
 }

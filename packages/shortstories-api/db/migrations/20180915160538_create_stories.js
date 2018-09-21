@@ -4,8 +4,9 @@ exports.up = function createStoriesTable(knex, Promise) {
       table.increments('id').primary()
       table.string('title').notNullable()
       table.text('body', 'longtext').notNullable()
-      table.integer('user_id').references('users.id')
-      table.timestamps()
+      table.integer('userId').references('users.id')
+      table.timestamp('createdAt').defaultTo(knex.fn.now())
+      table.timestamp('updatedAt').defaultTo(knex.fn.now())
     }),
   ])
 }
