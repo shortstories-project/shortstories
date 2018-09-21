@@ -61,6 +61,8 @@ export default {
         return await user.update({ photo: url })
       }
     ),
+
+    verifyUser: authService.verifyUser,
   },
 
   User: {

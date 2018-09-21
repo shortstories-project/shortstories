@@ -1,11 +1,25 @@
 export const resetPassword = link => `
 
-You are receiving this because you (or someone else) have requested the reset of the password for your account.
+Hey there!
 
-Please click on the following link, or paste this into your browser to complete the process:
+Someone requested a new password for your Shortstories account.
+
+Please click on the following link to complete the process:
 
 ${link}
 
-If you did not request this, please ignore this email and your password will remain unchanged.
+If you didn't make this request then you can safely ignore this email :)
+
+`
+
+export const emailConfirmation = link => `
+
+Welcome to Shortstories!
+
+Verify we have the right email address by clicking on the link below:
+
+${link}
+
+Thank you!
 
 `

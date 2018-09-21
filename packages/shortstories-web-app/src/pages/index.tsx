@@ -7,6 +7,7 @@ import SignIn from 'pages/sign-in'
 import { Header, DropAndCrop } from 'components'
 import CreateStory from 'pages/create-story'
 import NotFound from 'pages/not-found'
+import Verify from './verify'
 import * as routes from '../constants/routes'
 import history from '../constants/history'
 
@@ -32,6 +33,7 @@ const App = ({ session, refetch }: any) => (
           render={() => <SignIn refetch={refetch} />}
         />
         <Route path={routes.CREATE_STORY} component={CreateStory} />
+        <Route path={routes.VERIFY} component={Verify} />
         <Route component={NotFound} />
       </Switch>
     </>

@@ -64,6 +64,3 @@ export const paginationHelper = model => async ({ cursor, limit }) => {
     },
   }
 }
-
-export const getJWTSecret = user =>
-  `${user.password}-${new Date(user.createdAt).getTime()}`

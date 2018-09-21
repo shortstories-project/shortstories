@@ -8,7 +8,7 @@ import { onError } from 'apollo-link-error'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { injectGlobal } from 'styled-components'
 import { hot } from 'react-hot-loader'
-import App from 'pages/app'
+import App from 'pages'
 import style from './style'
 
 injectGlobal`${style}` // tslint:disable-line

@@ -34,7 +34,6 @@ export const UPDATE_ACCOUNT = gql`
     }
   }
 `
-
 export const POST_PHOTO = gql`
   mutation postPhoto(
     $file: Upload!
@@ -46,6 +45,11 @@ export const POST_PHOTO = gql`
     postPhoto(file: $file, width: $width, height: $height, x: $x, y: $y) {
       avatar
     }
+  }
+`
+export const VERIFY_USER = gql`
+  mutation verifyUser($token: String!) {
+    verifyUser(token: $token)
   }
 `
 

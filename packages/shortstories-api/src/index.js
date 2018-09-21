@@ -12,8 +12,8 @@ import { ApolloServer } from 'apollo-server-express'
 import schema from './schema'
 import resolvers from './resolvers'
 import models from './models'
-import auth from './services/auth'
 import loaders from './loaders'
+import redis from './config/redis'
 
 const RedisStore = connectRedis(session)
 
@@ -29,7 +29,7 @@ app.use(cookieParser())
 app.use(
   session({
     store: new RedisStore({
-      url: process.env.REDIS_URI,
+      client: redis,
     }),
     secret: process.env.SECRET,
     resave: false,
@@ -45,22 +45,19 @@ const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
   context: async ({ req }) => ({
-      models,
-      me: req.user,
-      req,
-      loaders: {
-        user: new DataLoader(keys => loaders.batchUsers(keys, models)),
-      },
-    }),
+    models,
+    me: req.user,
+    req,
+    loaders: {
+      user: new DataLoader(keys => loaders.batchUsers(keys, models)),
+    },
+  }),
 })
 
 server.applyMiddleware({ app, path: '/graphql' })
 
 app.use('/img/photos', express.static(path.join(__dirname, 'uploads')))
 app.use('/img/assets', express.static(path.join(__dirname, 'assets')))
-
-// Verify account
-app.get('/verify', auth.verifyUser)
 
 const port = process.env.PORT || 8000
 

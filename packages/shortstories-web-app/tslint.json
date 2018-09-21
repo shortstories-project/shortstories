@@ -21,7 +21,8 @@
     "object-literal-sort-keys": false,
     "no-shadowed-variable": false,
     "no-console": false,
-    "member-access": false
+    "member-access": false,
+    "max-classes-per-file": false
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }
