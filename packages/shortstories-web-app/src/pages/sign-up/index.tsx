@@ -1,7 +1,5 @@
 import * as React from 'react'
-import { withRouter } from 'react-router-dom'
 import { Mutation } from 'react-apollo'
-import gql from 'graphql-tag'
 import styled from 'styled-components'
 import {
   GridContainer,
@@ -12,16 +10,20 @@ import {
   Button,
 } from 'components'
 import * as routes from '../../constants/routes'
+import history from '../../constants/history'
+import { SIGN_UP } from '../../constants/mutations'
 
-const SIGN_UP = gql`
-  mutation($username: String!, $email: String!, $password: String!) {
-    signUp(username: $username, email: $email, password: $password) {
-      id
-      username
-      email
-    }
-  }
-`
+interface IProps {
+  refetch?: () => void
+}
+
+interface IState {
+  username: string
+  email: string
+  password: string
+  passwordConfirmation: string
+  [field: string]: any
+}
 
 const AuthContainer = styled.div`
   background-color: var(--white);
@@ -37,41 +39,35 @@ const Form = styled.form`
   justify-content: space-between;
 `
 
-const INITIAL_STATE = {
+const INITIAL_STATE: IState = {
   username: '',
   email: '',
   password: '',
   passwordConfirmation: '',
 }
 
-class SignUp extends React.PureComponent<any, any> {
-  public state = { ...INITIAL_STATE }
+class SignUp extends React.Component<IProps, IState> {
+  state = { ...INITIAL_STATE }
 
-  public onChange = (event: any) => {
-    const { name, value } = event.target
+  onChange = ({ target }: any) => {
+    const { name, value } = target
     this.setState({ [name]: value })
   }
 
-  public onSubmit = (event: any, signUp: any) => {
-    signUp().then(async ({ data }: any) => {
+  onSubmit = (event, signUp) => {
+    signUp().then(async () => {
       this.setState({ ...INITIAL_STATE })
-      localStorage.setItem('token', data.signUp.token)
       await this.props.refetch()
-      this.props.history.push(routes.STORIES)
+      history.push(routes.STORIES)
     })
     event.preventDefault()
   }
 
-  public render() {
+  render() {
     const { username, email, password, passwordConfirmation } = this.state
-    const isInvalid =
-      password !== passwordConfirmation ||
-      password === '' ||
-      email === '' ||
-      username === ''
     return (
       <Mutation mutation={SIGN_UP} variables={{ username, email, password }}>
-        {signUp => (
+        {(signUp, { data, loading, error }) => (
           <GridContainer>
             <GridRow center>
               <GridColumn lg={4} md={3} sm={2} xs={1} />
@@ -124,4 +120,4 @@ class SignUp extends React.PureComponent<any, any> {
   }
 }
 
-export default withRouter(SignUp)
+export default SignUp

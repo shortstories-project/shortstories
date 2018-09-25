@@ -4,7 +4,7 @@ import withSession from '../higher-order-components/with-session'
 import Stories from 'pages/stories'
 import SignUp from 'pages/sign-up'
 import SignIn from 'pages/sign-in'
-import { Header, DropAndCrop } from 'components'
+import { Header } from 'components'
 import CreateStory from 'pages/create-story'
 import NotFound from 'pages/not-found'
 import Verify from './verify'
@@ -26,7 +26,6 @@ const App = ({ session, refetch }: any) => (
           path={routes.SIGN_UP}
           render={() => <SignUp refetch={refetch} />}
         />
-        <Route path="/drop" component={DropAndCrop} />
         <Route
           exact
           path={routes.SIGN_IN}

@@ -10,19 +10,19 @@ export default gql`
     dislikedBy: [Reaction!]!
     viewedBy: [View!]!
     comments: [Comment!]!
-    created_at: String!
+    createdAt: String!
   }
 
   type Reaction {
     id: ID!
-    user_id: ID!
-    story_id: ID!
+    userId: ID!
+    storyId: ID!
   }
 
   type View {
     id: ID!
-    user_id: ID!
-    story_id: ID!
+    userId: ID!
+    storyId: ID!
   }
 
   type StoryConnection {

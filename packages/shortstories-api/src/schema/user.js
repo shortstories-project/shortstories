@@ -6,7 +6,7 @@ export default gql`
     username: String!
     photo: String!
     email: String!
-    is_verified: Boolean!
+    isVerified: Boolean!
     writtenStories: [Story!]!
     likedStories: [Story!]!
     viewedStories: [Story!]!
@@ -29,7 +29,6 @@ export default gql`
       username: String!
       email: String!
       password: String!
-      photo: String
     ): Me!
     signIn(login: String!, password: String!): Me!
     signOut: Boolean!

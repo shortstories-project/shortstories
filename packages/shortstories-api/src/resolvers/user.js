@@ -67,29 +67,29 @@ export default {
 
   User: {
     writtenStories: async (user, args, { models }) =>
-      await models.Story.query().where({ user_id: user.id }),
+      await models.Story.query().where({ userId: user.id }),
   },
 
   Me: {
     writtenStories: async (parent, args, { models, me }) =>
-      await models.Story.query().where({ user_id: me.id }),
+      await models.Story.query().where({ userId: me.id }),
 
     likedStories: async (parent, args, { models, me }) => {
       const likes = await models.Reaction.query().where({
-        user_id: me.id,
+        userId: me.id,
         state: 'like',
       })
       return await models.Story.query().findByIds(
-        likes.map(like => like['story_id'])
+        likes.map(like => like.storyId)
       )
     },
 
     viewedStories: async (user, args, { models, me }) => {
       const views = await models.View.query().where({
-        user_id: me.id,
+        userId: me.id,
       })
       return await models.Story.query().findByIds(
-        views.map(view => view['story_id'])
+        views.map(view => view.storyId)
       )
     },
   },

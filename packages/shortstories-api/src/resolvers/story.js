@@ -19,7 +19,7 @@ export default {
         await models.Story.query().insert({
           title,
           body,
-          user_id: req.user.id,
+          userId: req.user.id,
         })
     ),
 
@@ -42,19 +42,19 @@ export default {
       isAuthenticated,
       async (parent, { id }, { models, me }) => {
         const reaction = await models.Reaction.query().where({
-          user_id: me.id,
-          story_id: id,
+          userId: me.id,
+          storyId: id,
         })
         const createLike = async () =>
           await models.Reaction.query().insert({
-            user_id: me.id,
-            story_id: id,
+            userId: me.id,
+            storyId: id,
             state: LIKE,
           })
         if (reaction) {
           await models.Reaction.query()
             .delete()
-            .where({ user_id: me.id, story_id: id })
+            .where({ userId: me.id, storyId: id })
           if (reaction.state === DISLIKE) {
             return createLike()
           }
@@ -68,19 +68,19 @@ export default {
       isAuthenticated,
       async (parent, { id }, { models, me }) => {
         const reaction = await models.Reaction.query().where({
-          user_id: me.id,
-          story_id: id,
+          userId: me.id,
+          storyId: id,
         })
         const createDislike = async () =>
           await models.Reaction.query().insert({
-            user_id: me.id,
-            story_id: id,
+            userId: me.id,
+            storyId: id,
             state: DISLIKE,
           })
         if (reaction) {
           await models.Reaction.query()
             .delete()
-            .where({ user_id: me.id, story_id: id })
+            .where({ userId: me.id, storyId: id })
           if (reaction.state === LIKE) {
             return createDislike()
           }
@@ -94,8 +94,8 @@ export default {
       isAuthenticated,
       async (parent, { id }, { models, me }) =>
         await models.Reaction.query().insert({
-          user_id: me.id,
-          story_id: id,
+          userId: me.id,
+          storyId: id,
           state: DISLIKE,
         })
     ),
@@ -112,36 +112,36 @@ export default {
 
   Story: {
     user: async (story, args, { loaders }) =>
-      await loaders.user.load(story['user_id']),
+      await loaders.user.load(story.userId),
 
     comments: async (story, args, { models }) =>
-      await models.Comment.query().where({ story_id: story.id }),
+      await models.Comment.query().where({ storyId: story.id }),
 
     likedBy: async (story, args, { models, loaders }) =>
       await models.Reaction.query()
-        .where({ story_id: story.id, state: LIKE })
+        .where({ storyId: story.id, state: LIKE })
         .map(async like => ({
           id: like.id,
-          user: await loaders.user.load(like['user_id']),
-          storyId: like['story_id'],
+          user: await loaders.user.load(like.userId),
+          storyId: like.storyId,
         })),
 
     dislikedBy: async (story, args, { models, loaders }) =>
       await models.Reaction.query()
-        .where({ story_id: story.id, state: DISLIKE })
+        .where({ storyId: story.id, state: DISLIKE })
         .map(async dislike => ({
           id: dislike.id,
-          user: await loaders.user.load(dislike['user_id']),
-          storyId: dislike['story_id'],
+          user: await loaders.user.load(dislike.userId),
+          storyId: dislike.storyId,
         })),
 
     viewedBy: async (story, args, { models, loaders }) =>
       await models.View.query()
-        .where({ story_id: story.id })
+        .where({ storyId: story.id })
         .map(async view => ({
           id: view.id,
-          user: await loaders.user.load(view['user_id']),
-          storyId: view['story_id'],
+          user: await loaders.user.load(view.userId),
+          storyId: view.storyId,
         })),
   },
 }

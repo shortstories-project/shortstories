@@ -10,9 +10,9 @@ import View from './view'
 const { test, development, production } = connection
 let knexConnection
 
-if (process.env['NODE_ENV'] === 'development') {
+if (process.env.NODE_ENV === 'development') {
   knexConnection = Knex(development)
-} else if (process.env['NODE_ENV'] === 'test') {
+} else if (process.env.NODE_ENV === 'test') {
   knexConnection = Knex(test)
 } else {
   knexConnection = Knex(production)

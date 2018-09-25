@@ -16,8 +16,8 @@ export default {
       isAuthenticated,
       async (parent, { body, id }, { models, me }) =>
         await models.Comment.query().insert({
-          user_id: me.id,
-          story_id: id,
+          userId: me.id,
+          storyId: id,
           body,
         })
     ),
@@ -41,6 +41,6 @@ export default {
 
   Comment: {
     user: async (comment, args, { loaders }) =>
-      await loaders.user.load(comment['user_id']),
+      await loaders.user.load(comment.userId),
   },
 }

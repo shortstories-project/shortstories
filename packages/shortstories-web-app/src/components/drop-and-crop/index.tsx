@@ -7,7 +7,7 @@ import * as ReactImageCrop from 'react-image-crop'
 import UploadIcon from './upload-icon'
 import { POST_PHOTO } from '../../constants/mutations'
 
-const imageMaxSize = 1000000000 // bytes
+const imageMaxSize = 10000000 // bytes
 const acceptedFileTypes =
   'image/x-png, image/png, image/jpg, image/jpeg, image/gif'
 const acceptedFileTypesArray = acceptedFileTypes

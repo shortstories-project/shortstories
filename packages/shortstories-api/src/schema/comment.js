@@ -5,7 +5,7 @@ export default gql`
     id: ID!
     body: String!
     user: User!
-    created_at: String!
+    createdAt: String!
   }
 
   type CommentConnection {
