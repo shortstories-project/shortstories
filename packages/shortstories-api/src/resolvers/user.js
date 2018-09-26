@@ -63,6 +63,11 @@ export default {
     ),
 
     verifyUser: authService.verifyUser,
+
+    checkUserExist: async (parent, { login }, { models }) => {
+      const user = await models.User.findByLogin(login)
+      return !!user
+    }
   },
 
   User: {

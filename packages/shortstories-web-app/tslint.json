@@ -22,7 +22,9 @@
     "no-shadowed-variable": false,
     "no-console": false,
     "member-access": false,
-    "max-classes-per-file": false
+    "max-classes-per-file": false,
+    "curly": false,
+    "no-string-throw": false
   },
   "rulesDirectory": ["tslint-plugin-prettier"]
 }

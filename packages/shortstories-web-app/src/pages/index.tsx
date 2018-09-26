@@ -13,29 +13,26 @@ import history from '../constants/history'
 
 const App = ({ session, refetch }: any) => (
   <Router history={history}>
-    <>
-      <Header session={session} />
-      <Switch>
-        <Route
-          exact
-          path={routes.STORIES}
-          render={() => <Stories me={session.me} />}
-        />
-        <Route
-          exact
-          path={routes.SIGN_UP}
-          render={() => <SignUp refetch={refetch} />}
-        />
-        <Route
-          exact
-          path={routes.SIGN_IN}
-          render={() => <SignIn refetch={refetch} />}
-        />
-        <Route path={routes.CREATE_STORY} component={CreateStory} />
-        <Route path={routes.VERIFY} component={Verify} />
-        <Route component={NotFound} />
-      </Switch>
-    </>
+    <Switch>
+      <Route
+        exact
+        path={routes.STORIES}
+        render={() => <Stories me={session.me} />}
+      />
+      <Route
+        exact
+        path={routes.SIGN_UP}
+        render={() => <SignUp refetch={refetch} />}
+      />
+      <Route
+        exact
+        path={routes.SIGN_IN}
+        render={() => <SignIn refetch={refetch} />}
+      />
+      <Route path={routes.CREATE_STORY} component={CreateStory} />
+      <Route path={routes.VERIFY} component={Verify} />
+      <Route component={NotFound} />
+    </Switch>
   </Router>
 )
 

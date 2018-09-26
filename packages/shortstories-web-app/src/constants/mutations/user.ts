@@ -19,3 +19,9 @@ export const SIGN_IN = gql`
     }
   }
 `
+
+export const CHECK_USER_EXIST = gql`
+  mutation checkUserExist($login: String!) {
+    checkUserExist(login: $login)
+  }
+`
