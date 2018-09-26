@@ -4,7 +4,7 @@ const checkUnique = (login, check) =>
 export const username = (value, check) =>
   checkUnique(value, check).then(({ data }) => {
     if (!value) throw 'Username is required.'
-    else if (value.length < 4)
+    else if (value.length < 3)
       throw 'Username field must be at least 3 characters.'
     else if (value.length > 50) throw 'Username too long.'
     else if (data.checkUserExist) {
@@ -24,7 +24,7 @@ export const email = (value, check) =>
 
 export const password = value => {
   if (!value) throw 'Password is required.'
-  else if (value.length < 7)
+  else if (value.length < 6)
     throw 'The Password field must be at least 6 characters.'
 }
 

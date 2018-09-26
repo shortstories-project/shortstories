@@ -1,5 +1,9 @@
 import styled from 'styled-components'
 
+export const Wrapper: any = styled.div`
+  display: flex;
+`
+
 export const Container: any = styled.div`
   position: relative;
   z-index: 1;
@@ -92,4 +96,6 @@ export const Error: any = styled.span`
   font-weight: normal;
   text-shadow: none;
   color: red;
+  position: absolute;
+  margin-top: 54px;
 `

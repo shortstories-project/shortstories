@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { defaultProps } from 'recompose'
-import { Container, TextField, Label, Line, Error } from './styled'
+import { Container, TextField, Label, Line, Error, Wrapper } from './styled'
 
 interface IProps {
   id: string
@@ -21,9 +21,9 @@ const Input = defaultProps({
   name: '',
   onChange: e => console.log(e.target.value),
   onBlur: e => console.log(e.target.value),
-  error: null,
+  error: '',
 })(({ id, name, value, onChange, onBlur, type, label, error }: IProps) => (
-  <>
+  <Wrapper>
     <Container>
       <TextField
         id={id}
@@ -47,7 +47,7 @@ const Input = defaultProps({
       </Line>
     </Container>
     <Error>{error}</Error>
-  </>
+  </Wrapper>
 ))
 
 export default Input

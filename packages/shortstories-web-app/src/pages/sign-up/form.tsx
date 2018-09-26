@@ -42,7 +42,6 @@ const Form = ({ refetch, signUp, checkUserExist }) => (
   >
     {({ handleSubmit, values }) => (
       <AuthContainer>
-        <Logo full={false} />
         <StyledForm onSubmit={handleSubmit}>
           <Field
             name="username"
