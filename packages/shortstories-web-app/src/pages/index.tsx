@@ -4,6 +4,7 @@ import withSession from '../higher-order-components/with-session'
 import Stories from 'pages/stories'
 import SignUp from 'pages/sign-up'
 import SignIn from 'pages/sign-in'
+import User from 'pages/user'
 import { Header, DropAndCrop } from 'components'
 import CreateStory from 'pages/create-story'
 import NotFound from 'pages/not-found'
@@ -34,6 +35,7 @@ const App = ({ session, refetch }: any) => (
         />
         <Route path={routes.CREATE_STORY} component={CreateStory} />
         <Route path={routes.VERIFY} component={Verify} />
+        <Route path="/user" component={User} />
         <Route component={NotFound} />
       </Switch>
     </>
