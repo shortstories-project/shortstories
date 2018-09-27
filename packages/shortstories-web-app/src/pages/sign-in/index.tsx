@@ -97,7 +97,7 @@ class SignIn extends React.PureComponent<any, any> {
                       value={password}
                       onChange={this.onChange}
                     />
-                    <Button type="submit" title="LOGIN" />
+                    <Button type="submit" />
                   </Form>
                 </AuthContainer>
               </GridColumn>

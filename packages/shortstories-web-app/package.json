@@ -32,6 +32,7 @@
     "history": "^4.7.2",
     "idx": "^2.4.0",
     "mauerwerk": "^2.0.0",
+    "modern-normalize": "^0.5.0",
     "prop-types": "^15.6.2",
     "ramda": "^0.25.0",
     "react": "^16.5.0",
@@ -44,7 +45,6 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.30.0",
-    "sanitize.css": "^7.0.3",
     "styled-components": "^3.4.2"
   },
   "devDependencies": {

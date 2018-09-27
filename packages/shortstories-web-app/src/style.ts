@@ -7,6 +7,7 @@ export default css`
     --black: #272727;
     --white: #ffffff;
     --purple: #6d47d9;
+    --pink: #f93d66;
   }
 
   a {
@@ -37,7 +38,7 @@ export default css`
 
   #app {
     background-image: url(src/assets/images/topography.svg),
-      linear-gradient(110deg, #f93d66, #6d47d9);
+      linear-gradient(110deg, var(--pink), var(--purple));
     background-size: 340px, auto;
     background-repeat: repeat;
     background-attachment: fixed;

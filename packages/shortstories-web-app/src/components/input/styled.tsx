@@ -18,6 +18,7 @@ export const TextField: any = styled.input`
   position: relative;
   display: block;
   float: right;
+  font-family: 'Montserrat', sans-serif;
   padding: 0.8em;
   width: 60%;
   border: none;
@@ -26,6 +27,7 @@ export const TextField: any = styled.input`
   padding: 0.5em 0em 0.25em;
   width: 100%;
   background: transparent;
+  text-shadow: none;
   color: black;
   font-size: 1.25em;
   &:focus {
@@ -55,12 +57,14 @@ export const TextField: any = styled.input`
 
 export const Label: any = styled.label`
   display: inline-block;
+  text-shadow: none;
   padding: 0 1em;
   width: 40%;
   font-size: 70.25%;
   user-select: none;
   position: absolute;
   top: 0.95em;
+  font-family: 'Montserrat', sans-serif;
   font-size: 0.85em;
   font-weight: normal;
   letter-spacing: 0;
@@ -92,10 +96,12 @@ export const Line: any = styled.svg`
 `
 
 export const Error: any = styled.span`
-  font-size: 0.85em;
+  font-size: 12px;
+  letter-spacing: 0px;
   font-weight: normal;
   text-shadow: none;
   color: red;
   position: absolute;
   margin-top: 54px;
+  font-family: 'Montserrat', sans-serif;
 `

@@ -1,12 +1,21 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import { graphql, compose } from 'react-apollo'
+import { withState, withHandlers } from 'recompose'
 import { Formik } from 'formik'
-import { Logo, Button, Field } from 'components'
+import { Button, Field } from 'components'
 import history from '../../constants/history'
 import * as routes from '../../constants/routes'
 import * as validators from './validators'
-import { SIGN_UP, CHECK_USER_EXIST } from '../../constants/mutations/user'
+import { SIGN_UP, CHECK_USER_EXIST } from '../../mutations/user'
+
+interface IProps {
+  refetch: () => void
+  signUp: (obj: object) => any
+  checkUserExist: (obj: object) => void
+  loading?: boolean
+  toggleLoader?: any
+}
 
 const AuthContainer = styled.div`
   background-color: var(--white);
@@ -29,12 +38,20 @@ const INITIAL_VALUES = {
   passwordConfirmation: '',
 }
 
-const Form = ({ refetch, signUp, checkUserExist }) => (
+const Form = ({
+  refetch,
+  signUp,
+  checkUserExist,
+  loading,
+  toggleLoader,
+}: IProps) => (
   <Formik
     isInitialValid={false}
     initialValues={INITIAL_VALUES}
     onSubmit={values => {
+      toggleLoader()
       signUp({ variables: { ...values } }).then(async () => {
+        toggleLoader()
         await refetch()
         history.push(routes.STORIES)
       })
@@ -68,7 +85,9 @@ const Form = ({ refetch, signUp, checkUserExist }) => (
               validators.confirmationPassword(value, values.password)
             }
           />
-          <Button type="submit" title="REGISTER" />
+          <Button loading={loading} type="submit">
+            Register
+          </Button>
         </StyledForm>
       </AuthContainer>
     )}
@@ -77,5 +96,11 @@ const Form = ({ refetch, signUp, checkUserExist }) => (
 
 export default compose(
   graphql(SIGN_UP, { name: 'signUp' }),
-  graphql(CHECK_USER_EXIST, { name: 'checkUserExist' })
+  graphql(CHECK_USER_EXIST, { name: 'checkUserExist' }),
+  withState('loading', 'toggleLoading', false),
+  withHandlers({
+    toggleLoader: (props: any) => () => {
+      props.toggleLoading(!props.loading)
+    },
+  })
 )(Form)

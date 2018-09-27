@@ -1,7 +1,21 @@
 import * as React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { defaultProps } from 'recompose'
+import Loader from '../loader'
+
+interface IProps {
+  children: React.ReactNode
+  disabled?: boolean
+  type?: string
+  loading?: boolean
+  onClick?: (event: React.SyntheticEvent) => void
+}
 
 const StyledButton = styled.button`
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  text-transform: uppercase;
   height: 40px;
   color: #ffffff;
   border: none;
@@ -9,6 +23,12 @@ const StyledButton = styled.button`
   background-color: black;
   outline: none;
   transition: all 0.25s ease-out;
+  ${({ disabled }) =>
+    disabled
+      ? css`
+          pointer-events: none;
+        `
+      : null};
   &:hover {
     background-color: var(--purple);
   }
@@ -17,11 +37,15 @@ const StyledButton = styled.button`
   }
 `
 
-class Button extends React.PureComponent<any> {
-  public render() {
-    const { title, type } = this.props
-    return <StyledButton type={type}>{title}</StyledButton>
-  }
-}
+const Button = defaultProps({
+  disabled: false,
+  type: 'button',
+  children: 'Button',
+  loading: false,
+})(({ children, disabled, type, loading, onClick }: IProps) => (
+  <StyledButton onClick={onClick} disabled={disabled || loading} type={type}>
+    {loading ? <Loader /> : children}
+  </StyledButton>
+))
 
 export default Button

@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
-  entry: ['sanitize.css', './src/index.tsx'],
+  entry: ['modern-normalize', './src/index.tsx'],
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/',
