@@ -45,45 +45,42 @@ const INITIAL_VALUES = {
 
 const Form = ({ refetch }: IProps) => (
   <Mutation mutation={SIGN_IN}>
-    {(signIn, { error, loading }) => {
-      console.log(error && error.graphQLErrors)
-      return (
-        <Formik
-          isInitialValid={false}
-          initialValues={INITIAL_VALUES}
-          onSubmit={values => {
-            signIn({ variables: { ...values } }).then(async () => {
-              await refetch()
-              history.push(routes.STORIES)
-            })
-          }}
-        >
-          {({ handleSubmit }) => (
-            <Container>
-              <SignInForm onSubmit={handleSubmit}>
-                <Field name="login" label="Login" validate={validators.login} />
-                <Field
-                  name="password"
-                  type="password"
-                  label="Password"
-                  validate={validators.password}
-                />
-                <Button loading={loading} type="submit">
-                  Login
-                </Button>
-                {error &&
-                  error.graphQLErrors.map(err => (
-                    <ErrorMessage error={err.message} />
-                  ))}
-                <ToSignUp>
-                  No account? <Link to={routes.SIGN_UP}>Create one</Link>.
-                </ToSignUp>
-              </SignInForm>
-            </Container>
-          )}
-        </Formik>
-      )
-    }}
+    {(signIn, { error, loading }) => (
+      <Formik
+        isInitialValid={false}
+        initialValues={INITIAL_VALUES}
+        onSubmit={values => {
+          signIn({ variables: { ...values } }).then(async () => {
+            await refetch()
+            history.push(routes.STORIES)
+          })
+        }}
+      >
+        {({ handleSubmit }) => (
+          <Container>
+            <SignInForm onSubmit={handleSubmit}>
+              <Field name="login" label="Login" validate={validators.login} />
+              <Field
+                name="password"
+                type="password"
+                label="Password"
+                validate={validators.password}
+              />
+              <Button loading={loading} type="submit">
+                Login
+              </Button>
+              {error &&
+                error.graphQLErrors.map(err => (
+                  <ErrorMessage error={err.message} />
+                ))}
+              <ToSignUp>
+                No account? <Link to={routes.SIGN_UP}>Create one</Link>.
+              </ToSignUp>
+            </SignInForm>
+          </Container>
+        )}
+      </Formik>
+    )}
   </Mutation>
 )
 
