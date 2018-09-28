@@ -27,6 +27,12 @@ module.exports = {
   },
   module: {
     rules: [
+      /* Fix error: Can't reexport the namespace object from non EcmaScript module (only default export is available) */
+      {
+        test: /\.mjs$/,
+        include: /node_modules/,
+        type: "javascript/auto",
+      },
       {
         test: /\.tsx?$/,
         use: 'ts-loader',

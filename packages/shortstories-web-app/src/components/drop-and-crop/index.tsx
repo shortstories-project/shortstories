@@ -5,7 +5,7 @@ import { Mutation } from 'react-apollo'
 import ReactDropzone from 'react-dropzone'
 import * as ReactImageCrop from 'react-image-crop'
 import UploadIcon from './upload-icon'
-import { POST_PHOTO } from '../../constants/mutations'
+import { POST_PHOTO } from '../../mutations/user'
 
 const imageMaxSize = 10000000 // bytes
 const acceptedFileTypes =

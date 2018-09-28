@@ -2,8 +2,8 @@
   "name": "shortstories",
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "start:client": "lerna exec --scope shortstories-web-app -- npm run start",
-    "start:server": "lerna exec --scope shortstories-api -- npm run start",
+    "start:client": "lerna exec --scope shortstories-web-app -- yarn start",
+    "start:server": "lerna exec --scope shortstories-api -- yarn start",
     "start": "lerna run start"
   },
   "repository": {
@@ -18,6 +18,5 @@
   "homepage": "https://github.com/shortstories-project/shortstories#readme",
   "devDependencies": {
     "lerna": "^3.2.1"
-  },
-  "dependencies": {}
+  }
 }

@@ -4,6 +4,7 @@ import { defaultProps } from 'recompose'
 import Loader from '../loader'
 
 interface IProps {
+  className?: string
   children: React.ReactNode
   disabled?: boolean
   type?: string
@@ -11,7 +12,23 @@ interface IProps {
   onClick?: (event: React.SyntheticEvent) => void
 }
 
-const StyledButton = styled.button`
+const Button = defaultProps({
+  disabled: false,
+  type: 'button',
+  children: 'Button',
+  loading: false,
+})(({ className, children, disabled, type, loading, onClick }: IProps) => (
+  <button
+    className={className}
+    onClick={onClick}
+    disabled={disabled || loading}
+    type={type}
+  >
+    {loading ? <Loader /> : children}
+  </button>
+))
+
+const StyledButton = styled(Button)`
   font-family: 'Montserrat', sans-serif;
   font-weight: bold;
   font-size: 14px;
@@ -37,15 +54,4 @@ const StyledButton = styled.button`
   }
 `
 
-const Button = defaultProps({
-  disabled: false,
-  type: 'button',
-  children: 'Button',
-  loading: false,
-})(({ children, disabled, type, loading, onClick }: IProps) => (
-  <StyledButton onClick={onClick} disabled={disabled || loading} type={type}>
-    {loading ? <Loader /> : children}
-  </StyledButton>
-))
-
-export default Button
+export default StyledButton
