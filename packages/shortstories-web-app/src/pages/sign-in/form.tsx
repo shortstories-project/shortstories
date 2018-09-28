@@ -21,7 +21,7 @@ const Container = styled.div`
 `
 
 const SignInForm = styled.form`
-  height: 200px;
+  height: 250px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -35,6 +35,15 @@ const ToSignUp = styled.p`
   > a {
     color: var(--purple);
     font-weight: bold;
+  }
+`
+
+const ButtonWithError = styled.div`
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  > span {
+    margin-top: 4px;
   }
 `
 
@@ -66,13 +75,15 @@ const Form = ({ refetch }: IProps) => (
                 label="Password"
                 validate={validators.password}
               />
-              <Button loading={loading} type="submit">
-                Login
-              </Button>
-              {error &&
-                error.graphQLErrors.map(err => (
-                  <ErrorMessage error={err.message} />
-                ))}
+              <ButtonWithError>
+                <Button loading={loading} type="submit">
+                  Login
+                </Button>
+                {error &&
+                  error.graphQLErrors.map(err => (
+                    <ErrorMessage error={err.message} />
+                  ))}
+              </ButtonWithError>
               <ToSignUp>
                 No account? <Link to={routes.SIGN_UP}>Create one</Link>.
               </ToSignUp>

@@ -40,8 +40,8 @@ const StyledButton = styled(Button)`
   background-color: var(--black);
   outline: none;
   transition: all 0.25s ease-out;
-  ${({ disabled }) =>
-    disabled
+  ${({ disabled, loading }) =>
+    disabled || loading
       ? css`
           pointer-events: none;
         `
