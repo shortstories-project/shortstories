@@ -44,6 +44,16 @@ app.use(passport.session())
 const server = new ApolloServer({
   typeDefs: schema,
   resolvers,
+  formatError: error => {
+    const message = error.message
+      .replace('Validation error: ', '')
+      .replace('UserInputError: ', '')
+      .replace('AuthenticationError: ', '')
+    return {
+      ...error,
+      message,
+    };
+  },
   context: async ({ req }) => ({
     models,
     me: req.user,

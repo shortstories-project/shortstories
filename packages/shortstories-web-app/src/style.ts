@@ -5,35 +5,17 @@ export default css`
     font-size: 16px;
     --yellow: #ffc600;
     --black: #272727;
-    --white: #ffffff;
+    --white: #fcfcfc;
     --purple: #6d47d9;
     --pink: #f93d66;
+    --main-font: 'Montserrat', sans-serif;
+    --description-font-size: 12px;
+    --logo-font-size: 32px;
   }
 
   a {
     text-decoration: none;
     color: var(--black);
-  }
-
-  html {
-    height: 100%;
-    box-sizing: border-box;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
-      Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-      'Segoe UI Symbol';
-    font-weight: 900;
-    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.07);
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: var(--black);
-  }
-
-  body {
-    min-height: 100%;
-    font-size: 1rem;
-    letter-spacing: -1px;
-    margin: 0;
-    padding: 0;
   }
 
   #app {

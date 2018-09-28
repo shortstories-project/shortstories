@@ -79,7 +79,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Short Stories',
+      title: 'Shortstories',
       inject: true,
       hash: true,
       template: path.join(__dirname, 'public', 'index.ejs'),

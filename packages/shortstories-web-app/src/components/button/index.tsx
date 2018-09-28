@@ -29,15 +29,15 @@ const Button = defaultProps({
 ))
 
 const StyledButton = styled(Button)`
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--main-font);
   font-weight: bold;
   font-size: 14px;
   text-transform: uppercase;
   height: 40px;
-  color: #ffffff;
+  color: var(--white);
   border: none;
   cursor: pointer;
-  background-color: black;
+  background-color: var(--black);
   outline: none;
   transition: all 0.25s ease-out;
   ${({ disabled }) =>

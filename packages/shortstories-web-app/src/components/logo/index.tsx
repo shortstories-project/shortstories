@@ -1,30 +1,33 @@
 import * as React from 'react'
 import styled from 'styled-components'
+import { compose, defaultProps, mapProps } from 'recompose'
 
-interface IProps {
+interface IDefaultProps {
   full?: boolean
+}
+
+interface IMappedProps {
+  text?: string
 }
 
 const StyledLogo = styled.p`
   text-decoration: none;
-  color: black;
-  font-family: 'Caveat', sans-serif;
-  font-size: 2rem;
+  color: azure;
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8);
+  font-family: 'Pacifico', cursive;
+  font-size: var(--logo-font-size);
+  letter-spacing: -1.5px;
   text-align: center;
-  text-shadow: 1px 3px 0 rgba(18, 86, 136, 0.11);
   margin: 0;
 `
 
-class Logo extends React.PureComponent<IProps> {
-  protected static defaultProps = {
+const Logo = (props: IMappedProps) => <StyledLogo>{props.text}</StyledLogo>
+
+export default compose<IMappedProps, IDefaultProps>(
+  defaultProps<IDefaultProps>({
     full: true,
-  }
-
-  public render() {
-    const { full } = this.props
-    const text = full ? 'Short Stories' : 'S'
-    return <StyledLogo>{text}</StyledLogo>
-  }
-}
-
-export default Logo
+  }),
+  mapProps<IMappedProps, IDefaultProps>(props => ({
+    text: props.full ? 'Shortstories' : 'S',
+  }))
+)(Logo)
