@@ -1,6 +1,6 @@
 import gql from 'graphql-tag'
 
-/* Index */
+/* User */
 export const SIGN_UP = gql`
   mutation signIn($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {

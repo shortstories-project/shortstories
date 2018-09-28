@@ -7,3 +7,9 @@ export interface IUser {
   role: string
   stories: IStory[]
 }
+
+export interface IInformationPage {
+  like: number;
+  star: number;
+  view: number;
+}
