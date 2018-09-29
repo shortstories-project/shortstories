@@ -26,13 +26,14 @@ const Container = styled.div`
 `
 
 const SignUpForm = styled.form`
-  height: 340px;
+  height: 360px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 `
 
 const ToSignIn = styled.p`
+  text-align: center;
   margin: 0;
   font-family: var(--main-font);
   font-size: var(--description-font-size);
@@ -41,6 +42,22 @@ const ToSignIn = styled.p`
     color: var(--purple);
     font-weight: bold;
   }
+`
+
+const Description = styled.p`
+  text-align: center;
+  margin: 12px 0;
+  font-family: var(--main-font);
+  font-size: var(--description-font-size);
+  color: var(--black);
+  > a {
+    color: var(--purple);
+    font-weight: bold;
+  }
+`
+
+const RegisterButton = styled(Button)`
+  margin-top: 16px;
 `
 
 const INITIAL_VALUES = {
@@ -97,9 +114,15 @@ const Form = ({
               validators.confirmationPassword(value, values.password)
             }
           />
-          <Button loading={loading} type="submit">
+          <RegisterButton loading={loading} type="submit">
             Register
-          </Button>
+          </RegisterButton>
+          <Description>
+            By continuing, you agree to Shortstories's{' '}
+            <Link to={routes.TERMS_OF_SERVICE}>Terms of Service</Link>,{' '}
+            <Link to={routes.PRIVACY_POLICY}>Privacy Policy</Link> and{' '}
+            <Link to={routes.USE_COOKIE}>Cookie use</Link>.
+          </Description>
           <ToSignIn>
             Already have an account? <Link to={routes.SIGN_IN}>Sign in</Link>.
           </ToSignIn>

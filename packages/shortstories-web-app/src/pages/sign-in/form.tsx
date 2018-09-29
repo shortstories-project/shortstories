@@ -21,13 +21,26 @@ const Container = styled.div`
 `
 
 const SignInForm = styled.form`
-  height: 250px;
+  height: 290px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
 `
 
 const ToSignUp = styled.p`
+  text-align: center;
+  margin: 0;
+  font-family: var(--main-font);
+  font-size: var(--description-font-size);
+  color: var(--black);
+  > a {
+    color: var(--purple);
+    font-weight: bold;
+  }
+`
+
+const Description = styled.p`
+  text-align: center;
   margin: 0;
   font-family: var(--main-font);
   font-size: var(--description-font-size);
@@ -39,12 +52,21 @@ const ToSignUp = styled.p`
 `
 
 const ButtonWithError = styled.div`
-  margin-top: 12px;
+  margin: 12px 0;
   display: flex;
   flex-direction: column;
   > span {
     margin-top: 4px;
   }
+`
+
+const ForgotPassword = styled(Link)`
+  margin: 12px 0;
+  text-align: center;
+  font-family: var(--main-font);
+  font-size: var(--description-font-size);
+  color: var(--purple);
+  font-weight: bold;
 `
 
 const INITIAL_VALUES = {
@@ -84,6 +106,15 @@ const Form = ({ refetch }: IProps) => (
                     <ErrorMessage error={err.message} />
                   ))}
               </ButtonWithError>
+              <Description>
+                By continuing, you agree to Shortstories's{' '}
+                <Link to={routes.TERMS_OF_SERVICE}>Terms of Service</Link>,{' '}
+                <Link to={routes.PRIVACY_POLICY}>Privacy Policy</Link> and{' '}
+                <Link to={routes.USE_COOKIE}>Cookie use</Link>.
+              </Description>
+              <ForgotPassword to={routes.FORGOT_PASSWORD}>
+                Forgotten your password?
+              </ForgotPassword>
               <ToSignUp>
                 No account? <Link to={routes.SIGN_UP}>Create one</Link>.
               </ToSignUp>

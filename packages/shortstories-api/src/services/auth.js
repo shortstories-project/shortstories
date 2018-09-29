@@ -1,6 +1,7 @@
 import passport from 'passport'
 import nanoid from 'nanoid'
 import bcrypt from 'bcrypt'
+import { ApolloError } from 'apollo-server'
 import mailer from '../config/mailer'
 import redis from '../config/redis'
 import User from '../models/user'
@@ -79,12 +80,7 @@ async function changePassword(parent, { token, newPassword }) {
     await redis.del(`reset_password:${token}`)
     return await User.query().updateAndFetchById(userId, { newPassword: hash })
   }
-  return [
-    {
-      path: 'changePassword',
-      message: 'Invalid Token',
-    },
-  ]
+  throw new ApolloError('User not found!')
 }
 
 export default {

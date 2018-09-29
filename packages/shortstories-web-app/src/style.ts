@@ -37,8 +37,9 @@ export default css`
   }
 
   p {
-    font-size: 1rem;
+    font-size: 16px;
     color: var(--black);
+    line-height: normal;
   }
 
   .story-in-grid {
