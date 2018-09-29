@@ -62,3 +62,9 @@ export const VERIFY_USER = gql`
     verifyUser(token: $token)
   }
 `
+
+export const FORGOT_PASSWORD = gql`
+  mutation forgotPassword($login: String!) {
+    forgotPassword(login: $login)
+  }
+`

@@ -79,11 +79,15 @@ const Form = ({
     initialValues={INITIAL_VALUES}
     onSubmit={values => {
       toggleLoader()
-      signUp({ variables: { ...values } }).then(async () => {
-        toggleLoader()
-        await refetch()
-        history.push(routes.STORIES)
-      })
+      signUp({ variables: { ...values } })
+        .then(async () => {
+          toggleLoader()
+          await refetch()
+          history.push(routes.STORIES)
+        })
+        .catch(() => {
+          toggleLoader()
+        })
     }}
   >
     {({ handleSubmit, values }) => (

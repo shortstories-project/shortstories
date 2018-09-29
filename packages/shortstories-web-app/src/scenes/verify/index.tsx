@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
-import { VERIFY_USER } from '../constants/mutations'
+import { VERIFY_USER } from '../../constants/mutations'
 
 class VerifyPage extends React.Component<any> {
   componentDidMount() {

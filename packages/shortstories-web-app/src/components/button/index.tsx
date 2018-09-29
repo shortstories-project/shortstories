@@ -9,7 +9,7 @@ interface IProps {
   disabled?: boolean
   type?: string
   loading?: boolean
-  onClick?: (event: React.SyntheticEvent) => void
+  onClick?: (event?: React.SyntheticEvent) => void
 }
 
 const Button = defaultProps({
@@ -17,6 +17,7 @@ const Button = defaultProps({
   type: 'button',
   children: 'Button',
   loading: false,
+  onClick: () => null,
 })(({ className, children, disabled, type, loading, onClick }: IProps) => (
   <button
     className={className}

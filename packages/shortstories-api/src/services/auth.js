@@ -57,8 +57,9 @@ async function verifyUser(parent, { token }) {
   return false
 }
 
-async function forgotPassword(parent, { email }) {
-  const user = await User.query().where({ email })
+async function forgotPassword(parent, { login }) {
+  const user = await User.findByLogin(login)
+  if (!user) throw new ApolloError('User not found!')
   const token = nanoid(16)
   await redis.set(`reset_password:${token}`, user.id, 'ex', 60 * 20)
   const link = `${process.env.HOST}/reset/${token}`
@@ -69,7 +70,7 @@ async function forgotPassword(parent, { email }) {
     text: resetPassword(link),
   }
   mailer.sendMail(mailOptions)
-  return true
+  return user.email
 }
 
 async function changePassword(parent, { token, newPassword }) {

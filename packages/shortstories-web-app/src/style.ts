@@ -11,6 +11,7 @@ export default css`
     --main-font: 'Montserrat', sans-serif;
     --description-font-size: 12px;
     --logo-font-size: 32px;
+    --header-default-height: 80px;
   }
 
   a {
@@ -100,5 +101,14 @@ export default css`
     right: 40px;
     font-size: 26px;
     color: #000;
+  }
+
+  .forgot-modal-overlay {
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    background-color: rgba(0, 0, 0, 0.5);
   }
 `

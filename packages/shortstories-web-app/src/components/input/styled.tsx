@@ -6,7 +6,6 @@ export const Wrapper: any = styled.div`
 
 export const Container: any = styled.div`
   position: relative;
-  z-index: 1;
   display: inline-block;
   width: 100%;
   vertical-align: top;
