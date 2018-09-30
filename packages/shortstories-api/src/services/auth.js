@@ -54,7 +54,7 @@ async function verifyUser(parent, { token }) {
     await redis.del(token)
     return true
   }
-  return false
+  throw new ApolloError('This token is invalid.')
 }
 
 async function forgotPassword(parent, { login }) {

@@ -11,6 +11,7 @@ interface IMappedProps {
 }
 
 const StyledLogo = styled.p`
+  user-select: none;
   text-decoration: none;
   color: azure;
   text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.8);

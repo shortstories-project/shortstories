@@ -1,40 +1,25 @@
 import * as React from 'react'
-import { Mutation } from 'react-apollo'
-import { VERIFY_USER } from '../../constants/mutations'
+import { Container, Row, Column } from 'components'
+import Header from './header'
+import VerifyMessage from './verify-message'
 
-class VerifyPage extends React.Component<any> {
-  componentDidMount() {
-    this.props.verifyUser()
-  }
-
-  render() {
-    const { data, loading } = this.props
-    if (loading || !data) {
-      return <p>LOADING...</p>
-    }
-    return data.verifyUser ? <div>verify</div> : <div>not verify</div>
-  }
+interface IProps {
+  match: any
 }
 
-class Verify extends React.Component<any> {
-  render() {
-    const { match } = this.props
-    return (
-      <Mutation
-        mutation={VERIFY_USER}
-        variables={{ token: match.params.token }}
-      >
-        {(verifyUser, { data, error, loading }) => (
-          <VerifyPage
-            verifyUser={verifyUser}
-            data={data}
-            error={error}
-            loading={loading}
-          />
-        )}
-      </Mutation>
-    )
-  }
-}
+const Verify = ({ match }: IProps) => (
+  <>
+    <Header />
+    <Container>
+      <Row center>
+        <Column lg="4" md="3" sm="2" xs="1" />
+        <Column lg="4" md="6" sm="8" xs="10">
+          <VerifyMessage match={match} />
+        </Column>
+        <Column lg="4" md="3" sm="2" xs="1" />
+      </Row>
+    </Container>
+  </>
+)
 
 export default Verify

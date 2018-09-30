@@ -5,6 +5,7 @@ import Field from './field'
 import { GridColumn, GridContainer, GridRow } from './grid'
 import Header from './header'
 import Input from './input'
+import Loader from './loader'
 import Logo from './logo'
 import SignOutButton from './sign-out-button'
 import Story from './story'
@@ -22,6 +23,7 @@ export {
   GridColumn,
   GridContainer,
   GridRow,
+  Loader,
   Input,
   ImageUploader,
   Logo,

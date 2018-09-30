@@ -20,7 +20,7 @@ export default css`
   }
 
   #app {
-    background-image: url(src/assets/images/topography.svg),
+    background-image: url(/src/assets/images/topography.svg),
       linear-gradient(110deg, var(--pink), var(--purple));
     background-size: 340px, auto;
     background-repeat: repeat;
