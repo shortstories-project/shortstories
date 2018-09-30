@@ -68,3 +68,12 @@ export const FORGOT_PASSWORD = gql`
     forgotPassword(login: $login)
   }
 `
+
+export const CHANGE_PASSWORD = gql`
+  mutation changePassword($token: String!, $newPassword: String!) {
+    changePassword(token: $token, newPassword: $newPassword) {
+      id
+      username
+    }
+  }
+`

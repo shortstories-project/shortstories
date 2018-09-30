@@ -73,15 +73,16 @@ async function forgotPassword(parent, { login }) {
   return user.email
 }
 
-async function changePassword(parent, { token, newPassword }) {
+async function changePassword(parent, { token, newPassword }, { req }) {
   const userId = await redis.get(`reset_password:${token}`)
   if (userId) {
     const saltRounds = 10
     const hash = await bcrypt.hash(newPassword, saltRounds)
+    const user = await User.query().updateAndFetchById(userId, { password: hash })
     await redis.del(`reset_password:${token}`)
-    return await User.query().updateAndFetchById(userId, { newPassword: hash })
+    return signIn({ login: user.email, password: newPassword }, req)
   }
-  throw new ApolloError('User not found!')
+  throw new ApolloError('This token is invalid.')
 }
 
 export default {

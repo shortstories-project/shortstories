@@ -8,6 +8,7 @@ import CreateStory from './create-story'
 import NotFound from './not-found'
 import Verify from './verify'
 import ForgotPassword from './forgot-password'
+import ResetPassword from './reset-password'
 import * as routes from '../constants/routes'
 import history from '../constants/history'
 
@@ -30,6 +31,13 @@ const App = ({ session, refetch }: any) => (
         render={() => <SignIn refetch={refetch} />}
       />
       <Route exact path={routes.FORGOT_PASSWORD} component={ForgotPassword} />
+      <Route
+        exact
+        path={routes.RESET_PASSWORD}
+        render={({ match }) => (
+          <ResetPassword refetch={refetch} match={match} />
+        )}
+      />
       <Route path={routes.CREATE_STORY} component={CreateStory} />
       <Route path={routes.VERIFY} component={Verify} />
       <Route component={NotFound} />

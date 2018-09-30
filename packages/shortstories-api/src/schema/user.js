@@ -35,7 +35,7 @@ export default gql`
     verifyUser(token: String!): Boolean!
     checkUserExist(login: String!): Boolean!
     forgotPassword(login: String!): String
-    changePassword(token: String!, id: ID!, newPassword: String!): Me!
+    changePassword(token: String!, newPassword: String!): Me!
     updateUser(username: String, photo: String): Me!
     postPhoto(
       file: Upload!
