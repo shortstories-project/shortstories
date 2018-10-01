@@ -3522,6 +3522,10 @@ lodash.debounce@^4.0.8:
   version "4.0.8"
   resolved "https://registry.yarnpkg.com/lodash.debounce/-/lodash.debounce-4.0.8.tgz#82d79bff30a67c4005ffd5e2515300ad9ca4d7af"
 
+lodash.isinteger@^4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/lodash.isinteger/-/lodash.isinteger-4.0.4.tgz#619c0af3d03f8b04c31f5882840b77b11cd68343"
+
 lodash.topath@4.5.2:
   version "4.5.2"
   resolved "https://registry.yarnpkg.com/lodash.topath/-/lodash.topath-4.5.2.tgz#3616351f3bba61994a0931989660bd03254fd009"
@@ -4628,6 +4632,12 @@ react-spring@^5.7.2:
   resolved "https://registry.yarnpkg.com/react-spring/-/react-spring-5.8.0.tgz#52d8206487692b99c223377c252acea645d77307"
   dependencies:
     "@babel/runtime" "^7.0.0"
+
+react-styled-flexboxgrid@^2.6.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-styled-flexboxgrid/-/react-styled-flexboxgrid-2.6.0.tgz#a4e498da928f100c65a2b1f9839cc2959b0f2400"
+  dependencies:
+    lodash.isinteger "^4.0.4"
 
 react@^16.5.0:
   version "16.5.2"

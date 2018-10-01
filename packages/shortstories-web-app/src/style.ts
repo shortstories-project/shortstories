@@ -43,6 +43,13 @@ export default css`
     line-height: normal;
   }
 
+  img,
+  embed,
+  object,
+  video {
+    max-width: 100%;
+  }
+
   .story-in-grid {
     position: absolute;
     width: 100%;
