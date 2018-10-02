@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import Form from './form'
 
 interface IProps {
@@ -7,6 +8,9 @@ interface IProps {
 
 const SignIn = (props: IProps) => (
   <section className="hero is-fullheight">
+    <Helmet>
+      <title>Shortstories | Sign in</title>
+    </Helmet>
     <div className="hero-body">
       <div className="container">
         <div className="columns is-centered">

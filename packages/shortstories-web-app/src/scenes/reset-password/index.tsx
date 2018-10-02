@@ -1,4 +1,5 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import Form from './form'
 
 interface IProps {
@@ -12,6 +13,9 @@ interface IProps {
 
 const ResetPassword = ({ match, refetch }: IProps) => (
   <section className="hero is-fullheight">
+    <Helmet>
+      <title>Shortstories | Reset password</title>
+    </Helmet>
     <div className="hero-body">
       <div className="container">
         <div className="columns is-centered">

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
 import { lifecycle, branch, compose, renderComponent } from 'recompose'
 import { Link } from 'react-router-dom'
-import { Loader } from 'components'
+import { Loader, Logo } from 'components'
 import * as routes from '../../constants/routes'
 import { VERIFY_USER } from '../../mutations/user'
 
@@ -53,6 +53,7 @@ const SuccessMessage = styled.div`
 
 const LoadingComponent = () => (
   <Container>
+    <Logo black />
     <CenterContainer>
       <Loader />
     </CenterContainer>
@@ -66,6 +67,7 @@ const withLoading = branch<IProps>(
 
 const ErrorComponent = props => (
   <Container>
+    <Logo black />
     <CenterContainer>
       {props.error.graphQLErrors.map(err => (
         <ErrorMessage>{err.message} 😵</ErrorMessage>
@@ -91,6 +93,7 @@ const enhance = compose<IProps, IProps>(
 
 const ComponentWithVerify = enhance(() => (
   <Container>
+    <Logo black />
     <SuccessMessage>
       Your account is verified <span>🔥</span>
       <Link to={routes.CREATE_STORY}>

@@ -1,8 +1,12 @@
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import Form from './form'
 
 const ForgotPassword = () => (
   <section className="hero is-fullheight">
+    <Helmet>
+      <title>Shortstories | Forgot password</title>
+    </Helmet>
     <div className="hero-body">
       <div className="container">
         <div className="columns is-centered">
