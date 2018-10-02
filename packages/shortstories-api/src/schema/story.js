@@ -15,13 +15,13 @@ export default gql`
 
   type Reaction {
     id: ID!
-    userId: ID!
+    user: User!
     storyId: ID!
   }
 
   type View {
     id: ID!
-    userId: ID!
+    user: User!
     storyId: ID!
   }
 

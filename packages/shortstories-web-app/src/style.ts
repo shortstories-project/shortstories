@@ -50,6 +50,22 @@ export default css`
     max-width: 100%;
   }
 
+  .navbar {
+    min-height: 72px;
+  }
+
+  .navbar-burger {
+    height: 72px;
+  }
+
+  .navbar.is-transparent {
+    background-color: transparent;
+  }
+
+  .navbar.has-shadow {
+    box-shadow: 0 1px 16px rgba(0, 0, 0, 0.25);
+  }
+
   .story-in-grid {
     position: absolute;
     width: 100%;

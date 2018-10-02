@@ -4,7 +4,8 @@ import { Query } from 'react-apollo'
 import Measure from 'react-measure'
 import { Grid } from 'mauerwerk'
 import { Story } from 'components'
-import { GET_STORIES } from '../../constants/queries'
+import Header from './header'
+import { GET_STORIES } from '../../queries/story'
 import { IStory } from '../../interfaces/story'
 
 const StyledGrid = styled(Grid)`
@@ -82,33 +83,36 @@ const Stories = ({ me }: any) => (
 
       const { edges, pageInfo } = stories
       return (
-        <StoriesList
-          me={me}
-          hasNextPage={pageInfo.hasNextPage}
-          stories={edges}
-          loadMore={() =>
-            fetchMore({
-              variables: {
-                cursor: pageInfo.endCursor,
-              },
-              updateQuery: (previousResult, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return previousResult
-                }
-                return {
-                  stories: {
-                    ...fetchMoreResult.stories,
-                    edges: [
-                      ...previousResult.stories.edges,
-                      ...fetchMoreResult.stories.edges,
-                    ],
-                  },
-                }
-              },
-            })
-          }
-          refetch={refetch}
-        />
+        <>
+          <Header me={me} />
+          <StoriesList
+            me={me}
+            hasNextPage={pageInfo.hasNextPage}
+            stories={edges}
+            loadMore={() =>
+              fetchMore({
+                variables: {
+                  cursor: pageInfo.endCursor,
+                },
+                updateQuery: (previousResult, { fetchMoreResult }) => {
+                  if (!fetchMoreResult) {
+                    return previousResult
+                  }
+                  return {
+                    stories: {
+                      ...fetchMoreResult.stories,
+                      edges: [
+                        ...previousResult.stories.edges,
+                        ...fetchMoreResult.stories.edges,
+                      ],
+                    },
+                  }
+                },
+              })
+            }
+            refetch={refetch}
+          />
+        </>
       )
     }}
   </Query>

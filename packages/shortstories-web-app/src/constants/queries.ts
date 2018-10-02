@@ -7,6 +7,7 @@ export const GET_ME = gql`
       id
       username
       email
+      isVerified
     }
   }
 `

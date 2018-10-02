@@ -1,6 +1,7 @@
 import * as React from 'react'
-import withAuthorization from '../../higher-order-components/with-authorization'
 import { Mutation } from 'react-apollo'
+import withAuthorization from 'higher-order-components/with-authorization'
+import Header from './header'
 import gql from 'graphql-tag'
 
 const CREATE_STORY = gql`
@@ -22,7 +23,7 @@ const INITIAL_STATE = {
   body: '',
 }
 
-class CreateStory extends React.PureComponent {
+class CreateStory extends React.Component {
   public state = {
     ...INITIAL_STATE,
   }
@@ -43,6 +44,7 @@ class CreateStory extends React.PureComponent {
     const { title, body } = this.state
     return (
       <>
+        <Header />
         <h1>Create Story</h1>
         <Mutation mutation={CREATE_STORY} variables={{ title, body }}>
           {(createStory, { data, loading, error }) => (
@@ -69,6 +71,4 @@ class CreateStory extends React.PureComponent {
   }
 }
 
-export default withAuthorization(session => Boolean(session && session.me))(
-  CreateStory
-)
+export default withAuthorization(CreateStory)

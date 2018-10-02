@@ -38,7 +38,11 @@ const App = ({ session, refetch }: any) => (
           <ResetPassword refetch={refetch} match={match} />
         )}
       />
-      <Route path={routes.CREATE_STORY} component={CreateStory} />
+      <Route
+        exact
+        path={routes.CREATE_STORY}
+        render={() => <CreateStory me={session.me} />}
+      />
       <Route path={routes.VERIFY} component={Verify} />
       <Route component={NotFound} />
     </Switch>
