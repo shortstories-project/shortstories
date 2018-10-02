@@ -96,7 +96,6 @@ const Header = ({ me }: any) => (
           <p>Please verify your email address for writing stories.</p>
           <div>
             <Button>Resend verification email</Button>
-            <Button>Close</Button>
           </div>
         </VerifyMessage>
       )}
