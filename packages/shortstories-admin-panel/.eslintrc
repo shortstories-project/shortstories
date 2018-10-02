@@ -3,7 +3,10 @@
   "extends": ["standard", "plugin:react/recommended", "prettier"],
   "plugins": ["prettier"],
   "settings": {
-    "import/resolver": "node"
+    "import/resolver": "node",
+    "react": {
+      "version": "16.5"
+    }
   },
   "env": {
     "browser": true,
