@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo'
 import { withState, withHandlers } from 'recompose'
 import { Link } from 'react-router-dom'
 import { Formik } from 'formik'
-import { Button, Field } from 'components'
+import { Button, Field, Logo } from 'components'
 import history from '../../constants/history'
 import * as routes from '../../constants/routes'
 import * as validators from './validators'
@@ -92,6 +92,7 @@ const Form = ({
   >
     {({ handleSubmit, values }) => (
       <Container>
+        <Logo black />
         <SignUpForm onSubmit={handleSubmit}>
           <Field
             name="username"

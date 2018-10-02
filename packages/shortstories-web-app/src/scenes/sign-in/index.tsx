@@ -1,6 +1,4 @@
 import * as React from 'react'
-import { Container, Row, Column } from 'components'
-import Header from './header'
 import Form from './form'
 
 interface IProps {
@@ -8,18 +6,17 @@ interface IProps {
 }
 
 const SignIn = (props: IProps) => (
-  <>
-    <Header />
-    <Container>
-      <Row center>
-        <Column lg="4" md="3" sm="2" xs="1" />
-        <Column lg="4" md="6" sm="8" xs="10">
-          <Form refetch={props.refetch} />
-        </Column>
-        <Column lg="4" md="3" sm="2" xs="1" />
-      </Row>
-    </Container>
-  </>
+  <section className="hero is-fullheight">
+    <div className="hero-body">
+      <div className="container">
+        <div className="columns is-centered">
+          <div className="column is-5-tablet is-4-desktop is-4-widescreen">
+            <Form refetch={props.refetch} />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
 )
 
 export default SignIn

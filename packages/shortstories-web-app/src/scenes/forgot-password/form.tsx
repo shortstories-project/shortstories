@@ -3,8 +3,7 @@ import styled from 'styled-components'
 import { graphql, compose } from 'react-apollo'
 import { withState, withHandlers } from 'recompose'
 import { Formik } from 'formik'
-import { Button, Field } from 'components'
-import Modal from './modal'
+import { Button, Field, Logo } from 'components'
 import history from '../../constants/history'
 import * as validators from './validators'
 import { FORGOT_PASSWORD, CHECK_USER_EXIST } from '../../mutations/user'
@@ -48,6 +47,25 @@ const BackButton = styled(Button)`
   margin-top: 16px;
 `
 
+const SuccessMessage = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  & > h2 {
+    font-family: var(--main-font);
+    font-weight: bold;
+  }
+  & > p {
+    font-family: var(--main-font);
+    margin: 0;
+    & > span {
+      color: var(--purple);
+      font-weight: bold;
+    }
+  }
+`
+
 const INITIAL_VALUES = {
   login: '',
 }
@@ -77,8 +95,17 @@ const Form = ({
     }}
   >
     {({ handleSubmit, errors }) => (
-      <>
-        <Container mailSent={mailSent}>
+      <Container mailSent={mailSent}>
+        <Logo black />
+        {mailSent ? (
+          <SuccessMessage>
+            <h2>Email sent!</h2>
+            <p>
+              We sent a message to <span>{mailSent}</span> so you can pick your
+              new password.
+            </p>
+          </SuccessMessage>
+        ) : (
           <ForgotPasswordForm onSubmit={handleSubmit}>
             <Field
               name="login"
@@ -97,9 +124,8 @@ const Form = ({
               Back
             </BackButton>
           </ForgotPasswordForm>
-        </Container>
-        <Modal email={mailSent} />
-      </>
+        )}
+      </Container>
     )}
   </Formik>
 )

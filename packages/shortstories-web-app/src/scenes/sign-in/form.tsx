@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
 import { Link } from 'react-router-dom'
 import { Formik } from 'formik'
-import { Button, Field, ErrorMessage } from 'components'
+import { Button, Field, ErrorMessage, Logo } from 'components'
 import history from '../../constants/history'
 import * as routes from '../../constants/routes'
 import * as validators from './validators'
@@ -89,6 +89,7 @@ const Form = ({ refetch }: IProps) => (
       >
         {({ handleSubmit }) => (
           <Container>
+            <Logo black />
             <SignInForm onSubmit={handleSubmit}>
               <Field name="login" label="Login" validate={validators.login} />
               <Field

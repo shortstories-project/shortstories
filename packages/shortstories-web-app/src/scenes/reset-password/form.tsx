@@ -2,7 +2,7 @@ import * as React from 'react'
 import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
 import { Formik } from 'formik'
-import { Button, Field, ErrorMessage } from 'components'
+import { Button, Field, ErrorMessage, Logo } from 'components'
 import history from '../../constants/history'
 import * as routes from '../../constants/routes'
 import * as validators from './validators'
@@ -69,6 +69,7 @@ const Form = ({ match, refetch }: IProps) => (
       >
         {({ handleSubmit, errors, values }) => (
           <Container>
+            <Logo black />
             <ResetPasswordForm onSubmit={handleSubmit}>
               <Field
                 name="password"
