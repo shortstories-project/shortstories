@@ -14,6 +14,10 @@ export default css`
     --header-default-height: 80px;
   }
 
+  * {
+    outline: none;
+  }
+
   a {
     text-decoration: none;
     color: var(--black);

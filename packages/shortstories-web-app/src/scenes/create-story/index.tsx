@@ -14,8 +14,8 @@ const CreateStory = ({ me }: any) => (
       <div className="hero-body">
         <div className="container">
           <div className="columns is-centered">
-            <div className="column is-5-tablet is-4-desktop is-4-widescreen">
-              <Form />
+            <div className="column is-12-mobile is-12-tablet is-10-desktop is-10-widescreen">
+              <Form me={me} />
             </div>
           </div>
         </div>
