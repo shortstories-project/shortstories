@@ -1,4 +1,5 @@
 import { css } from 'styled-components'
+import { darken } from 'polished'
 
 export default css`
   :root {
@@ -18,13 +19,8 @@ export default css`
     outline: none;
   }
 
-  a {
-    text-decoration: none;
-    color: var(--black);
-  }
-
   #app {
-    background-image: url(/src/assets/images/topography.svg),
+    background-image: url(/assets/images/topography.svg),
       linear-gradient(110deg, var(--pink), var(--purple));
     background-size: 340px, auto;
     background-repeat: repeat;
@@ -38,13 +34,33 @@ export default css`
   h4,
   h5,
   h6 {
+    font-family: var(--main-font);
     margin: 0 0 5px 0;
   }
 
   p {
-    font-size: 16px;
+    font-family: var(--main-font);
+    font-size: 1rem;
     color: var(--black);
     line-height: normal;
+  }
+
+  a {
+    font-family: var(--main-font);
+    font-size: 1rem;
+    color: var(--purple);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+    &:hover {
+      color: ${darken(0.3, '#6d47d9')};
+    }
+  }
+
+  span,
+  div {
+    font-family: var(--main-font);
+    font-size: 1rem;
+    color: var(--black);
   }
 
   img,

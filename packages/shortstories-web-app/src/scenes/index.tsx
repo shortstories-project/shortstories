@@ -15,11 +15,7 @@ import history from '../constants/history'
 const App = ({ session, refetch }: any) => (
   <Router history={history}>
     <Switch>
-      <Route
-        exact
-        path={routes.STORIES}
-        render={() => <Stories me={session.me} />}
-      />
+      <Route exact path={routes.STORIES} render={() => <Stories />} />
       <Route
         exact
         path={routes.SIGN_UP}

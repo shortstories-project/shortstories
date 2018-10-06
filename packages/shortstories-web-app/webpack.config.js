@@ -1,6 +1,7 @@
 const path = require('path')
 const webpack = require('webpack')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
@@ -31,29 +32,42 @@ module.exports = {
       {
         test: /\.mjs$/,
         include: /node_modules/,
-        type: "javascript/auto",
+        type: 'javascript/auto',
       },
       {
-        test: /\.tsx?$/,
-        use: 'ts-loader',
+        test: /\.(j|t)sx?$/,
         exclude: /node_modules/,
-      },
-      {
-        test: /\.js$/,
-        use: 'source-map-loader',
-        enforce: 'pre',
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            babelrc: false,
+            presets: [
+              [
+                '@babel/preset-env',
+                { targets: { browsers: 'last 2 version' } },
+              ],
+              '@babel/preset-typescript',
+              '@babel/preset-react',
+            ],
+            plugins: [
+              ['@babel/plugin-proposal-class-properties', { loose: true }],
+              'react-hot-loader/babel',
+            ],
+          },
+        },
       },
       {
         test: /\.css$/,
         use: ['style-loader', 'css-loader'],
       },
       {
-        test: /\.svg$/,
+        test: /\.(png|jpg|jpeg|svg|gif)$/,
         use: {
           loader: 'url-loader',
           options: {
             limit: 100000,
-            name: 'src/assets/images/[name].[ext]',
+            name: '[path][name].[ext]',
           },
         },
       },
@@ -61,10 +75,8 @@ module.exports = {
   },
   devServer: {
     stats: 'errors-only',
-    hotOnly: true,
     open: true,
     overlay: true,
-    progress: true,
     historyApiFallback: true,
     proxy: {
       '/graphql': {
@@ -85,7 +97,12 @@ module.exports = {
       template: path.join(__dirname, 'public', 'index.ejs'),
     }),
     new FaviconsWebpackPlugin(path.join(__dirname, 'public', 'favicon.ico')),
-    new webpack.HotModuleReplacementPlugin(),
+    new CopyWebpackPlugin([
+      {
+        from: path.join(__dirname, 'src', 'assets'),
+        to: path.join(__dirname, 'dist', 'assets'),
+      },
+    ]),
     new webpack.NamedModulesPlugin(),
   ],
 }

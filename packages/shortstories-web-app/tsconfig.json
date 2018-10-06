@@ -1,11 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "./dist/",
-    "sourceMap": true,
-    "noImplicitAny": false,
+    "target": "es6",
     "module": "commonjs",
-    "target": "esnext",
+    "lib": ["es6", "es7", "dom"],
     "jsx": "react",
+    "sourceMap": true,
+    "outDir": "./dist/",
+    "removeComments": true,
+    "noImplicitAny": false,
+    "moduleResolution": "node",
+    "typeRoots": ["node_modules/@types"],
     "baseUrl": "./src",
     "paths": {
       "pages": ["pages"],
@@ -15,12 +19,6 @@
       "fonts": ["assets/fonts"]
     }
   },
-  "include": [
-    "./src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "webpack.config.js",
-    "public"
-  ]
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules", "webpack.config.js", "public"]
 }
