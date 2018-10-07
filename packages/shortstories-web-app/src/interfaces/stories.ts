@@ -1,6 +1,6 @@
-import { IStory } from './story'
+import IStory from './story'
 
-export interface IStories {
+export default interface IStories {
   edges: IStory[]
   pageInfo: {
     hasNextPage: boolean

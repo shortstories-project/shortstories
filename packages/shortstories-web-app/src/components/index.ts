@@ -4,11 +4,11 @@ import ErrorMessage from './error-message'
 import Field from './field'
 import TextareaField from './field/textarea-field'
 import SimpleInputField from './field/simple-input-field'
-import { GridColumn, GridContainer, GridRow } from './grid'
 import Input from './input'
 import Loader from './loader'
+import BigLoader from './loader/big-loader'
 import Logo from './logo'
-import Story from './story'
+import StoryCard from './story-card'
 import ImageUploader from './image-uploader'
 import Container from './container'
 import Row from './row'
@@ -21,14 +21,12 @@ export {
   TextareaField,
   SimpleInputField,
   ErrorMessage,
-  GridColumn,
-  GridContainer,
-  GridRow,
   Loader,
+  BigLoader,
   Input,
   ImageUploader,
   Logo,
-  Story,
+  StoryCard,
   Container,
   Row,
   Column,

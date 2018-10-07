@@ -9,7 +9,7 @@ class View extends Model {
       modelClass: `${__dirname}/User`,
       join: {
         from: 'views.userId',
-        to: 'user.id',
+        to: 'users.id',
       },
     },
     story: {
@@ -17,7 +17,7 @@ class View extends Model {
       modelClass: `${__dirname}/Story`,
       join: {
         from: 'views.storyId',
-        to: 'story.id',
+        to: 'stories.id',
       },
     },
   }

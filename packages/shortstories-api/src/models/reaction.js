@@ -9,7 +9,7 @@ class Reaction extends Model {
       modelClass: `${__dirname}/User`,
       join: {
         from: 'reactions.userId',
-        to: 'user.id',
+        to: 'users.id',
       },
     },
     story: {
@@ -17,7 +17,7 @@ class Reaction extends Model {
       modelClass: `${__dirname}/Story`,
       join: {
         from: 'reactions.storyId',
-        to: 'story.id',
+        to: 'stories.id',
       },
     },
   }

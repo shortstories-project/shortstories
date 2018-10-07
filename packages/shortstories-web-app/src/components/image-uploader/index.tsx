@@ -2,7 +2,7 @@ import 'react-image-crop/dist/ReactCrop.css'
 import * as React from 'react'
 import { Mutation } from 'react-apollo'
 import * as ReactCrop from 'react-image-crop'
-import { POST_PHOTO } from '../../constants/mutations'
+import { POST_PHOTO } from '../../mutations/user'
 
 const percentToPx = (a: number, b: number) => a * (b / 100)
 

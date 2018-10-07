@@ -1,6 +1,6 @@
 export const STORIES = '/'
-export const STORY = '/story/:id'
-export const USER = '/user/:id'
+export const STORY = id => `/story/${id}`
+export const USER = id => `/user/${id}`
 export const ACCOUNT = '/account'
 export const CREATE_STORY = '/create-story'
 export const ADMIN = '/admin'

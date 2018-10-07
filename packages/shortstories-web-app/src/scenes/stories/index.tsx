@@ -1,3 +1,16 @@
+import * as React from 'react'
+import Header from './header'
+import StoriesGrid from './stories-grid'
+
+const Stories = ({ me }: any) => (
+  <>
+    <Header me={me} />
+    <StoriesGrid />
+  </>
+)
+
+export default Stories
+
 // import * as React from 'react'
 // import styled from 'styled-components'
 // import { graphql, Query } from 'react-apollo'
@@ -114,9 +127,3 @@
 // )
 
 // export default Stories
-
-import * as React from 'react'
-
-const Stories = () => <div>sdasd</div>
-
-export default Stories

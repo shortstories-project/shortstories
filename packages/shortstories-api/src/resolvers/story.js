@@ -1,6 +1,6 @@
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isStoryOwner } from './authorization'
-import { paginationHelper } from '../utils'
+import { paginationHelper, reactionHandler } from '../utils'
 import { LIKE, DISLIKE } from '../constants'
 
 export default {
@@ -38,66 +38,27 @@ export default {
       }
     ),
 
-    likeStory: combineResolvers(
-      isAuthenticated,
-      async (parent, { id }, { models, me }) => {
-        const reaction = await models.Reaction.query().where({
-          userId: me.id,
-          storyId: id,
-        })
-        const createLike = async () =>
-          await models.Reaction.query().insert({
-            userId: me.id,
-            storyId: id,
-            state: LIKE,
-          })
-        if (reaction) {
-          await models.Reaction.query()
-            .delete()
-            .where({ userId: me.id, storyId: id })
-          if (reaction.state === DISLIKE) {
-            return createLike()
-          }
-          return reaction
-        }
-        return createLike()
-      }
+    likeStory: combineResolvers(isAuthenticated, (...args) =>
+      reactionHandler(...args)(LIKE)
     ),
 
-    dislikeStory: combineResolvers(
-      isAuthenticated,
-      async (parent, { id }, { models, me }) => {
-        const reaction = await models.Reaction.query().where({
-          userId: me.id,
-          storyId: id,
-        })
-        const createDislike = async () =>
-          await models.Reaction.query().insert({
-            userId: me.id,
-            storyId: id,
-            state: DISLIKE,
-          })
-        if (reaction) {
-          await models.Reaction.query()
-            .delete()
-            .where({ userId: me.id, storyId: id })
-          if (reaction.state === LIKE) {
-            return createDislike()
-          }
-          return reaction
-        }
-        return createDislike()
-      }
+    dislikeStory: combineResolvers(isAuthenticated, (...args) =>
+      reactionHandler(...args)(DISLIKE)
     ),
 
     viewStory: combineResolvers(
       isAuthenticated,
-      async (parent, { id }, { models, me }) =>
-        await models.Reaction.query().insert({
+      async (parent, { id }, { models, me }) => {
+        const newView = await models.View.query().insert({
           userId: me.id,
           storyId: id,
-          state: DISLIKE,
         })
+        return {
+          id: newView.id,
+          user: await models.User.query().findById(newView.userId),
+          storyId: newView.storyId,
+        }
+      }
     ),
 
     deleteStory: combineResolvers(

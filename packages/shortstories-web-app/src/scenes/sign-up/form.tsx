@@ -39,6 +39,7 @@ const ToSignIn = styled.p`
   font-size: var(--description-font-size);
   color: var(--black);
   > a {
+    font-size: var(--description-font-size);
     color: var(--purple);
     font-weight: bold;
   }
@@ -51,6 +52,7 @@ const Description = styled.p`
   font-size: var(--description-font-size);
   color: var(--black);
   > a {
+    font-size: var(--description-font-size);
     color: var(--purple);
     font-weight: bold;
   }

@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Query } from 'react-apollo'
-import { GET_ME } from '../constants/queries'
+import { GET_ME } from '../queries/user'
 
 const withSession = (Component: React.ComponentType) => (props: any) => (
   <Query query={GET_ME}>

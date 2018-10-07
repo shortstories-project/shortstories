@@ -1,9 +1,8 @@
-import { IStory } from './story'
+import IStories from './stories'
 
-export interface IUser {
+export default interface IUser {
   id: string
   username: string
-  email: string
-  role: string
-  stories: IStory[]
+  photo: string
+  writtenStories: IStories
 }

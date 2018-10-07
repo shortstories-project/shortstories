@@ -64,3 +64,52 @@ export const paginationHelper = model => async ({ cursor, limit }) => {
     },
   }
 }
+
+export const reactionHandler = (
+  parent,
+  { id },
+  { models, me }
+) => async state => {
+  async function createReaction() {
+    const newReaction = await models.Reaction.query().insert({
+      userId: me.id,
+      storyId: id,
+      state,
+    })
+    return {
+      id: newReaction.id,
+      state: newReaction.state,
+      storyId: newReaction.storyId,
+      user: await models.User.query().findById(newReaction.userId),
+    }
+  }
+  async function updateReaction(id, newState) {
+    const updatedReaction = await models.Reaction.query().updateAndFetchById(
+      id,
+      { state: newState }
+    )
+    return {
+      id: updatedReaction.id,
+      state: updatedReaction.state,
+      storyId: updatedReaction.storyId,
+      user: await models.User.query().findById(updatedReaction.userId),
+    }
+  }
+  const [reaction] = await models.Reaction.query().where({
+    userId: me.id,
+    storyId: id,
+  })
+  if (reaction && reaction.state === state) {
+    await models.Reaction.query().deleteById(reaction.id)
+    return {
+      id: reaction.id,
+      state: reaction.state,
+      storyId: reaction.storyId,
+      user: await models.User.query().findById(reaction.userId),
+    }
+  }
+  if (reaction && reaction.state !== state) {
+    return updateReaction(reaction.id, state)
+  }
+  return createReaction()
+}

@@ -5,7 +5,12 @@ const CopyWebpackPlugin = require('copy-webpack-plugin')
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin')
 
 module.exports = {
-  entry: ['modern-normalize', 'bulma/css/bulma.css', './src/index.tsx'],
+  entry: [
+    'modern-normalize',
+    'bulma/css/bulma.css',
+    '@babel/polyfill',
+    './src/index.tsx',
+  ],
   output: {
     path: path.join(__dirname, 'dist'),
     publicPath: '/',
@@ -45,7 +50,10 @@ module.exports = {
             presets: [
               [
                 '@babel/preset-env',
-                { targets: { browsers: 'last 2 version' } },
+                {
+                  targets: { browsers: 'last 2 version' },
+                  useBuiltIns: 'entry',
+                },
               ],
               '@babel/preset-typescript',
               '@babel/preset-react',

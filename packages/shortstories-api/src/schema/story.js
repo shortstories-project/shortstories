@@ -15,6 +15,7 @@ export default gql`
 
   type Reaction {
     id: ID!
+    state: String!
     user: User!
     storyId: ID!
   }
