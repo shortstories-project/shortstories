@@ -1,11 +1,18 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import Header from './header'
 import StoriesGrid from './stories-grid'
+
+const MainContainer = styled.div`
+  padding-top: 112px;
+`
 
 const Stories = ({ me }: any) => (
   <>
     <Header me={me} />
-    <StoriesGrid />
+    <MainContainer>
+      <StoriesGrid />
+    </MainContainer>
   </>
 )
 

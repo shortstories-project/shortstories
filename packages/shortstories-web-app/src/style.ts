@@ -13,6 +13,8 @@ export default css`
     --description-font-size: 12px;
     --logo-font-size: 32px;
     --header-default-height: 80px;
+    --main-bg: url(/assets/images/topography.svg),
+      linear-gradient(110deg, var(--pink), var(--purple));
   }
 
   * {
@@ -20,8 +22,7 @@ export default css`
   }
 
   #app {
-    background-image: url(/assets/images/topography.svg),
-      linear-gradient(110deg, var(--pink), var(--purple));
+    background-image: var(--main-bg);
     background-size: 340px, auto;
     background-repeat: repeat;
     background-attachment: fixed;
@@ -71,14 +72,14 @@ export default css`
 
   .navbar {
     min-height: 72px;
+    background-image: var(--main-bg);
+    background-size: 340px, auto;
+    background-repeat: repeat;
+    background-attachment: fixed;
   }
 
   .navbar-burger {
     height: 72px;
-  }
-
-  .navbar.is-transparent {
-    background-color: transparent;
   }
 
   .navbar.has-shadow {

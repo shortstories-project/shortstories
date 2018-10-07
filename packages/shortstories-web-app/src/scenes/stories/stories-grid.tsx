@@ -37,7 +37,6 @@ interface IProps {
 
 const Grid = styled.main`
   margin: 0 auto;
-  margin-top: 40px;
 `
 
 class StoriesGrid extends React.Component<IProps> {

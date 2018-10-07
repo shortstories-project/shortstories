@@ -13,27 +13,8 @@ const NavItem = styled(NavLink)`
   color: var(--white);
 `
 
-const VerifyMessage = styled.div`
-  height: 70px;
-  display: flex;
-  align-items: center;
-  background-color: azure;
-  justify-content: space-between;
-  & > p {
-    font-family: var(--main-font);
-    color: var(--black);
-    margin-left: 12px;
-  }
-  & > div {
-    margin-right: 12px;
-  }
-  & > div > button {
-    margin-left: 12px;
-  }
-`
-
 const Header = ({ me }: any) => (
-  <nav className="navbar has-shadow is-transparent">
+  <nav className="navbar has-shadow is-fixed-top">
     <div className="navbar-brand">
       <a href={routes.STORIES} className="navbar-item">
         <Logo />
