@@ -11,6 +11,7 @@ import * as routes from './constants/routes'
 import Enter from './scenes/enter/enter'
 import SignIn from './scenes/sign-in'
 import SignUp from './scenes/sign-up'
+import CardsContent from './scenes/cards-content'
 
 const history = createHistory()
 const client = new ApolloClient({
@@ -24,6 +25,7 @@ ReactDOM.render(
         <Route exact path={routes.ENTER} component={Enter} />
         <Route exact path={routes.SIGN_IN} component={SignIn} />
         <Route exact path={routes.SIGN_UP} component={SignUp} />
+        <Route exact path={routes.CARDS_CONTENT} component={CardsContent} />
       </Switch>
     </Router>
   </ApolloProvider>,

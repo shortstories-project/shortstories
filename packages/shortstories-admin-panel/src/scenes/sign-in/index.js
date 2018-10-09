@@ -1,6 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import 'bulma/css/bulma.css'
+import { Link } from 'react-router-dom'
+// import { GET_ME } from '../../constants/queries'
+// import { Query } from 'react-apollo'
+// import Session from '../../components/testy'
 
 const Form = styled.form`
   display: flex;
@@ -19,16 +23,21 @@ const Form = styled.form`
 `
 
 class SignIn extends React.PureComponent {
-  dataLogin = (event) => {
+  state = {
+    okay: null,
+  }
+
+  dataLogin = event => {
     // console.log(event.target.value)
   }
-  dataPassword = (event) => {
+  dataPassword = event => {
     // console.log(event.target.value)
   }
 
   render() {
     return (
       <div>
+        {this.withSession}
         <Form>
           <input
             className={'input is-rounded'}
@@ -40,7 +49,9 @@ class SignIn extends React.PureComponent {
             placeholder={'Password'}
             onChange={this.dataPassword}
           />
-          <button className={'button is-primary is-rounded'}>Login</button>
+          <Link to={'/cards-content'}>
+            <button className={'button is-primary is-rounded'}>Login</button>
+          </Link>
         </Form>
       </div>
     )

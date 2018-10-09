@@ -1,5 +1,7 @@
 import * as React from 'react'
 import styled from 'styled-components'
+// import { Query } from "react-apollo";
+// import {GET_STORIES} from "../../constants/queries";
 
 const Form = styled.form`
   display: flex;
@@ -18,13 +20,13 @@ const Form = styled.form`
 `
 
 class SignUp extends React.PureComponent {
-  dataLogin = (event) => {
+  dataLogin = event => {
     // console.log(event.target.value)
   }
-  dataEmail = (event) => {
+  dataEmail = event => {
     // console.log(event.target.value)
   }
-  dataPassword = (event) => {
+  dataPassword = event => {
     // console.log(event.target.value)
   }
 
@@ -47,7 +49,13 @@ class SignUp extends React.PureComponent {
             placeholder={'Password'}
             onChange={this.dataPassword}
           />
-          <button className={'button is-primary is-rounded'}>Create</button>
+          <button
+            className={'button is-primary is-rounded'}
+            type={'button'}
+            // onClick={this.test}
+          >
+            Create
+          </button>
         </Form>
       </div>
     )
