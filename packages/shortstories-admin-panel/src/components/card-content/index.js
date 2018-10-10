@@ -1,11 +1,10 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import 'bulma/css/bulma.css'
-import PropTypes from 'prop-types';
+import PropTypes from 'prop-types'
 // import { Link } from 'react-router-dom'
 
 const Card = styled.div`
-  width: 20%;
   height: 350px;
   border: 10px solid #048a76;
   cursor: pointer;
@@ -36,7 +35,7 @@ class CardContent extends React.PureComponent {
 }
 
 CardContent.propTypes = {
-  content: PropTypes.string
+  content: PropTypes.string,
 }
 
 export default CardContent

@@ -12,6 +12,8 @@ import Enter from './scenes/enter/enter'
 import SignIn from './scenes/sign-in'
 import SignUp from './scenes/sign-up'
 import CardsContent from './scenes/cards-content'
+import Users from './scenes/users'
+// import Hmmm from './components/hmmm'
 
 const history = createHistory()
 const client = new ApolloClient({
@@ -26,8 +28,10 @@ ReactDOM.render(
         <Route exact path={routes.SIGN_IN} component={SignIn} />
         <Route exact path={routes.SIGN_UP} component={SignUp} />
         <Route exact path={routes.CARDS_CONTENT} component={CardsContent} />
+        <Route exact path={routes.USERS} component={Users} />
       </Switch>
     </Router>
+    {/* <Hmmm/> */}
   </ApolloProvider>,
   document.getElementById('root')
 )

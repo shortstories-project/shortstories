@@ -1,6 +1,8 @@
 import * as React from 'react'
 import styled from 'styled-components'
 import 'bulma/css/bulma.css'
+import { Link } from 'react-router-dom'
+
 import CardContent from '../../components/card-content'
 
 const Container = styled.div`
@@ -19,9 +21,15 @@ class CardsContent extends React.PureComponent {
     return (
       <Container>
         <div>
-          <CardContent content={'Users'} />
-          <CardContent content={'Stories'} />
-          <CardContent content={'Comments'} />
+          <Link style={{ width: 230 }} to={'/users'}>
+            <CardContent content={'Users'} />
+          </Link>
+          <Link style={{ width: 230 }} to={'/stories'}>
+            <CardContent content={'Stories'} />
+          </Link>
+          <Link style={{ width: 230 }} to={'/comments'}>
+            <CardContent content={'Comments'} />
+          </Link>
         </div>
       </Container>
     )
