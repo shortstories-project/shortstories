@@ -41,13 +41,7 @@ const EmptyBlock = styled.div`
   left: 366px;
   width: 710px;
   height: 28px;
-  background: -webkit-gradient(
-    linear,
-    left top,
-    left bottom,
-    from(rgba(255, 255, 255, 0)),
-    to(rgba(177, 246, 236, 1))
-  );
+  background: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 0)), to(rgba(177, 246, 236, 1)));
 `
 
 const Div = styled.div`
@@ -71,33 +65,30 @@ class Users extends React.PureComponent {
       { name: 'Ivan', lastName: 'Trupyn' },
       { name: 'Ivan', lastName: 'Trupyn' },
       { name: 'Artem', lastName: 'Migovan' },
-      { name: 'Oleg', lastName: 'Dodzh' },
+      { name: 'Oleg', lastName: 'Dodzh' }
     ],
     showPopUp: false,
     index: null,
-    deleteUser: '',
+    deleteUser: ''
   }
 
-  openPopUp = index => {
+  openPopUp = (index) => {
     this.setState({
       showPopUp: true,
-      deleteUser:
-        this.state.dataUsers[index].name +
-        ' ' +
-        this.state.dataUsers[index].lastName,
+      deleteUser: this.state.dataUsers[index].name + ' ' + this.state.dataUsers[index].lastName
     })
   }
 
   notDeleteItem = () => {
     this.setState({
-      showPopUp: false,
+      showPopUp: false
     })
   }
 
   deleteItem = () => {
     this.setState({
       dataUser: this.state.dataUsers.splice(this.state.index, 1),
-      showPopUp: false,
+      showPopUp: false
     })
   }
 
@@ -112,24 +103,19 @@ class Users extends React.PureComponent {
                 className={'delete'}
                 onClick={() => {
                   this.setState({
-                    index,
+                    index
                   })
                   this.openPopUp(index)
                 }}
               />
             </div>
           ))}
-          {this.state.showPopUp ? (
-            <PopUp
-              deleteItem={this.deleteItem}
-              notDeleteItem={this.notDeleteItem}
-              deleteUser={this.state.deleteUser}
-            />
-          ) : (
-            ''
-          )}
+          {this.state.showPopUp ?
+            <PopUp deleteItem={this.deleteItem}
+                   notDeleteItem={this.notDeleteItem}
+                   deleteUser={this.state.deleteUser}/> : ''}
         </Container>
-        <EmptyBlock />
+        <EmptyBlock/>
       </Div>
     )
   }
