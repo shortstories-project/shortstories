@@ -1,6 +1,5 @@
 import * as React from 'react'
 import styled from 'styled-components'
-import deleteImage from '../../image/delete.png'
 
 import PopUp from '../../components/pop-up'
 
@@ -8,13 +7,14 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   width: 50%;
-  height: 300px;
+  height: 350px;
   margin: auto;
-  padding: 15px;
   margin-top: 150px;
+  padding: 15px;
   overflow: scroll;
   background: #00d1b240;
   border-radius: 20px;
+  box-shadow: 0 0 17px rgba(122, 107, 107, 0.5);
   > div {
     display: flex;
     justify-content: space-between;
@@ -24,7 +24,7 @@ const Container = styled.div`
     color: #ffff;
     border-radius: 20px;
     margin: 2px;
-    font-weight: bold;
+    font-weight: 200;
     min-height: 30px;
   }
   > div > img {
@@ -33,6 +33,27 @@ const Container = styled.div`
     cursor: pointer;
   }
 `
+
+const EmptyBlock = styled.div`
+  position: absolute;
+  border-radius: 20px;
+  bottom: 0;
+  left: 366px;
+  width: 710px;
+  height: 28px;
+  background: -webkit-gradient(
+    linear,
+    left top,
+    left bottom,
+    from(rgba(255, 255, 255, 0)),
+    to(rgba(177, 246, 236, 1))
+  );
+`
+
+const Div = styled.div`
+  position: relative;
+`
+
 class Users extends React.PureComponent {
   state = {
     // TODO заглушака бля бэкэнда
@@ -50,40 +71,66 @@ class Users extends React.PureComponent {
       { name: 'Ivan', lastName: 'Trupyn' },
       { name: 'Ivan', lastName: 'Trupyn' },
       { name: 'Artem', lastName: 'Migovan' },
-      { name: 'Oleg', lastName: 'Dodzh' }
+      { name: 'Oleg', lastName: 'Dodzh' },
     ],
-    showPopUp: false
+    showPopUp: false,
+    index: null,
+    deleteUser: '',
   }
 
-  openPopUp = () => {
+  openPopUp = index => {
     this.setState({
-      showPopUp: true
+      showPopUp: true,
+      deleteUser:
+        this.state.dataUsers[index].name +
+        ' ' +
+        this.state.dataUsers[index].lastName,
     })
   }
 
-  deleteItem = index => {
+  notDeleteItem = () => {
     this.setState({
-      dataUser: this.state.dataUsers.splice(index, 1),
+      showPopUp: false,
+    })
+  }
+
+  deleteItem = () => {
+    this.setState({
+      dataUser: this.state.dataUsers.splice(this.state.index, 1),
+      showPopUp: false,
     })
   }
 
   render() {
     return (
-      <Container>
-        {this.state.dataUsers.map((item, index) => (
-          <div key={index}>
-            <p>{item.name + ' ' + item.lastName}</p>
-            <img
-              src={deleteImage}
-              alt={'delete'}
-              onClick={() => {
-                this.openPopUp()
-              }}
+      <Div>
+        <Container>
+          {this.state.dataUsers.map((item, index) => (
+            <div key={index}>
+              <p>{item.name + ' ' + item.lastName}</p>
+              <span
+                className={'delete'}
+                onClick={() => {
+                  this.setState({
+                    index,
+                  })
+                  this.openPopUp(index)
+                }}
+              />
+            </div>
+          ))}
+          {this.state.showPopUp ? (
+            <PopUp
+              deleteItem={this.deleteItem}
+              notDeleteItem={this.notDeleteItem}
+              deleteUser={this.state.deleteUser}
             />
-          </div>
-        ))}
-        {this.state.showPopUp ? <PopUp /> : ''}
-      </Container>
+          ) : (
+            ''
+          )}
+        </Container>
+        <EmptyBlock />
+      </Div>
     )
   }
 }
