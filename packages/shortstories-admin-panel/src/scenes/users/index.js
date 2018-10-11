@@ -13,19 +13,19 @@ const Container = styled.div`
   padding: 15px;
   margin-top: 150px;
   overflow: scroll;
-  background: #048a7645;
+  background: #00d1b240;
   border-radius: 20px;
   > div {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 5px 12px;
-    background: #048a769e;
+    background: #00d1b2;
     color: #ffff;
     border-radius: 20px;
     margin: 2px;
     font-weight: bold;
-    position: relative;
+    min-height: 30px;
   }
   > div > img {
     width: 18px;
@@ -37,19 +37,27 @@ class Users extends React.PureComponent {
   state = {
     // TODO заглушака бля бэкэнда
     dataUsers: [
-      { name: 'Artem', lastName: 'Migovan', showPopUp: false },
-      { name: 'Oleg', lastName: 'Dodzh', showPopUp: false },
-      { name: 'Ivan', lastName: 'Trupyn', showPopUp: false },
+      { name: 'Artem', lastName: 'Migovan' },
+      { name: 'Oleg', lastName: 'Dodzh' },
+      { name: 'Ivan', lastName: 'Trupyn' },
+      { name: 'Petya', lastName: 'Ebanov' },
+      { name: 'LeXa', lastName: '007' },
+      { name: 'Kirya', lastName: 'Sexmachin' },
+      { name: 'Vika', lastName: 'Onal4ik' },
+      { name: 'Kirya', lastName: 'Sexmachin' },
+      { name: 'Ivan', lastName: 'Trupyn' },
+      { name: 'Oleg', lastName: 'Dodzh' },
+      { name: 'Ivan', lastName: 'Trupyn' },
+      { name: 'Ivan', lastName: 'Trupyn' },
+      { name: 'Artem', lastName: 'Migovan' },
+      { name: 'Oleg', lastName: 'Dodzh' }
     ],
+    showPopUp: false
   }
 
-  openPopUp = index => {
-    this.setState(state => {
-      const newDataUser = state.dataUsers.slice()
-      newDataUser[index].showPopUp = true
-      return {
-        dataUsers: newDataUser,
-      }
+  openPopUp = () => {
+    this.setState({
+      showPopUp: true
     })
   }
 
@@ -69,12 +77,12 @@ class Users extends React.PureComponent {
               src={deleteImage}
               alt={'delete'}
               onClick={() => {
-                this.openPopUp(index)
+                this.openPopUp()
               }}
             />
-            {item.showPopUp ? <PopUp /> : ''}
           </div>
         ))}
+        {this.state.showPopUp ? <PopUp /> : ''}
       </Container>
     )
   }
