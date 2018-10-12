@@ -46,7 +46,7 @@ const UserWindow = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-  width: 6%;
+  width: 9%;
   justify-content: space-between;
   align-items: center;
 `
@@ -91,7 +91,6 @@ class Users extends React.PureComponent {
   }
 
   openPopUp = index => {
-    // console.log(' this.popUp.open()', this.popUp.open())
     this.popUp.open()
     this.setState({
       index,
@@ -103,7 +102,6 @@ class Users extends React.PureComponent {
   }
 
   deleteUser = () => {
-    // console.log('this.state.index', this.state.index)
     this.setState({
       dataUser: this.state.dataUsers.splice(this.state.index, 1),
     })
@@ -122,16 +120,12 @@ class Users extends React.PureComponent {
         <UserWindow>
           {this.state.dataUsers.map((item, index) => (
             <div key={index}>
-              {/* <input value={item.name + ' ' + item.lastName} */}
-              {/* onChange={this.dataUser} */}
-              {/* readOnly={this.state.notEdit} */}
-              {/* type={'text'}/> */}
               <Input
                 valueUser={item.name + ' ' + item.lastName}
                 notEdit={this.state.notEdit}
               />
               <Buttons>
-                <button onClick={this.editUser} />
+                <button onClick={this.editUser}>edit</button>
                 <span
                   className={'delete'}
                   onClick={() => {
