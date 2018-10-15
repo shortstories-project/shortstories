@@ -1,40 +1,48 @@
 import * as React from 'react'
-// import styled from 'styled-components'
+import styled from 'styled-components'
 import 'bulma/css/bulma.css'
 import PropTypes from 'prop-types'
 
-class Input extends React.PureComponent {
+import './input.css'
 
-  // state = {
-  //   notEdit: true,
-  // }
+const Input = styled.input`
+    width: 62%;
+    border: none;
+    background: #00d1b2;
+    color: #ffff;
+    font-weight: 200;
+    font-size: 16px;
+    outline: none;
+`
 
-  openEdit = () => {
-    // console.log(123)
+class InputComponent extends React.PureComponent {
+
+  state = {
+    myValue: this.props.valueUser
   }
 
-  // closeEdit = () => {
-  //   this.setState({
-  //     notEdit: true,
-  //   })
-  // }
+  openEdit = (event) => {
+    this.setState({
+      myValue: event.target.value
+    })
+  }
 
   render() {
     return (
-      <div>
-        <input
+        <Input
+          className={this.props.showEdit ? 'notEdit' : 'edit'}
           value={this.props.valueUser}
+          // value={this.state.myValue}
           onChange={this.openEdit}
-          readOnly={this.props.notEdit}
+          readOnly={this.props.showEdit}
         />
-      </div>
     )
   }
 }
 
-Input.propTypes = {
+InputComponent.propTypes = {
   valueUser: PropTypes.string,
-  notEdit: PropTypes.any,
+  showEdit: PropTypes.any,
 }
 
-export default Input
+export default InputComponent

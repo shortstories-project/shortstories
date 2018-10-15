@@ -1,0 +1,11 @@
+.edit {
+    border: 1px solid;
+    border-radius: 20px;
+    padding: 5px 10px;
+    margin-left: 10px;
+}
+
+.notEdit {
+    border: none;
+    padding: 5px 10px;
+}

@@ -4,6 +4,11 @@ import styled from 'styled-components'
 import PopUp from '../../components/pop-up'
 import Input from '../../components/input'
 
+import deleteIcon from '../../image/delete.png'
+import editIcon from '../../image/edit.png'
+import checkMarkIcon from '../../image/check-mark.png'
+import userIcon from '../../image/user.png'
+
 const Container = styled.div`
   width: 50%;
   margin: auto;
@@ -35,7 +40,7 @@ const UserWindow = styled.div`
     border-radius: 20px;
     margin: 2px;
     font-weight: 200;
-    min-height: 30px;
+    min-height: 45px;
   }
   > div > img {
     width: 18px;
@@ -46,9 +51,13 @@ const UserWindow = styled.div`
 
 const Buttons = styled.div`
   display: flex;
-  width: 9%;
-  justify-content: space-between;
+  width: 8%;
+  justify-content: space-around;
   align-items: center;
+  cursor: pointer;
+  > img {
+    width: 16px;
+  }
 `
 
 const EmptyBlock = styled.div`
@@ -56,7 +65,7 @@ const EmptyBlock = styled.div`
   border-radius: 20px;
   bottom: 0;
   width: 710px;
-  height: 28px;
+  height: 17px;
   background: -webkit-gradient(
     linear,
     left top,
@@ -66,28 +75,47 @@ const EmptyBlock = styled.div`
   );
 `
 
+const EditWindow = styled.div`
+  display: flex;
+  align-items: center;
+  > img {
+    width: 16px;
+    margin: 10px;
+    cursor: pointer;
+  }
+  > label > input {
+    display: none;
+  }
+`
+
+const UserPic = styled.img`
+  width: 25px !important;
+  margin: -5px 0px !important;
+  cursor: pointer;
+`
+
 class Users extends React.PureComponent {
   state = {
     // TODO заглушака бля бэкэнда
     dataUsers: [
-      { name: 'Artem', lastName: 'Migovan' },
-      { name: 'Oleg', lastName: 'Dodzh' },
-      { name: 'Ivan', lastName: 'Trupyn' },
-      { name: 'Petya', lastName: 'Ebanov' },
-      { name: 'LeXa', lastName: '007' },
-      { name: 'Kirya', lastName: 'Sexmachin' },
-      { name: 'Vika', lastName: 'Onal4ik' },
-      { name: 'Kirya', lastName: 'Sexmachin' },
-      { name: 'Ivan', lastName: 'Trupyn' },
-      { name: 'Oleg', lastName: 'Dodzh' },
-      { name: 'Ivan', lastName: 'Trupyn' },
-      { name: 'Ivan', lastName: 'Trupyn' },
-      { name: 'Artem', lastName: 'Migovan' },
-      { name: 'Oleg', lastName: 'Dodzh' },
+      { name: 'Artem', lastName: 'Migovan', showEdit: true },
+      { name: 'Oleg', lastName: 'Dodzh', showEdit: true },
+      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
+      { name: 'Petya', lastName: 'Ebanov', showEdit: true },
+      { name: 'LeXa', lastName: '007', showEdit: true },
+      { name: 'Kirya', lastName: 'Sexmachin', showEdit: true },
+      { name: 'Vika', lastName: 'Onal4ik', showEdit: true },
+      { name: 'Kirya', lastName: 'Sexmachin', showEdit: true },
+      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
+      { name: 'Oleg', lastName: 'Dodzh', showEdit: true },
+      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
+      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
+      { name: 'Artem', lastName: 'Migovan', showEdit: true },
+      { name: 'Oleg', lastName: 'Dodzh', showEdit: true },
     ],
     index: null,
     deleteUserName: '',
-    notEdit: true,
+    userPic: null,
   }
 
   openPopUp = index => {
@@ -107,27 +135,63 @@ class Users extends React.PureComponent {
     })
   }
 
-  editUser = () => {
+  editUser = index => {
+    const dataUsers = this.state.dataUsers.slice()
+    dataUsers[index].showEdit = false
     this.setState({
-      notEdit: false,
+      dataUsers,
+    })
+  }
+
+  closeEditUser = index => {
+    const dataUsers = this.state.dataUsers.slice()
+    dataUsers[index].showEdit = true
+    this.setState({
+      dataUsers,
+    })
+  }
+
+  uploadUserPic = event => {
+    this.setState({
+      userPic: event.target.value,
     })
   }
 
   render() {
+    const test = `Delete' ${this.state.deleteUserName} ?`
     return (
       <Container>
         <h1>All users.</h1>
         <UserWindow>
           {this.state.dataUsers.map((item, index) => (
             <div key={index}>
-              <Input
-                valueUser={item.name + ' ' + item.lastName}
-                notEdit={this.state.notEdit}
-              />
+              <EditWindow>
+                <label>
+                  <UserPic src={userIcon} title={'Change image'} />
+                  <input type={'file'} onChange={this.uploadUserPic} />
+                </label>
+                <Input
+                  valueUser={item.name + ' ' + item.lastName}
+                  showEdit={this.state.dataUsers[index].showEdit}
+                />
+              </EditWindow>
               <Buttons>
-                <button onClick={this.editUser}>edit</button>
-                <span
-                  className={'delete'}
+                {this.state.dataUsers[index].showEdit ? (
+                  <img
+                    src={editIcon}
+                    alt={'editIcon'}
+                    onClick={() => this.editUser(index)}
+                  />
+                ) : (
+                  <img
+                    src={checkMarkIcon}
+                    alt={'checkMarkIcon'}
+                    onClick={() => this.closeEditUser(index)}
+                  />
+                )}
+                <img
+                  src={deleteIcon}
+                  alt={'deleteIcon'}
                   onClick={() => {
                     this.openPopUp(index)
                   }}
@@ -138,7 +202,7 @@ class Users extends React.PureComponent {
         </UserWindow>
         <PopUp
           ref={node => (this.popUp = node)}
-          deleteUserName={this.state.deleteUserName}
+          deleteUserName={test}
           onApprove={this.deleteUser}
         />
         <EmptyBlock />
