@@ -22,7 +22,8 @@ const Container = styled.div`
   }
   > p {
     color: #f1a3e7;
-    font-size: 20px;
+    font-size: 19px;
+    font-weight: 200;
   }
 `
 

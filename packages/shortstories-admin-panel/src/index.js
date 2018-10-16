@@ -13,6 +13,7 @@ import SignIn from './scenes/sign-in'
 import SignUp from './scenes/sign-up'
 import CardsContent from './scenes/cards-content'
 import Users from './scenes/users'
+import Stories from './scenes/stories'
 // import Hmmm from './components/hmmm'
 
 const history = createHistory()
@@ -29,9 +30,9 @@ ReactDOM.render(
         <Route exact path={routes.SIGN_UP} component={SignUp} />
         <Route exact path={routes.CARDS_CONTENT} component={CardsContent} />
         <Route exact path={routes.USERS} component={Users} />
+        <Route exact path={routes.STORIES} component={Stories} />
       </Switch>
     </Router>
-    {/* <Hmmm/> */}
   </ApolloProvider>,
   document.getElementById('root')
 )

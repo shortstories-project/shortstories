@@ -7,7 +7,6 @@ import Input from '../../components/input'
 import deleteIcon from '../../image/delete.png'
 import editIcon from '../../image/edit.png'
 import checkMarkIcon from '../../image/check-mark.png'
-import userIcon from '../../image/user.png'
 
 const Container = styled.div`
   width: 50%;
@@ -21,7 +20,7 @@ const Container = styled.div`
   }
 `
 
-const UserWindow = styled.div`
+const StoriesWindow = styled.div`
   display: flex;
   flex-direction: column;
   height: 350px;
@@ -94,103 +93,80 @@ const EditWindow = styled.div`
   }
 `
 
-const UserPic = styled.img`
-  width: 25px !important;
-  margin: -5px 0px !important;
-  cursor: pointer;
-`
-
-class Users extends React.PureComponent {
+class Stories extends React.PureComponent {
   state = {
     // TODO заглушака бля бэкэнда
-    dataUsers: [
-      { name: 'Artem', lastName: 'Migovan', showEdit: true },
-      { name: 'Oleg', lastName: 'Dodzh', showEdit: true },
-      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
-      { name: 'Petya', lastName: 'Ebanov', showEdit: true },
-      { name: 'LeXa', lastName: '007', showEdit: true },
-      { name: 'Kirya', lastName: 'Sexmachin', showEdit: true },
-      { name: 'Vika', lastName: 'Onal4ik', showEdit: true },
-      { name: 'Kirya', lastName: 'Sexmachin', showEdit: true },
-      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
-      { name: 'Oleg', lastName: 'Dodzh', showEdit: true },
-      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
-      { name: 'Ivan', lastName: 'Trupyn', showEdit: true },
-      { name: 'Artem', lastName: 'Migovan', showEdit: true },
-      { name: 'Oleg', lastName: 'Dodzh', showEdit: true },
+    dataStories: [
+      { nameStories: 'My life story.', story: 'Migovan', showEdit: true },
+      { nameStories: 'Why work in the afternoon?', story: 'Migovan', showEdit: true },
+      { nameStories: 'How to cook the most delicious onions.', story: 'Migovan', showEdit: true },
+      { nameStories: 'The most secret secret...', story: 'Migovan', showEdit: true },
+      { nameStories: 'How to drink 100 liters of beer?', story: 'Migovan', showEdit: true },
+      { nameStories: 'Why work in the afternoon?', story: 'Migovan', showEdit: true },
+      { nameStories: 'My life story.', story: 'Migovan', showEdit: true },
+      { nameStories: 'The most secret secret...', story: 'Migovan', showEdit: true }
     ],
     index: null,
-    deleteUserName: '',
-    userPic: null,
+    deleteNameStory: ''
   }
 
   openPopUp = index => {
     this.popUp.open()
     this.setState({
       index,
-      deleteUserName: `${this.state.dataUsers[index].name} ${this.state.dataUsers[index].lastName}`
+      deleteNameStory: this.state.dataStories[index].nameStories
     })
   }
 
-  deleteUser = () => {
-    const dataUsers = this.state.dataUsers.slice()
-    dataUsers.splice(this.state.index, 1);
+  deleteStories = () => {
+    let dataStories = this.state.dataStories.slice()
+    dataStories.splice(this.state.index, 1)
     this.setState({
-      dataUsers,
+      dataStories
     })
   }
 
-  editUser = index => {
-    const dataUsers = this.state.dataUsers.slice()
-    dataUsers[index].showEdit = false
+  editStories = index => {
+    const dataStories = this.state.dataStories.slice()
+    dataStories[index].showEdit = false
     this.setState({
-      dataUsers,
+      dataStories
     })
   }
 
-  closeEditUser = index => {
-    const dataUsers = this.state.dataUsers.slice()
-    dataUsers[index].showEdit = true
+  closeEditStories = index => {
+    const dataStories = this.state.dataStories.slice()
+    dataStories[index].showEdit = true
     this.setState({
-      dataUsers,
-    })
-  }
-
-  uploadUserPic = event => {
-    this.setState({
-      userPic: event.target.value,
+      dataStories
     })
   }
 
   render() {
     return (
       <Container>
-        <h1>All users.</h1>
-        <UserWindow>
-          {this.state.dataUsers.map((item, index) => (
+        <h1>All stories.</h1>
+        <StoriesWindow>
+          {this.state.dataStories.map((item, index) => (
             <div key={index}>
               <EditWindow>
-                <label>
-                  <UserPic src={userIcon} title={'Change image'} />
-                  <input type={'file'} onChange={this.uploadUserPic} />
-                </label>
                 <Input
-                  valueUser={item.name + ' ' + item.lastName}
-                  showEdit={this.state.dataUsers[index].showEdit}
+                  valueUser={item.nameStories}
+                  showEdit={this.state.dataStories[index].showEdit}
                 />
               </EditWindow>
               <Buttons>
-                {this.state.dataUsers[index].showEdit ? (
+                {this.state.dataStories[index].showEdit ? (
                   <img
                     src={editIcon}
                     alt={'editIcon'}
-                    onClick={() => this.editUser(index)}
+                    onClick={() => this.editStories(index)}
                   />
                 ) : (
                   <img
                     src={checkMarkIcon}
                     alt={'checkMarkIcon'}
-                    onClick={() => this.closeEditUser(index)}
+                    onClick={() => this.closeEditStories(index)}
                   />
                 )}
                 <img
@@ -203,11 +179,11 @@ class Users extends React.PureComponent {
               </Buttons>
             </div>
           ))}
-        </UserWindow>
+        </StoriesWindow>
         <PopUp
           ref={node => (this.popUp = node)}
-          deleteUserName={`Delete ${this.state.deleteUserName} ?`}
-          onApprove={this.deleteUser}
+          deleteUserName={`Delete ${this.state.deleteNameStory} ?`}
+          onApprove={this.deleteStories}
         />
         <EmptyBlock />
       </Container>
@@ -215,4 +191,4 @@ class Users extends React.PureComponent {
   }
 }
 
-export default Users
+export default Stories
