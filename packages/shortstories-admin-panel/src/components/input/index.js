@@ -17,7 +17,7 @@ const Input = styled.input`
 
 class InputComponent extends React.PureComponent {
   state = {
-    myValue: this.props.valueUser,
+    myValue: this.props.value,
   }
 
   openEdit = event => {
@@ -30,7 +30,7 @@ class InputComponent extends React.PureComponent {
     return (
       <Input
         className={this.props.showEdit ? 'notEdit' : 'edit'}
-        value={this.props.valueUser}
+        value={this.props.value}
         // value={this.state.myValue}
         onChange={this.openEdit}
         readOnly={this.props.showEdit}
@@ -40,7 +40,7 @@ class InputComponent extends React.PureComponent {
 }
 
 InputComponent.propTypes = {
-  valueUser: PropTypes.string,
+  value: PropTypes.string,
   showEdit: PropTypes.any,
 }
 

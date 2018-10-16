@@ -54,7 +54,7 @@ class PopUp extends React.PureComponent {
       <div>
         {this.state.isShow && (
           <Container>
-            <p>{this.props.deleteUserName}</p>
+            <p>{this.props.deleteValue}</p>
             <div>
               <button
                 className={'button is-primary is-rounded'}
@@ -77,7 +77,7 @@ class PopUp extends React.PureComponent {
 }
 
 PopUp.propTypes = {
-  deleteUserName: PropTypes.string,
+  deleteValue: PropTypes.string,
   onApprove: PropTypes.any,
 }
 
