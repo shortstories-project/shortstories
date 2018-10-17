@@ -14,19 +14,18 @@ const Container = styled.div`
 `
 
 class SearchBar extends React.PureComponent {
-
   state = {
-    filter: ''
+    filter: '',
   }
 
-  dataSearchBar = (event) => {
-    let data = []
+  dataSearchBar = event => {
+    const data = []
     this.setState({
-      filter: event.target.value
+      filter: event.target.value,
     })
-    this.props.data.forEach((item) => {
-      let regexp = this.state.filter.toLowerCase()
-      let itsDataFound = item.name.toLowerCase().match(regexp);
+    this.props.data.forEach(item => {
+      const regexp = this.state.filter.toLowerCase()
+      const itsDataFound = item.name.toLowerCase().match(regexp)
       itsDataFound && data.push(itsDataFound)
       // console.log(data && data)
     })
@@ -35,16 +34,18 @@ class SearchBar extends React.PureComponent {
   render() {
     return (
       <Container>
-        <input type="text"
-               placeholder="filter..."
-               onChange={this.dataSearchBar}/>
+        <input
+          type="text"
+          placeholder="filter..."
+          onChange={this.dataSearchBar}
+        />
       </Container>
     )
   }
 }
 
 SearchBar.propTypes = {
-  data: PropTypes.any
+  data: PropTypes.any,
 }
 
 export default SearchBar
