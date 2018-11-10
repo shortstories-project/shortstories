@@ -64,7 +64,14 @@ const server = new ApolloServer({
   }),
 })
 
-server.applyMiddleware({ app, path: '/graphql' })
+server.applyMiddleware({
+  app,
+  path: '/graphql',
+  cors: {
+    credentials: true,
+    origin: process.env.FRONTEND_URL,
+  },
+})
 
 app.use('/img/photos', express.static(path.join(__dirname, 'uploads')))
 
