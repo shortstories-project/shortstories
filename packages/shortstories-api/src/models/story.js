@@ -1,50 +1,30 @@
-import { Model } from 'objection'
+const story = (sequelize, DataTypes) => {
+  const Story = sequelize.define('story', {
+    title: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+      },
+    },
+    body: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
+        len: [600, 4000],
+      },
+    },
+  })
 
-class Story extends Model {
-  static tableName = 'stories'
-
-  static relationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: `${__dirname}/User`,
-      join: {
-        from: 'stories.userId',
-        to: 'users.id',
-      },
-    },
-    comments: {
-      relation: Model.HasManyRelation,
-      modelClass: `${__dirname}/Comment`,
-      join: {
-        from: 'stories.id',
-        to: 'comments.storyId',
-      },
-    },
-    reactions: {
-      relation: Model.HasManyRelation,
-      modelClass: `${__dirname}/Reaction`,
-      join: {
-        from: 'stories.id',
-        to: 'reactions.storyId',
-      },
-    },
-    views: {
-      relation: Model.HasManyRelation,
-      modelClass: `${__dirname}/View`,
-      join: {
-        from: 'stories.id',
-        to: 'views.storyId',
-      },
-    },
+  Story.associate = models => {
+    Story.belongsTo(models.User)
+    Story.hasMany(models.Comment, { onDelete: 'cascade', hooks: true })
+    Story.hasMany(models.Reaction, { onDelete: 'cascade', hooks: true })
+    Story.hasMany(models.View, { onDelete: 'cascade', hooks: true })
   }
 
-  $beforeInsert() {
-    this.createdAt = new Date().toISOString()
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString()
-  }
+  return Story
 }
 
-export default Story
+export default story

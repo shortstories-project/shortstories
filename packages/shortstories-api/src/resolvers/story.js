@@ -1,108 +1,96 @@
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isStoryOwner } from './authorization'
-import { paginationHelper, reactionHandler } from '../utils'
+import reactionHandler from '../utils/reaction-handler'
+import pagination from '../utils/pagination'
 import { LIKE, DISLIKE } from '../constants'
 
 export default {
   Query: {
-    stories: async (parens, { cursor, limit = 100 }, { models }) =>
-      paginationHelper(models.Story)({ cursor, limit }),
+    stories: async (parens, { cursor, limit = 100 }, ctx) =>
+      pagination(ctx.models.Story, cursor, limit),
 
-    story: async (parent, { id }, { models }) =>
-      await models.Story.query().findById(id),
+    story: async (parent, args, ctx) =>
+      await ctx.models.Story.findByPk(args.id),
   },
 
   Mutation: {
     createStory: combineResolvers(
       isAuthenticated,
-      async (parent, { title, body }, { models, req }) =>
-        await models.Story.query().insert({
-          title,
-          body,
-          userId: req.user.id,
+      async (parent, args, ctx) =>
+        await ctx.models.Story.create({
+          ...args,
+          userId: ctx.request.userId,
         })
     ),
 
     updateStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
-      async (parent, { id, title, body }, { models }) => {
-        const changes = {}
-        const fields = [title, body]
-        fields.forEach(field => {
-          if (field !== undefined) {
-            changes[field] = field
-          }
-        })
-        return await models.Story.query().updateAndFetchById(id, changes)
+      async (parent, { id, title, body }, ctx) => {
+        const story = await ctx.models.Story.findByPk(id)
+        return await story.update({ title, body })
       }
     ),
 
-    likeStory: combineResolvers(isAuthenticated, (...args) =>
-      reactionHandler(...args)(LIKE)
+    likeStory: combineResolvers(isAuthenticated, (parent, args, ctx) =>
+      reactionHandler(args.id, ctx, LIKE)
     ),
 
-    dislikeStory: combineResolvers(isAuthenticated, (...args) =>
-      reactionHandler(...args)(DISLIKE)
+    dislikeStory: combineResolvers(isAuthenticated, (parent, args, ctx) =>
+      reactionHandler(args.id, ctx, DISLIKE)
     ),
 
-    viewStory: combineResolvers(
-      isAuthenticated,
-      async (parent, { id }, { models, me }) => {
-        const newView = await models.View.query().insert({
-          userId: me.id,
-          storyId: id,
-        })
-        return {
-          id: newView.id,
-          user: await models.User.query().findById(newView.userId),
-          storyId: newView.storyId,
-        }
-      }
-    ),
+    viewStory: combineResolvers(isAuthenticated, async (parent, args, ctx) => {
+      const view = await ctx.models.View.create({
+        userId: ctx.request.userId,
+        storyId: args.id,
+      })
+      return view
+    }),
 
     deleteStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
-      async (parent, { id }, { models }) =>
-        await models.Story.query()
-          .delete()
-          .where({ id })
+      async (parent, args, ctx) =>
+        await ctx.models.Story.destroy({
+          where: {
+            id: args.id,
+          },
+        })
     ),
   },
 
   Story: {
-    user: async (story, args, { loaders }) =>
-      await loaders.user.load(story.userId),
+    user: async (story, args, ctx) => await ctx.loaders.user.load(story.userId),
 
-    comments: async (story, args, { models }) =>
-      await models.Comment.query().where({ storyId: story.id }),
+    comments: async (story, args, ctx) =>
+      await ctx.models.Comment.findAll({
+        where: {
+          storyId: args.id,
+        },
+      }),
 
-    likedBy: async (story, args, { models, loaders }) =>
-      await models.Reaction.query()
-        .where({ storyId: story.id, state: LIKE })
-        .map(async like => ({
-          id: like.id,
-          user: await loaders.user.load(like.userId),
-          storyId: like.storyId,
-        })),
+    likedBy: async (story, args, ctx) =>
+      await ctx.models.Reaction.findAll({
+        where: {
+          storyId: story.id,
+          state: LIKE,
+        },
+      }),
 
-    dislikedBy: async (story, args, { models, loaders }) =>
-      await models.Reaction.query()
-        .where({ storyId: story.id, state: DISLIKE })
-        .map(async dislike => ({
-          id: dislike.id,
-          user: await loaders.user.load(dislike.userId),
-          storyId: dislike.storyId,
-        })),
+    dislikedBy: async (story, args, ctx) =>
+      await ctx.models.Reaction.findAll({
+        where: {
+          storyId: story.id,
+          state: DISLIKE,
+        },
+      }),
 
-    viewedBy: async (story, args, { models, loaders }) =>
-      await models.View.query()
-        .where({ storyId: story.id })
-        .map(async view => ({
-          id: view.id,
-          user: await loaders.user.load(view.userId),
-          storyId: view.storyId,
-        })),
+    viewedBy: async (story, args, ctx) =>
+      await ctx.models.View.findAll({
+        where: {
+          storyId: story.id,
+        },
+      }),
   },
 }

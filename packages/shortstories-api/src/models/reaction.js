@@ -1,34 +1,17 @@
-import { Model } from 'objection'
-
-class Reaction extends Model {
-  static tableName = 'reactions'
-
-  static relationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: `${__dirname}/User`,
-      join: {
-        from: 'reactions.userId',
-        to: 'users.id',
-      },
+const reaction = (sequelize, DataTypes) => {
+  const Reaction = sequelize.define('reaction', {
+    state: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
-    story: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: `${__dirname}/Story`,
-      join: {
-        from: 'reactions.storyId',
-        to: 'stories.id',
-      },
-    },
+  })
+
+  Reaction.associate = models => {
+    Reaction.belongsTo(models.User)
+    Reaction.belongsTo(models.Story)
   }
 
-  $beforeInsert() {
-    this.createdAt = new Date().toISOString()
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString()
-  }
+  return Reaction
 }
 
-export default Reaction
+export default reaction

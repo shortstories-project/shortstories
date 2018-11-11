@@ -1,5 +1,4 @@
 import axios from 'axios'
-import gql from 'graphql-tag'
 import { API_URL } from '../../constants'
 
 export const signUp = async variables =>

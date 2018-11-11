@@ -1,31 +1,36 @@
-import Knex from 'knex'
-import { Model } from 'objection'
-import connection from '../../knexfile'
-import User from './user'
-import Story from './story'
-import Reaction from './reaction'
-import Comment from './comment'
-import View from './view'
+import Sequelize from 'sequelize'
 
-const { test, development, production } = connection
-let knexConnection
+let sequelize
 
-if (process.env.NODE_ENV === 'development') {
-  knexConnection = Knex(development)
-} else if (process.env.NODE_ENV === 'test') {
-  knexConnection = Knex(test)
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect: 'postgres',
+  })
 } else {
-  knexConnection = Knex(production)
+  sequelize = new Sequelize(
+    process.env.TEST_DATABASE || process.env.DATABASE,
+    process.env.DATABASE_USER,
+    process.env.DATABASE_PASSWORD,
+    {
+      dialect: 'postgres',
+    }
+  )
 }
-
-Model.knex(knexConnection)
 
 const models = {
-  User,
-  Story,
-  Comment,
-  Reaction,
-  View,
+  User: sequelize.import('./user'),
+  Story: sequelize.import('./story'),
+  Reaction: sequelize.import('./reaction'),
+  View: sequelize.import('./view'),
+  Comment: sequelize.import('./comment'),
 }
+
+Object.keys(models).forEach(key => {
+  if ('associate' in models[key]) {
+    models[key].associate(models)
+  }
+})
+
+export { sequelize }
 
 export default models

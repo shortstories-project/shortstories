@@ -1,34 +1,20 @@
-import { Model } from 'objection'
-
-class Comment extends Model {
-  static tableName = 'comments'
-
-  static relationMappings = {
-    user: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: `${__dirname}/User`,
-      join: {
-        from: 'comments.userId',
-        to: 'users.id',
+const comment = (sequelize, DataTypes) => {
+  const Comment = sequelize.define('comment', {
+    body: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: true,
       },
     },
-    story: {
-      relation: Model.BelongsToOneRelation,
-      modelClass: `${__dirname}/Story`,
-      join: {
-        from: 'comments.storyId',
-        to: 'story.id',
-      },
-    },
+  })
+
+  Comment.associate = models => {
+    Comment.belongsTo(models.User)
+    Comment.belongsTo(models.Story)
   }
 
-  $beforeInsert() {
-    this.createdAt = new Date().toISOString()
-  }
-
-  $beforeUpdate() {
-    this.updatedAt = new Date().toISOString()
-  }
+  return Comment
 }
 
-export default Comment
+export default comment

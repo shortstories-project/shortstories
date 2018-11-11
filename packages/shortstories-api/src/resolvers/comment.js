@@ -1,22 +1,22 @@
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isCommentOwner } from './authorization'
-import { paginationHelper } from '../utils'
+import pagination from '../utils/pagination'
 
 export default {
   Query: {
-    comments: async (parent, { cursor, limit = 10 }, { models }) =>
-      paginationHelper(models.Comment)({ cursor, limit }),
+    comments: async (parent, { cursor, limit = 10 }, ctx) =>
+      pagination(ctx.models.Comment, cursor, limit),
 
-    comment: async (parent, { id }, { models }) =>
-      await models.Comment.query().findById(id),
+    comment: async (parent, args, ctx) =>
+      await ctx.models.Comment.findByPk(args.id),
   },
 
   Mutation: {
     createComment: combineResolvers(
       isAuthenticated,
-      async (parent, { body, id }, { models, me }) =>
-        await models.Comment.query().insert({
-          userId: me.id,
+      async (parent, { body, id }, ctx) =>
+        await ctx.models.Comment.create({
+          userId: ctx.request.userId,
           storyId: id,
           body,
         })
@@ -25,17 +25,21 @@ export default {
     updateComment: combineResolvers(
       isAuthenticated,
       isCommentOwner,
-      async (parent, { id, body }, { models }) =>
-        await models.Comment.query().updateAndFetchById(id, { body })
+      async (parent, { id, body }, ctx) => {
+        const comment = ctx.models.Comment.findByPk(id)
+        return comment.update({ body })
+      }
     ),
 
     deleteComment: combineResolvers(
       isAuthenticated,
       isCommentOwner,
-      async (parent, { id }, { models }) =>
-        await models.Comment.query()
-          .delete()
-          .where({ id })
+      async (parent, { id }, ctx) =>
+        await ctx.models.Comment.destroy({
+          where: {
+            id,
+          },
+        })
     ),
   },
 

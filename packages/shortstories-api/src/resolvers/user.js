@@ -1,101 +1,220 @@
 import path from 'path'
+import jwt from 'jsonwebtoken'
+import nanoid from 'nanoid'
+import { Op } from 'sequelize'
 import fs from 'fs'
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated } from './authorization'
-import authService from '../services/auth'
-import { uploadPhoto } from '../utils'
+import uploadPhoto from '../utils/photo'
+import { transport, makeANiceEmail } from '../utils/mail'
 
 export default {
   Query: {
-    me: (parent, args, { me }) => me,
+    me: (parent, args, ctx) => ctx.request.user,
 
-    user: async (parent, { id }, { models }) =>
-      await models.User.query().findById(id),
+    user: async (parent, args, ctx) => await ctx.models.User.findByPk(args.id),
   },
 
   Mutation: {
-    signUp: async (parent, args, { req }) =>
-      await authService.signUp(args, req),
+    async signUp(parent, args, ctx) {
+      args.email = args.email.toLowerCase()
+      const verifyToken = nanoid(20)
+      const user = await ctx.models.User.create({
+        ...args,
+        verifyToken,
+        verifyTokenExpiry: Date.now() + 3600000, // 1 hour from now
+      })
+      const token = jwt.sign({ userId: user.id }, process.env.SECRET)
+      ctx.response.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 100 * 60 * 60 * 24 * 365, // 1 year cookie
+      })
+      await transport.sendMail({
+        from: `Shortstories <${process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: 'Verify your account',
+        html: makeANiceEmail(`Welcome to Shortstories! Verify we have the right email address by clicking on the link below:
+        \n\n
+        <a href="${
+          process.env.FRONTEND_URL
+        }/verify?verifyToken=${verifyToken}">Click Here to Verify</a>`),
+      })
+      return user
+    },
 
-    signIn: async (parent, args, { req }) =>
-      await authService.signIn(args, req),
-
-    signOut: combineResolvers(isAuthenticated, (parent, args, { req }) => {
-      try {
-        req.session.destroy()
-        req.logout()
-        return true
-      } catch (e) {
-        return false
+    async signIn(parent, { login, password }, ctx) {
+      const user = await ctx.models.User.findByLogin(login)
+      if (!user) {
+        throw new Error(`No such user found for login ${login}`)
       }
-    }),
+      const isValid = await user.validatePassword(password)
+      if (!isValid) {
+        throw new Error('Invalid Password!')
+      }
+      const token = jwt.sign({ userId: user.id }, process.env.SECRET)
+      ctx.response.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+      })
+      return user
+    },
 
-    forgotPassword: authService.forgotPassword,
+    signOut(parent, args, ctx) {
+      ctx.response.clearCookie('token')
+      return {
+        message: 'Goodbye!',
+      }
+    },
 
-    changePassword: authService.changePassword,
+    async verifyUser(parent, args, ctx) {
+      const user = await ctx.models.User.findOne({
+        where: {
+          verifyToken: args.token,
+          verifyTokenExpiry: {
+            [Op.gte]: Date.now() - 3600000,
+          },
+        },
+      })
+      if (!user) {
+        throw new Error('This token is either invalid or expired!')
+      }
+      const verifiedUser = await user.update({
+        isVerified: true,
+        verifyToken: null,
+        verifyTokenExpiry: null,
+      })
+      return verifiedUser
+    },
+
+    async requestReset(parent, args, ctx) {
+      const user = await ctx.models.User.findByLogin(args.login)
+      if (!user) {
+        throw new Error(`No such user found for login ${args.login}`)
+      }
+      const resetToken = nanoid(20)
+      const resetTokenExpiry = Date.now() + 3600000
+      await user.update({
+        resetToken,
+        resetTokenExpiry,
+      })
+      await transport.sendMail({
+        from: `Shortstories <${process.env.SMTP_USER}>`,
+        to: user.email,
+        subject: 'Verify your account',
+        html: makeANiceEmail(`Your Password Reset Token is here!
+        \n\n
+        <a href="${
+          process.env.FRONTEND_URL
+        }/reset?resetToken=${resetToken}">Click Here to Reset</a>`),
+      })
+      return {
+        message: 'Thanks!',
+      }
+    },
+
+    async resetPassword(parent, args, ctx) {
+      if (args.password !== args.confirmPassword) {
+        throw new Error("Yo Passwords don't match!")
+      }
+      const user = await ctx.models.User.findOne({
+        where: {
+          resetToken: args.token,
+          resetTokenExpiry: {
+            [Op.gte]: Date.now() - 3600000,
+          },
+        },
+      })
+      if (!user) {
+        throw new Error('This token is either invalid or expired!')
+      }
+      const passwordHash = await user.generatePasswordHash()
+      const updatedUser = await user.update({
+        password: passwordHash,
+        resetToken: null,
+        resetTokenExpiry: null,
+      })
+      const token = jwt.sign({ userId: updatedUser.id }, process.env.SECRET)
+      ctx.response.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 365,
+      })
+      return updatedUser
+    },
 
     updateUser: combineResolvers(
       isAuthenticated,
-      async (parent, args, { models, me }) => {
-        const user = await models.User.findById(me.id)
-        return await user.update(args)
-      }
+      async (parent, args, ctx) => await ctx.request.user.update(args)
     ),
 
-    postPhoto: combineResolvers(
-      isAuthenticated,
-      async (parent, args, { models, me }) => {
-        const user = await models.User.findById(me.id)
-        if (me.photo && me.photo !== '/img/assets/default.jpg') {
-          const { base } = path.parse(me.photo)
-          const photoPath = path.join(__dirname, '..', 'uploads', base)
-          fs.unlinkSync(photoPath)
-        }
-        const { stream, filename } = await args.file
-        const url = await uploadPhoto(stream, filename, {
-          width: args.width,
-          height: args.height,
-          x: args.x,
-          y: args.y,
-        })
-        return await user.update({ photo: url })
+    postPhoto: combineResolvers(isAuthenticated, async (parent, args, ctx) => {
+      const me = ctx.request.user
+      if (me.photo) {
+        const { base } = path.parse(me.photo)
+        const photoPath = path.join(__dirname, '..', 'uploads', base)
+        fs.unlinkSync(photoPath)
       }
-    ),
+      const { stream, filename } = await args.file
+      const url = await uploadPhoto(stream, filename, {
+        width: args.width,
+        height: args.height,
+        x: args.x,
+        y: args.y,
+      })
+      return await me.update({ photo: url })
+    }),
 
-    verifyUser: authService.verifyUser,
-
-    checkUserExist: async (parent, { login }, { models }) => {
-      const user = await models.User.findByLogin(login)
+    checkUserExist: async (parent, args, ctx) => {
+      const user = await ctx.models.User.findByLogin(args.login)
       return !!user
-    }
+    },
   },
 
   User: {
-    writtenStories: async (user, args, { models }) =>
-      await models.Story.query().where({ userId: user.id }),
+    writtenStories: async (parent, args, ctx) =>
+      await ctx.models.Story.findAll({
+        where: {
+          userId: parent.id,
+        },
+      }),
   },
 
   Me: {
-    writtenStories: async (parent, args, { models, me }) =>
-      await models.Story.query().where({ userId: me.id }),
+    writtenStories: async (parent, args, ctx) =>
+      await ctx.models.Story.findAll({
+        where: {
+          userId: ctx.request.userId,
+        },
+      }),
 
-    likedStories: async (parent, args, { models, me }) => {
-      const likes = await models.Reaction.query().where({
-        userId: me.id,
-        state: 'like',
+    likedStories: async (parent, args, ctx) => {
+      const likes = await ctx.models.Reaction.findAll({
+        where: {
+          userId: ctx.request.userId,
+          state: 'like',
+        },
       })
-      return await models.Story.query().findByIds(
-        likes.map(like => like.storyId)
-      )
+      return await ctx.models.Story.findAll({
+        where: {
+          id: {
+            [Op.in]: likes.map(l => l.storyId),
+          },
+        },
+      })
     },
 
-    viewedStories: async (user, args, { models, me }) => {
-      const views = await models.View.query().where({
-        userId: me.id,
+    viewedStories: async (user, args, ctx) => {
+      const views = await ctx.models.View.findAll({
+        where: {
+          userId: ctx.request.userId,
+        },
       })
-      return await models.Story.query().findByIds(
-        views.map(view => view.storyId)
-      )
+      return await ctx.models.Story.findAll({
+        where: {
+          id: {
+            [Op.in]: views.map(v => v.storyId),
+          },
+        },
+      })
     },
   },
 }
