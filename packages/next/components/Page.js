@@ -91,10 +91,16 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const pagesWithoutHeader = ['/signin', '/signup', '/request-reset']
+const pagesWithoutHeader = [
+  '/signin',
+  '/signup',
+  '/request-reset',
+  '/reset',
+  '/verify',
+]
 
 const Page = ({ children, router }) => {
-  const withHeader = !pagesWithoutHeader.includes(router.asPath)
+  const withHeader = !pagesWithoutHeader.includes(router.route)
   return (
     <>
       <ThemeProvider theme={theme}>

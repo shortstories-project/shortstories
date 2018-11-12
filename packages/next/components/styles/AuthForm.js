@@ -40,6 +40,33 @@ const AuthForm = styled.form`
   .signup-link {
     margin-bottom: 0;
   }
+
+  p {
+    cursor: default;
+  }
+
+  .button-wrapper {
+    margin-top: 12px;
+
+    > button {
+      width: calc(50% - 10px);
+      margin-right: 20px;
+
+      &:last-child {
+        margin-right: 0;
+      }
+    }
+  }
+
+  .success-message {
+    > p {
+      margin: 0;
+
+      span {
+        color: ${props => props.theme.purple};
+      }
+    }
+  }
 `
 
 export default AuthForm

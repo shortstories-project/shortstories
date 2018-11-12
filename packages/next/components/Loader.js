@@ -30,7 +30,7 @@ const StyledLoader = styled.div`
 
 const Outer = styled.div`
   position: absolute;
-  border: 4px solid var(--pink);
+  border: 4px solid ${props => props.theme.pink};
   border-left-color: transparent;
   border-bottom: 0;
   width: 100%;
@@ -41,7 +41,7 @@ const Outer = styled.div`
 
 const Inner = styled.div`
   position: absolute;
-  border: 4px solid var(--pink);
+  border: 4px solid ${props => props.theme.pink};
   border-radius: 50%;
   width: 20px;
   height: 20px;

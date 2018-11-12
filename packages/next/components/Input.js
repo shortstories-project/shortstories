@@ -17,7 +17,8 @@ const Input = ({ label, type, name, validate }) => (
             id={name}
             name={name}
             type={type}
-            autoComplete={type}
+            autoComplete="off"
+            aria-autocomplete="list"
             value={field.value}
             onChange={field.onChange}
             onBlur={field.onBlur}

@@ -108,12 +108,12 @@ export default {
         }/reset?resetToken=${resetToken}">Click Here to Reset</a>`),
       })
       return {
-        message: 'Thanks!',
+        email: user.get('email'),
       }
     },
 
     async resetPassword(parent, args, ctx) {
-      if (args.password !== args.confirmPassword) {
+      if (args.password !== args.passwordConfirmation) {
         throw new Error("Yo Passwords don't match!")
       }
       const user = await ctx.models.User.findOne({

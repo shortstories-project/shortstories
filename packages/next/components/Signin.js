@@ -10,8 +10,8 @@ import Button from './Button'
 import { CURRENT_USER_QUERY } from './User'
 import { isEmpty } from '../lib/validators'
 
-const SIGNIN_MUTATION = gql`
-  mutation SIGNIN_MUTATION($login: String!, $password: String!) {
+const SIGN_IN_MUTATION = gql`
+  mutation SIGN_IN_MUTATION($login: String!, $password: String!) {
     signIn(login: $login, password: $password) {
       id
       username
@@ -22,7 +22,7 @@ const SIGNIN_MUTATION = gql`
 
 const Signin = () => (
   <Mutation
-    mutation={SIGNIN_MUTATION}
+    mutation={SIGN_IN_MUTATION}
     refetchQueries={[{ query: CURRENT_USER_QUERY }]}
   >
     {(signIn, { error, loading }) => (
@@ -33,6 +33,7 @@ const Signin = () => (
           signIn({ variables: { ...values } })
         }}
         render={props => (
+          // eslint-disable-next-line
           <AuthForm method="POST" onSubmit={props.handleSubmit}>
             <h2 className="logo">Shortstories</h2>
             <Input

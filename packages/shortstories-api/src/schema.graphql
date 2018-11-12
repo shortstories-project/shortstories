@@ -22,6 +22,10 @@ type SuccessMessage {
   message: String
 }
 
+type RequestReset {
+  email: String!
+}
+
 type Story {
   id: ID!
   title: String!
@@ -95,11 +99,11 @@ type Mutation {
   signOut: SuccessMessage
   verifyUser(token: String!): Me!
   checkUserExist(login: String!): Boolean!
-  requestReset(login: String!): SuccessMessage
+  requestReset(login: String!): RequestReset
   resetPassword(
     token: String!
     password: String!
-    confirmPassword: String!
+    passwordConfirmation: String!
   ): Me!
   updateUser(username: String, photo: String): Me!
   postPhoto(

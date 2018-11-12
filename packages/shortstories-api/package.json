@@ -14,13 +14,14 @@
   "license": "MIT",
   "scripts": {
     "start": "nodemon -e js,graphql -x babel-node src/index.js",
-    "test-server": "TEST_DATABASE=shortstories_test yarn start",
+    "test-server": "TEST_DATABASE_URL=postgres://shashkov@127.0.0.1:5432/shortstories_test yarn start",
     "test": "mocha --timeout 10000 --require @babel/register 'src/**/*.spec.js'"
   },
   "dependencies": {
     "apollo-server": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
+    "chalk": "^2.4.1",
     "cookie-parser": "^1.4.3",
     "dataloader": "^1.4.0",
     "dotenv": "^6.1.0",
@@ -56,6 +57,7 @@
     "eslint-plugin-promise": "^4.0.1",
     "mocha": "^5.2.0",
     "nodemon": "^1.18.4",
-    "prettier": "^1.14.3"
+    "prettier": "^1.14.3",
+    "winston": "^3.1.0"
   }
 }

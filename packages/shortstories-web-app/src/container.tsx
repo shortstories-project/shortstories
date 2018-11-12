@@ -13,7 +13,7 @@ import style from './style'
 injectGlobal`${style}` // tslint:disable-line
 
 const httpLink = createUploadLink({
-  uri: '/graphql',
+  uri: 'http://localhost:4000',
 })
 
 const authLink = new ApolloLink((operation, forward) => {

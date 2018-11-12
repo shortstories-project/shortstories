@@ -86,16 +86,6 @@ module.exports = {
     open: true,
     overlay: true,
     historyApiFallback: true,
-    proxy: {
-      '/graphql': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-      '/img': {
-        target: 'http://localhost:8000',
-        changeOrigin: true,
-      },
-    },
   },
   plugins: [
     new HtmlWebpackPlugin({

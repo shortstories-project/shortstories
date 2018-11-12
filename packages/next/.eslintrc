@@ -16,20 +16,7 @@
   },
   "plugins": ["prettier"],
   "rules": {
-    "no-shadow": [
-      2,
-      {
-        "hoist": "all",
-        "allow": [
-          "resolve",
-          "reject",
-          "done",
-          "next",
-          "err",
-          "error"
-        ]
-      }
-    ],
+    "no-shadow": 0,
     "no-throw-literal": 0,
     "prettier/prettier": "error",
     "react/jsx-filename-extension": [

@@ -3,7 +3,8 @@ import path from 'path'
 import express from 'express'
 import cookieParser from 'cookie-parser'
 import jwt from 'jsonwebtoken'
-import createServer from './create-server'
+import chalk from 'chalk'
+import createServer from './createServer'
 import models, { sequelize } from './models'
 
 const server = createServer()
@@ -43,7 +44,11 @@ sequelize.sync({ force: isTest }).then(async () => {
     },
     ({ port }) => {
       // eslint-disable-next-line
-      console.log(`Server is now running on port http://localhost:${port}`)
+      console.log(
+        `\n🔥 Server is now running on ${chalk.yellowBright(
+          `http://localhost:${port}`
+        )} 🔥`
+      )
     }
   )
 })
