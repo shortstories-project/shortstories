@@ -72,6 +72,7 @@ const Signup = () => (
           // eslint-disable-next-line
           <AuthForm method="POST" onSubmit={props.handleSubmit}>
             <h2 className="logo">Shortstories</h2>
+            <Error error={signUpMutation.result.error} />
             <Input
               name="username"
               label="Username"
@@ -103,21 +104,9 @@ const Signup = () => (
               }
             />
             <div className="button-with-error">
-              <Button
-                loading={
-                  signUpMutation.result.loading ||
-                  checkUserExistMutation.result.loading
-                }
-                type="submit"
-              >
-                Login
+              <Button loading={signUpMutation.result.loading} type="submit">
+                Register
               </Button>
-              <Error
-                error={
-                  signUpMutation.result.error ||
-                  checkUserExistMutation.result.error
-                }
-              />
             </div>
             <p className="more-info">
               By continuing, you agree to Shortstories&apos;s{' '}

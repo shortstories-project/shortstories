@@ -3,8 +3,11 @@ import { Field } from 'formik'
 import PropTypes from 'prop-types'
 import InputStyles from './styles/InputStyles'
 
-const getError = (field, errors, touched) =>
-  errors[field] && touched[field] && errors[field]
+const getError = (field, errors, touched) => {
+  const error = errors[field] && touched[field] && errors[field]
+  if (typeof error === 'object') return error.message
+  return error
+}
 
 const Input = ({ label, type, name, validate }) => (
   <Field

@@ -6,6 +6,7 @@ import { Formik } from 'formik'
 import { adopt } from 'react-adopt'
 import AuthForm from './styles/AuthForm'
 import Input from './Input'
+import Error from './ErrorMessage'
 import Button from './Button'
 import { CHECK_USER_EXIST_MUTATION } from './Signup'
 import { login } from '../lib/validators'
@@ -59,6 +60,7 @@ class RequestReset extends Component {
               // eslint-disable-next-line
               <AuthForm method="POST" onSubmit={props.handleSubmit}>
                 <h2 className="logo">Shortstories</h2>
+                <Error error={requestResetMutation.result.error} />
                 {requestSentEmail ? (
                   <div className="success-message">
                     <h3>Email sent!</h3>

@@ -1,4 +1,5 @@
 import React from 'react'
+import Router from 'next/router'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Formik } from 'formik'
@@ -35,13 +36,15 @@ const Reset = ({ token }) => (
       <Formik
         isInitialValid={false}
         initialValues={{ password: '', passwordConfirmation: '' }}
-        onSubmit={values => {
-          reset({ variables: { ...values, token } })
+        onSubmit={async values => {
+          await reset({ variables: { ...values, token } })
+          Router.push('/')
         }}
         render={props => (
           // eslint-disable-next-line
           <AuthForm method="POST" onSubmit={props.handleSubmit}>
             <h2 className="logo">Shortstories</h2>
+            <Error error={error} />
             <Input
               name="password"
               type="password"
@@ -61,7 +64,6 @@ const Reset = ({ token }) => (
               <Button loading={loading} type="submit">
                 Reset password
               </Button>
-              <Error error={error} />
             </div>
           </AuthForm>
         )}

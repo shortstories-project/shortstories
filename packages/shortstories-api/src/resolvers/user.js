@@ -100,7 +100,7 @@ export default {
       await transport.sendMail({
         from: `Shortstories <${process.env.SMTP_USER}>`,
         to: user.email,
-        subject: 'Verify your account',
+        subject: 'Reset Password',
         html: makeANiceEmail(`Your Password Reset Token is here!
         \n\n
         <a href="${

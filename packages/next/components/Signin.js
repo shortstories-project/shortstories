@@ -36,6 +36,7 @@ const Signin = () => (
           // eslint-disable-next-line
           <AuthForm method="POST" onSubmit={props.handleSubmit}>
             <h2 className="logo">Shortstories</h2>
+            <Error error={error} />
             <Input
               name="login"
               label="Login"
@@ -51,7 +52,6 @@ const Signin = () => (
               <Button loading={loading} type="submit">
                 Login
               </Button>
-              <Error error={error} />
             </div>
             <p className="more-info">
               By continuing, you agree to Shortstories&apos;s{' '}
