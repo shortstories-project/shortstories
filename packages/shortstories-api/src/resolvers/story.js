@@ -66,7 +66,7 @@ export default {
     comments: async (story, args, ctx) =>
       await ctx.models.Comment.findAll({
         where: {
-          storyId: args.id,
+          storyId: story.id,
         },
       }),
 

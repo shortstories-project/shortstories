@@ -18,18 +18,18 @@ Router.onRouteChangeError = () => {
 
 const Logo = styled.h1`
   font-family: 'Pacifico';
-  font-size: 4rem;
+  font-size: 3.5rem;
   letter-spacing: -1.5px;
-  margin-top: 0;
-  margin-bottom: 0;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
   margin-left: 2rem;
   position: relative;
   z-index: 2;
 
   a {
     padding: 0.5rem 1rem;
-    color: azure;
-    text-shadow: 3px 3px 1px rgba(0, 0, 0, 0.7);
+    color: black;
+    text-shadow: 3px 3px 1px rgba(0, 0, 0, 0.2);
   }
 
   @media (max-width: 1300px) {
