@@ -78,8 +78,8 @@ class Stories extends Component {
             )
           return (
             <StoriesList>
-              {data.stories.edges.map(story => (
-                <StoryItem story={story} />
+              {data.stories.edges.map((story, index) => (
+                <StoryItem story={story} index={index} />
               ))}
             </StoriesList>
           )

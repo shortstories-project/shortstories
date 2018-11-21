@@ -29,12 +29,15 @@ const ToolsBar = styled.div`
       align-items: center;
       justify-content: center;
       margin-left: 16px;
-
-      button {
-        cursor: pointer;
-        margin: 0;
-        padding: 0;
-        border: none;
+      img {
+        width: 16px;
+        height: 16px;
+        path: {
+          fill: lightgray;
+        }
+      }
+      span {
+        font-size: 1rem;
       }
     }
   }
