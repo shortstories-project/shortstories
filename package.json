@@ -6,7 +6,8 @@
     "start:backend": "lerna exec --scope backend -- yarn start:dev",
     "start:frontend": "lerna exec --scope frontend -- yarn start:dev",
     "start:project": "lerna run start:dev",
-    "lint:project:js": "lerna run lint:js"
+    "lint:project:js": "lerna run lint:js",
+    "lint:project:css": "lerna exec --scope frontend -- yarn lint:css"
   },
   "repository": {
     "type": "git",

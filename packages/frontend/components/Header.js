@@ -17,7 +17,7 @@ Router.onRouteChangeError = () => {
 }
 
 const Logo = styled.h1`
-  font-family: 'Pacifico';
+  font-family: 'Pacifico', cursive;
   font-size: 3.5rem;
   letter-spacing: -1.5px;
   margin-top: 1rem;

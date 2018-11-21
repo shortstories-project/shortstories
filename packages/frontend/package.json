@@ -9,7 +9,8 @@
     "build": "next build",
     "start": "next start",
     "test": "NODE_ENV=test jest --watch",
-    "lint:js": "eslint components/ lib/ pages/ --fix"
+    "lint:js": "eslint components/ lib/ pages/ --fix",
+    "lint:css": "stylelint components/ pages/ --fix"
   },
   "dependencies": {
     "@babel/core": "^7.1.5",
@@ -43,7 +44,11 @@
     "eslint-plugin-prettier": "^3.0.0",
     "eslint-plugin-react": "^7.11.1",
     "jest": "^23.6.0",
-    "prettier": "^1.15.1"
+    "prettier": "^1.15.1",
+    "stylelint": "^9.8.0",
+    "stylelint-config-recommended": "^2.1.0",
+    "stylelint-config-styled-components": "^0.1.1",
+    "stylelint-processor-styled-components": "^1.5.1"
   },
   "jest": {
     "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",

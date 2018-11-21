@@ -8,7 +8,7 @@ const AuthForm = styled.form`
 
   .logo {
     cursor: default;
-    font-family: 'Pacifico';
+    font-family: 'Pacifico', cursive;
     font-size: 3rem;
     line-height: 3rem;
     letter-spacing: -1.5px;

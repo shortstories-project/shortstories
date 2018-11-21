@@ -14,7 +14,7 @@ const InputStyles = styled.div`
     padding-top: 16px;
   }
 
-  input {
+  .field {
     position: relative;
     display: block;
     float: right;
@@ -27,37 +27,33 @@ const InputStyles = styled.div`
     text-shadow: none;
     color: black;
     font-size: 1.25em;
-    &:focus {
-      outline: none;
-      + label {
-        color: ${props => props.theme.black};
-        transform: translate3d(0, -1.25em, 0) scale3d(0.75, 0.75, 1);
-      }
-      ~ svg {
-        stroke: ${props => props.theme.black};
-        transform: translate3d(-66.6%, 0, 0);
-      }
-    }
-    + label {
+    + .label {
       color: ${props => (!props.isEmpty ? props.theme.black : '#6a7989')};
       transform: ${props =>
         !props.isEmpty
           ? 'translate3d(0, -1.25em, 0) scale3d(0.75, 0.75, 1)'
           : 'initial'};
     }
-    ~ svg {
+    ~ .line {
       stroke: ${props => (!props.isEmpty ? props.theme.black : '#92989e')};
       transform: ${props =>
         !props.isEmpty ? 'translate3d(-66.6%, 0, 0)' : 'initial'};
     }
+    &:focus {
+      outline: none;
+      + .label {
+        color: ${props => props.theme.black};
+        transform: translate3d(0, -1.25em, 0) scale3d(0.75, 0.75, 1);
+      }
+      ~ .line {
+        stroke: ${props => props.theme.black};
+        transform: translate3d(-66.6%, 0, 0);
+      }
+    }
   }
 
   label {
-    display: inline-block;
     text-shadow: none;
-    padding: 0 1em;
-    width: 40%;
-    font-size: 70.25%;
     user-select: none;
     position: absolute;
     top: 0.75em;

@@ -25,11 +25,13 @@ const Input = ({ label, type, name, validate }) => (
             value={field.value}
             onChange={field.onChange}
             onBlur={field.onBlur}
+            className="field"
           />
-          <label htmlFor={name}>
+          <label className="label" htmlFor={name}>
             <span>{label}</span>
           </label>
           <svg
+            className="line"
             width="300%"
             height="100%"
             viewBox="0 0 1200 60"

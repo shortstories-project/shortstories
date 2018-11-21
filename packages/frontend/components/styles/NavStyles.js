@@ -13,7 +13,6 @@ const NavStyles = styled.ul`
     align-items: center;
     position: relative;
     text-transform: uppercase;
-    font-weight: 900;
     font-size: 1.5rem;
     background: none;
     border: 0;

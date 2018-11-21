@@ -69,6 +69,10 @@ const GlobalStyle = createGlobalStyle`
   button {
     font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
+
+  p {
+    margin: 0;
+  }
 `
 
 const pagesWithoutHeader = [

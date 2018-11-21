@@ -90,7 +90,7 @@ const Toolbar = styled.aside`
   margin-left: auto !important;
   margin-right: auto !important;
   display: block;
-  > div {
+  > .reaction-buttons {
     transform: translateY(150px);
     top: 0 !important;
     position: fixed !important;
@@ -135,7 +135,7 @@ const SingleStory = ({ id }) => (
               </SingleStoryStyles>
               {me && (
                 <Toolbar>
-                  <div>
+                  <div className="reaction-buttons">
                     <LikeButton
                       id={id}
                       qty={story.likedBy.length}

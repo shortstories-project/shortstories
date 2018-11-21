@@ -58,10 +58,6 @@ const StoryStyles = styled.div`
       }
     }
   }
-
-  p {
-    margin: 0;
-  }
 `
 
 export default StoryStyles
