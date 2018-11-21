@@ -1,6 +1,5 @@
 import { combineResolvers } from 'graphql-resolvers'
 import { isAuthenticated, isStoryOwner } from './authorization'
-import reactionHandler from '../utils/reaction-handler'
 import pagination from '../utils/pagination'
 import { LIKE, DISLIKE } from '../constants'
 
@@ -32,12 +31,67 @@ export default {
       }
     ),
 
-    likeStory: combineResolvers(isAuthenticated, (parent, args, ctx) =>
-      reactionHandler(args.id, ctx, LIKE)
-    ),
+    likeStory: combineResolvers(isAuthenticated, async (parent, args, ctx) => {
+      const reaction = await ctx.models.Reaction.findOne({
+        where: {
+          userId: ctx.request.userId,
+          storyId: args.id,
+        },
+      })
+      if (reaction) {
+        const state = reaction.get('state')
+        if (state === LIKE) {
+          await ctx.models.Reaction.destroy({
+            where: {
+              id: reaction.id,
+              state: LIKE,
+            },
+          })
+          return reaction
+        }
+        if (state === DISLIKE) {
+          return await reaction.update({
+            state: LIKE,
+          })
+        }
+      }
+      return await ctx.models.Reaction.create({
+        userId: ctx.request.userId,
+        storyId: args.id,
+        state: LIKE,
+      })
+    }),
 
-    dislikeStory: combineResolvers(isAuthenticated, (parent, args, ctx) =>
-      reactionHandler(args.id, ctx, DISLIKE)
+    dislikeStory: combineResolvers(
+      isAuthenticated,
+      async (parent, args, ctx) => {
+        const reaction = await ctx.models.Reaction.findOne({
+          where: {
+            userId: ctx.request.userId,
+            storyId: args.id,
+          },
+        })
+        if (reaction) {
+          const state = reaction.get('state')
+          if (state === LIKE) {
+            return await reaction.update({
+              state: DISLIKE,
+            })
+          }
+          await ctx.models.Reaction.destroy({
+            where: {
+              id: reaction.id,
+              state: DISLIKE,
+            },
+          })
+          return reaction
+        }
+        return await ctx.models.Reaction.create({
+          userId: ctx.request.userId,
+          storyId: args.id,
+          state: DISLIKE,
+        })
+      }
     ),
 
     viewStory: combineResolvers(isAuthenticated, async (parent, args, ctx) => {

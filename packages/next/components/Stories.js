@@ -4,7 +4,7 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import styled from 'styled-components'
 import BigLoader from './BigLoader'
-import Story from './Story'
+import StoryItem from './StoryItem'
 
 const ALL_STORIES_QUERY = gql`
   query ALL_STORIES_QUERY($cursor: String) {
@@ -79,7 +79,7 @@ class Stories extends Component {
           return (
             <StoriesList>
               {data.stories.edges.map(story => (
-                <Story story={story} />
+                <StoryItem story={story} />
               ))}
             </StoriesList>
           )
