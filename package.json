@@ -5,7 +5,8 @@
     "bootstrap": "lerna bootstrap",
     "start:backend": "lerna exec --scope backend -- yarn start:dev",
     "start:frontend": "lerna exec --scope frontend -- yarn start:dev",
-    "start:dev": "lerna run start:dev"
+    "start:project": "lerna run start:dev",
+    "lint:project:js": "lerna run lint:js"
   },
   "repository": {
     "type": "git",

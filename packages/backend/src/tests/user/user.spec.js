@@ -1,19 +1,7 @@
 import { expect } from 'chai'
-import knex from 'knex'
-import connection from '../../../knexfile'
 import * as api from './api'
 
-const knexConnection = knex(connection.test)
-
 describe('User', () => {
-  before(async () => {
-    await knexConnection.migrate.rollback().then(() => {
-      knexConnection.migrate.latest()
-    })
-  })
-
-  after(() => knexConnection.migrate.rollback())
-
   describe('signUp', () => {
     it('register new user', async () => {
       const expectedResult = {

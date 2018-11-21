@@ -8,7 +8,8 @@
     "start:dev": "next -p 5555",
     "build": "next build",
     "start": "next start",
-    "test": "NODE_ENV=test jest --watch"
+    "test": "NODE_ENV=test jest --watch",
+    "lint:js": "eslint components/ lib/ pages/ --fix"
   },
   "dependencies": {
     "@babel/core": "^7.1.5",

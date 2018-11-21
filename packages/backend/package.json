@@ -15,7 +15,8 @@
   "scripts": {
     "start:dev": "nodemon -e js,graphql -x babel-node src/index.js",
     "test-server": "TEST_DATABASE_URL=postgres://shashkov@127.0.0.1:5432/shortstories_test yarn start",
-    "test": "mocha --timeout 10000 --require @babel/register 'src/**/*.spec.js'"
+    "test": "mocha --timeout 10000 --require @babel/register 'src/**/*.spec.js'",
+    "lint:js": "eslint src/ --fix"
   },
   "dependencies": {
     "apollo-server": "^2.2.0",
