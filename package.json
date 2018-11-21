@@ -1,9 +1,10 @@
 {
   "name": "shortstories",
+  "version": "1.0.0",
   "scripts": {
     "bootstrap": "lerna bootstrap",
-    "start:client": "lerna exec --scope shortstories-web-app -- yarn start",
-    "start:server": "lerna exec --scope shortstories-api -- yarn start",
+    "start:frontend": "lerna exec --scope frontend -- yarn start",
+    "start:backend": "lerna exec --scope backend -- yarn start",
     "start": "lerna run start"
   },
   "repository": {
