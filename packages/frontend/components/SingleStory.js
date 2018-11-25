@@ -152,8 +152,10 @@ const SingleStory = ({ id }) => (
                 {story.body
                   .split('\n')
                   .filter(p => p !== '')
-                  .map(p => (
-                    <p className="body-paragraph">{p}</p>
+                  .map((p, index) => (
+                    <p key={index} className="body-paragraph">
+                      {p}
+                    </p>
                   ))}
               </SingleStoryStyles>
               {me && (

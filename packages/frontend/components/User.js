@@ -9,6 +9,35 @@ const CURRENT_USER_QUERY = gql`
       username
       email
       isVerified
+      photo
+      writtenStories {
+        id
+        body
+        title
+        user {
+          id
+          username
+          photo
+        }
+        likedBy {
+          id
+          userId
+        }
+        dislikedBy {
+          id
+          userId
+        }
+        comments {
+          id
+          body
+          user {
+            id
+            username
+          }
+          createdAt
+        }
+        createdAt
+      }
     }
   }
 `

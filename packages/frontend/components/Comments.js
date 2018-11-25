@@ -98,8 +98,9 @@ class Comments extends Component {
   }
 
   writeComment = event => {
+    const { name, value } = event.target
     this.setState({
-      [event.target.name]: event.target.value,
+      [name]: value,
     })
   }
 

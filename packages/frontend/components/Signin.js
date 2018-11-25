@@ -34,7 +34,7 @@ const Signin = () => (
         }}
         render={props => (
           // eslint-disable-next-line
-          <AuthForm method="POST" onSubmit={props.handleSubmit}>
+          <AuthForm onSubmit={props.handleSubmit}>
             <h2 className="logo">Shortstories</h2>
             <Error error={error} />
             <Input

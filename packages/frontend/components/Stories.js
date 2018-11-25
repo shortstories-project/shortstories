@@ -2,9 +2,9 @@ import React, { Component } from 'react'
 import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import styled from 'styled-components'
 import BigLoader from './BigLoader'
 import StoryItem from './StoryItem'
+import StoriesList from './styles/StoriesList'
 
 const ALL_STORIES_QUERY = gql`
   query ALL_STORIES_QUERY($cursor: String) {
@@ -47,14 +47,6 @@ const ALL_STORIES_QUERY = gql`
       }
     }
   }
-`
-
-const StoriesList = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  grid-gap: 20px;
-  max-width: ${props => props.theme.maxWidth};
-  margin: 0 auto;
 `
 
 class Stories extends Component {
