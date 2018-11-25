@@ -20,11 +20,21 @@ const theme = {
 }
 
 const StyledPage = styled.div`
-  background-image: url('/static/topography.svg'),
-    linear-gradient(110deg, #f4c4f3, #fc67fa);
-  background-size: 300px, auto;
+  ${props =>
+    props.isSingleStory
+      ? css`
+          background-color: #fff;
+          > div {
+            height: auto;
+          }
+        `
+      : css`
+          background-image: url('/static/topography.svg'),
+            linear-gradient(110deg, #f4c4f3, #fc67fa);
+          background-size: 300px, auto;
+          min-height: 100vh;
+        `};
   color: ${props => props.theme.black};
-  min-height: 100vh;
 `
 
 const Inner = styled.div`
@@ -63,7 +73,8 @@ const GlobalStyle = createGlobalStyle`
 
   a {
     text-decoration: none;
-    color: ${theme.purple};
+    color: #6d47d9;
+    font-weight: bold;
   }
 
   button {
@@ -85,10 +96,11 @@ const pagesWithoutHeader = [
 
 const Page = ({ children, router }) => {
   const withHeader = !pagesWithoutHeader.includes(router.route)
+  const isSingleStory = router.route === '/story'
   return (
     <>
       <ThemeProvider theme={theme}>
-        <StyledPage>
+        <StyledPage isSingleStory={isSingleStory}>
           <Meta />
           {withHeader && <Header />}
           <Inner withHeader={withHeader}>{children}</Inner>

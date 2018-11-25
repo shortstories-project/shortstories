@@ -2,6 +2,8 @@ import styled from 'styled-components'
 
 const StoryStyles = styled.div`
   cursor: pointer;
+  height: 450px;
+  overflow: hidden;
   background: #fff;
   border-radius: 4px;
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.25);
@@ -47,13 +49,12 @@ const StoryStyles = styled.div`
       display: flex;
       flex-direction: column;
       justify-content: center;
-
-      a {
-        font-size: 1.6rem;
+      .name {
+        color: #6d47d9;
         font-weight: bold;
       }
-
-      p {
+      .date {
+        color: #aaa;
         font-size: 1rem;
       }
     }

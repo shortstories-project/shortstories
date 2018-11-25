@@ -31,8 +31,10 @@ function StoryItem({ story, index }) {
           alt={story.user.username}
         />
         <div className="name-and-date">
-          {story.user.username}
-          <p>{format(+story.createdAt, 'MMMM D, YYYY')}</p>
+          <span className="name">{story.user.username}</span>
+          <span className="date">
+            {format(+story.createdAt, 'MMM D, YYYY')}
+          </span>
         </div>
       </div>
       <h2 className="title">{story.title}</h2>

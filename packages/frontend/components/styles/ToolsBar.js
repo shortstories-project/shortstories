@@ -32,9 +32,7 @@ const ToolsBar = styled.div`
       img {
         width: 16px;
         height: 16px;
-        path: {
-          fill: lightgray;
-        }
+        margin-bottom: 2px;
       }
       span {
         font-size: 1rem;

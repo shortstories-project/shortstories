@@ -79,7 +79,7 @@ class Stories extends Component {
           return (
             <StoriesList>
               {data.stories.edges.map((story, index) => (
-                <StoryItem story={story} index={index} />
+                <StoryItem key={story.id} story={story} index={index} />
               ))}
             </StoriesList>
           )

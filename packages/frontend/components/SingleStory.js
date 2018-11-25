@@ -10,6 +10,7 @@ import Error from './ErrorMessage'
 import BigLoader from './BigLoader'
 import LikeButton from './LikeButton'
 import DislikeButton from './DislikeButton'
+import Comments from './Comments'
 import User from './User'
 
 const SINGLE_STORY_QUERY = gql`
@@ -34,6 +35,16 @@ const SINGLE_STORY_QUERY = gql`
       viewedBy {
         id
       }
+      comments {
+        id
+        body
+        user {
+          id
+          photo
+          username
+        }
+        createdAt
+      }
       createdAt
     }
   }
@@ -44,19 +55,25 @@ const SingleStoryStyles = styled.div`
   margin: 0 auto;
 
   .title,
-  .body {
+  .body-paragraph {
     font-family: 'Alegreya', serif;
     color: ${props => props.theme.black};
   }
 
   .title {
-    font-size: 4.2rem;
+    font-size: 5rem;
+    line-height: 5rem;
     font-weight: 600;
+    margin: 20px 0;
   }
 
-  .body {
+  .body-paragraph {
+    margin-bottom: 2rem;
     font-size: 2.1rem;
     line-height: 1.4;
+    &:last-child {
+      margin-bottom: 0;
+    }
   }
 
   .author {
@@ -82,20 +99,19 @@ const SingleStoryStyles = styled.div`
         margin: 0;
       }
     }
+
+    .created-at {
+      color: #aaa;
+      font-size: 1.2rem;
+    }
   }
 `
 
 const Toolbar = styled.aside`
-  max-width: 1000px !important;
-  margin-left: auto !important;
-  margin-right: auto !important;
-  display: block;
   > .reaction-buttons {
-    transform: translateY(150px);
-    top: 0 !important;
-    position: fixed !important;
-    margin-left: -12px !important;
-    z-index: 100 !important;
+    display: flex;
+    margin: 20px auto;
+    max-width: 700px;
   }
 `
 
@@ -127,29 +143,39 @@ const SingleStory = ({ id }) => (
                     <Link href={`/user?id=${story.user.id}`}>
                       <a>{story.user.username}</a>
                     </Link>
-                    <p>{format(+story.createdAt, 'MMMM D, YYYY')}</p>
+                    <p className="created-at">
+                      {format(+story.createdAt, 'MMM D, YYYY')}
+                    </p>
                   </div>
                 </div>
                 <h1 className="title">{story.title}</h1>
-                <p className="body">{story.body}</p>
+                {story.body
+                  .split('\n')
+                  .filter(p => p !== '')
+                  .map(p => (
+                    <p className="body-paragraph">{p}</p>
+                  ))}
               </SingleStoryStyles>
               {me && (
-                <Toolbar>
-                  <div className="reaction-buttons">
-                    <LikeButton
-                      id={id}
-                      qty={story.likedBy.length}
-                      isLiked={story.likedBy.some(i => i.userId === me.id)}
-                    />
-                    <DislikeButton
-                      id={id}
-                      qty={story.dislikedBy.length}
-                      isDisliked={story.dislikedBy.some(
-                        i => i.userId === me.id
-                      )}
-                    />
-                  </div>
-                </Toolbar>
+                <>
+                  <Toolbar>
+                    <div className="reaction-buttons">
+                      <LikeButton
+                        id={id}
+                        qty={story.likedBy.length}
+                        isLiked={story.likedBy.some(i => i.userId === me.id)}
+                      />
+                      <DislikeButton
+                        id={id}
+                        qty={story.dislikedBy.length}
+                        isDisliked={story.dislikedBy.some(
+                          i => i.userId === me.id
+                        )}
+                      />
+                    </div>
+                  </Toolbar>
+                  <Comments id={id} comments={story.comments} />
+                </>
               )}
             </>
           )

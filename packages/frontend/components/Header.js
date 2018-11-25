@@ -40,6 +40,10 @@ const Logo = styled.h1`
 `
 
 const StyledHeader = styled.header`
+  position: sticky;
+  top: 0;
+  background-color: rgba(255, 255, 255, 0.95);
+  z-index: 1;
   .bar {
     box-shadow: ${props => props.theme.bs};
     display: grid;

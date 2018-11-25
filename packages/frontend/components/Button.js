@@ -14,6 +14,7 @@ const StyledButton = styled.button`
   background-color: ${props => props.theme.black};
   outline: none;
   transition: all 0.25s ease-out;
+  opacity: ${props => (props.disabled || props.loading ? '0.7' : '1')};
   pointer-events: ${props =>
     props.disabled || props.loading ? 'none' : 'auto'};
   &:hover {
