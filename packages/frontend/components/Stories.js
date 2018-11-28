@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
@@ -49,36 +49,36 @@ const ALL_STORIES_QUERY = gql`
   }
 `
 
-class Stories extends Component {
-  render() {
-    return (
-      <Query query={ALL_STORIES_QUERY}>
-        {({ data, loading, error }) => {
-          if (loading) return <BigLoader />
-          if (error) return <p>Error: {error.message}</p>
-          if (!data.stories.edges.length)
-            return (
-              <>
-                <h2>No stories yet</h2>
-                <Link href="/create-story">
+function Stories() {
+  return (
+    <Query query={ALL_STORIES_QUERY}>
+      {({ data, loading, error }) => {
+        if (loading) return <BigLoader />
+        if (error) return <p>Error: {error.message}</p>
+        if (!data.stories.edges.length)
+          return (
+            <div>
+              <h2>No stories yet</h2>
+              <Link href="/create-story">
+                <a>
                   Be the first{' '}
                   <span role="img" aria-label="fire">
                     🔥
                   </span>
-                </Link>
-              </>
-            )
-          return (
-            <StoriesList>
-              {data.stories.edges.map((story, index) => (
-                <StoryItem key={story.id} story={story} index={index} />
-              ))}
-            </StoriesList>
+                </a>
+              </Link>
+            </div>
           )
-        }}
-      </Query>
-    )
-  }
+        return (
+          <StoriesList>
+            {data.stories.edges.map((story, index) => (
+              <StoryItem key={story.id} story={story} index={index} />
+            ))}
+          </StoriesList>
+        )
+      }}
+    </Query>
+  )
 }
 
 export default Stories

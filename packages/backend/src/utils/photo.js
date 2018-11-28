@@ -25,7 +25,7 @@ export default function uploadPhoto(stream, filename, { width, height, x, y }) {
             if (error) {
               reject(error)
             } else {
-              const { base } = path.parseFloat(filePath)
+              const { base } = path.parse(filePath)
               resolve(`/img/photos/${base}`)
             }
           })

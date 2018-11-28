@@ -38,6 +38,34 @@ const CURRENT_USER_QUERY = gql`
         }
         createdAt
       }
+      likedStories {
+        id
+        body
+        title
+        user {
+          id
+          username
+          photo
+        }
+        likedBy {
+          id
+          userId
+        }
+        dislikedBy {
+          id
+          userId
+        }
+        comments {
+          id
+          body
+          user {
+            id
+            username
+          }
+          createdAt
+        }
+        createdAt
+      }
     }
   }
 `

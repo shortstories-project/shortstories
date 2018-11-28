@@ -28,11 +28,12 @@ const FormStyles = styled.form`
   }
 
   .title-block {
-    height: 87px;
     input {
       width: 100%;
-      padding: 20px;
-      font-size: 1.6rem;
+      padding: 10px 20px;
+      font-size: 5rem;
+      font-family: 'Alegreya', serif;
+      color: ${props => props.theme.black};
       outline: none;
       border: 3px solid gainsboro;
       margin-bottom: 4px;
@@ -40,21 +41,24 @@ const FormStyles = styled.form`
   }
 
   .body-block {
-    min-height: 323px;
     textarea {
+      font-size: 2.1rem;
+      font-family: 'Alegreya', serif;
+      line-height: 1.4;
+      border: 3px solid gainsboro;
+      color: ${props => props.theme.black};
       width: 100%;
-      padding: 20px;
-      font-size: 1.6rem;
+      padding: 10px 20px;
       outline: none;
       resize: none;
       min-height: 300px;
-      border: 3px solid gainsboro;
     }
   }
 
   .error-message {
     color: ${props => props.theme.red};
-    font-size: 1rem;
+    font-size: 1.2rem;
+    font-weight: bold;
   }
 
   button {

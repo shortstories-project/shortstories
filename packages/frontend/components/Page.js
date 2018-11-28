@@ -29,8 +29,8 @@ const StyledPage = styled.div`
           }
         `
       : css`
-          background-image: url('/static/topography.svg'),
-            linear-gradient(110deg, #f4c4f3, #fc67fa);
+          background-image: url('/static/topography.svg');
+          background-color: #eee;
           background-size: 300px, auto;
           min-height: 100vh;
         `};
@@ -83,6 +83,13 @@ const GlobalStyle = createGlobalStyle`
 
   p {
     margin: 0;
+  }
+
+  .ReactModal__Body--open {
+    overflow: hidden;
+    position: fixed;
+    width: 100%;
+    height: 100%;
   }
 `
 

@@ -1,23 +1,60 @@
+import 'cross-fetch/polyfill'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { ApolloClient } from 'apollo-client'
+import { createUploadLink } from 'apollo-upload-client'
+import { getDataFromTree, ApolloProvider } from 'react-apollo'
 import App, { Container } from 'next/app'
-import { ApolloProvider } from 'react-apollo'
+import Head from 'next/head'
 import Page from '../components/Page'
-import withData from '../lib/with-data'
+import API_URL from '../config'
+
+const createApolloClient = (cache = {}, headers) =>
+  new ApolloClient({
+    ssrMode: typeof window !== 'undefined',
+    cache: new InMemoryCache().restore(cache),
+    link: createUploadLink({
+      uri: API_URL,
+      credentials: 'include',
+      headers,
+    }),
+  })
 
 class MyApp extends App {
-  static async getInitialProps({ Component, ctx }) {
-    let pageProps = {}
-    if (Component.getInitialProps) {
-      pageProps = await Component.getInitialProps(ctx)
+  static async getInitialProps({ ctx, router, Component }) {
+    const props = {}
+
+    if (Component.getInitialProps)
+      props.pageProps = await Component.getInitialProps(ctx)
+
+    if (ctx.req) {
+      const apolloClient = createApolloClient(undefined, ctx.req.headers)
+      try {
+        await getDataFromTree(
+          <MyApp
+            {...props}
+            apolloClient={apolloClient}
+            router={router}
+            Component={Component}
+          />
+        )
+      } catch (error) {
+        console.error('getInitialProps error:', error)
+      }
+      Head.rewind()
+      props.apolloCache = apolloClient.cache.extract()
     }
-    pageProps.query = ctx.query
-    return { pageProps }
+
+    return props
   }
 
+  apolloClient =
+    this.props.apolloClient || createApolloClient(this.props.apolloCache)
+
   render() {
-    const { Component, apollo, pageProps } = this.props
+    const { Component, pageProps } = this.props
     return (
       <Container>
-        <ApolloProvider client={apollo}>
+        <ApolloProvider client={this.apolloClient}>
           <Page>
             <Component {...pageProps} />
           </Page>
@@ -27,4 +64,4 @@ class MyApp extends App {
   }
 }
 
-export default withData(MyApp)
+export default MyApp
