@@ -12,6 +12,7 @@ import LikeButton from './LikeButton'
 import DislikeButton from './DislikeButton'
 import Comments from './Comments'
 import User from './User'
+import getPhoto from '../lib/get-photo'
 
 const SINGLE_STORY_QUERY = gql`
   query SINGLE_STORY_QUERY($id: ID!) {
@@ -134,7 +135,7 @@ const SingleStory = ({ id }) => (
                   <Link href={`/user?id=${story.user.id}`}>
                     <a className="avatar">
                       <img
-                        src={story.user.photo || '/static/user-placeholder.png'}
+                        src={getPhoto(story.user.photo)}
                         alt={story.user.username}
                       />
                     </a>

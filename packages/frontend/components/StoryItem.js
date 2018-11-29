@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import format from 'date-fns/format'
 import StoryStyles from './styles/StoryStyles'
 import ToolsBar from './styles/ToolsBar'
+import getPhoto from '../lib/get-photo'
 
 function StoryItem({ story, index }) {
   const toUser = e => {
@@ -27,7 +28,7 @@ function StoryItem({ story, index }) {
       >
         <img
           className="avatar"
-          src={story.user.photo || '/static/user-placeholder.png'}
+          src={getPhoto(story.user.photo)}
           alt={story.user.username}
         />
         <div className="name-and-date">

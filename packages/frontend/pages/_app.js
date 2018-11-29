@@ -21,17 +21,17 @@ const createApolloClient = (cache = {}, headers) =>
 
 class MyApp extends App {
   static async getInitialProps({ ctx, router, Component }) {
-    const props = {}
+    let pageProps = {}
 
     if (Component.getInitialProps)
-      props.pageProps = await Component.getInitialProps(ctx)
+      pageProps = await Component.getInitialProps(ctx)
 
     if (ctx.req) {
       const apolloClient = createApolloClient(undefined, ctx.req.headers)
       try {
         await getDataFromTree(
           <MyApp
-            {...props}
+            {...pageProps}
             apolloClient={apolloClient}
             router={router}
             Component={Component}
@@ -41,17 +41,21 @@ class MyApp extends App {
         console.error('getInitialProps error:', error)
       }
       Head.rewind()
-      props.apolloCache = apolloClient.cache.extract()
+      pageProps.apolloCache = apolloClient.cache.extract()
     }
 
-    return props
+    pageProps.query = ctx.query
+
+    return { pageProps }
   }
 
   apolloClient =
-    this.props.apolloClient || createApolloClient(this.props.apolloCache)
+    this.props.apolloClient ||
+    createApolloClient(this.props.pageProps.apolloCache)
 
   render() {
     const { Component, pageProps } = this.props
+    console.log(pageProps)
     return (
       <Container>
         <ApolloProvider client={this.apolloClient}>

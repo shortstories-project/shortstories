@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Router from 'next/router'
 import { Mutation } from 'react-apollo'
 import { adopt } from 'react-adopt'
 import gql from 'graphql-tag'
@@ -66,7 +67,9 @@ const Signup = () => (
           passwordConfirmation: '',
         }}
         onSubmit={values => {
-          signUpMutation.mutation({ variables: { ...values } })
+          signUpMutation.mutation({ variables: { ...values } }).then(() => {
+            Router.push('/')
+          })
         }}
         render={props => (
           // eslint-disable-next-line

@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Router from 'next/router'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { Formik } from 'formik'
@@ -30,7 +31,9 @@ const Signin = () => (
         isInitialValid={false}
         initialValues={{ login: '', password: '' }}
         onSubmit={values => {
-          signIn({ variables: { ...values } })
+          signIn({ variables: { ...values } }).then(() => {
+            Router.push('/')
+          })
         }}
         render={props => (
           // eslint-disable-next-line

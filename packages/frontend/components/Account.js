@@ -6,6 +6,7 @@ import PleaseSignIn from './PleaseSignIn'
 import DropAndCrop from './DropAndCrop'
 import StoriesList from './styles/StoriesList'
 import StoryItem from './StoryItem'
+import getPhoto from '../lib/get-photo'
 import API_URL from '../config'
 
 const AccountStyles = styled.div`
@@ -170,10 +171,8 @@ class Account extends Component {
                 >
                   <img
                     className="avatar"
-                    src={
-                      `${API_URL}${me.photo}` || '/static/user-placeholder.png'
-                    }
-                    alt=""
+                    src={getPhoto(me.photo)}
+                    alt={me.username}
                   />
                   <div className="blur">
                     <img

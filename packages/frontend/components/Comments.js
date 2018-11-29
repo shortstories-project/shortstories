@@ -8,6 +8,7 @@ import format from 'date-fns/format'
 import PropTypes from 'prop-types'
 import Button from './Button'
 import { SINGLE_STORY_QUERY } from './SingleStory'
+import getPhoto from '../lib/get-photo'
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation CREATE_COMMENT_MUTATION($id: ID!, $body: String!) {
@@ -149,8 +150,8 @@ class Comments extends Component {
                   <a>
                     <img
                       className="avatar"
-                      src={c.user.photo || '/static/user-placeholder.png'}
-                      alt="avatar"
+                      src={getPhoto(c.user.photo)}
+                      alt={c.user.username}
                     />
                     <div>
                       <span className="username">{c.user.username}</span>
