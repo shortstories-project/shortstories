@@ -33,9 +33,11 @@
     "graphql-tag": "^2.10.0",
     "graphql-yoga": "^1.16.7",
     "jsonwebtoken": "^8.4.0",
+    "lodash.last": "^3.0.0",
     "nanoid": "^2.0.0",
     "nodemailer": "^4.7.0",
     "pg": "^7.6.1",
+    "ramda": "^0.26.1",
     "sequelize": "^5.0.0-beta.14"
   },
   "devDependencies": {

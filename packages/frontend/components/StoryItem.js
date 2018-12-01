@@ -6,15 +6,15 @@ import StoryStyles from './styles/StoryStyles'
 import ToolsBar from './styles/ToolsBar'
 import getPhoto from '../lib/get-photo'
 
-function StoryItem({ story, index }) {
+function StoryItem({ id, user, stats, createdAt, title, body, index }) {
   const toUser = e => {
     e.stopPropagation()
-    Router.push(`/user?id=${story.user.id}`)
+    Router.push(`/user?id=${user.id}`)
   }
   return (
     <StoryStyles
       onClick={() => {
-        Router.push(`/story?id=${story.id}`)
+        Router.push(`/story?id=${id}`)
       }}
     >
       <div
@@ -28,31 +28,29 @@ function StoryItem({ story, index }) {
       >
         <img
           className="avatar"
-          src={getPhoto(story.user.photo)}
-          alt={story.user.username}
+          src={getPhoto(user.photo)}
+          alt={user.username}
         />
         <div className="name-and-date">
-          <span className="name">{story.user.username}</span>
-          <span className="date">
-            {format(+story.createdAt, 'MMM D, YYYY')}
-          </span>
+          <span className="name">{user.username}</span>
+          <span className="date">{format(createdAt, 'MMM D, YYYY')}</span>
         </div>
       </div>
-      <h2 className="title">{story.title}</h2>
-      <p className="body">{story.body}</p>
+      <h2 className="title">{title}</h2>
+      <p className="body">{body}</p>
       <ToolsBar>
         <div className="buttons-container">
           <div>
             <img src="/static/icons/like-fill-gray.svg" alt="like" />
-            <span>{story.likedBy.length}</span>
+            <span>{stats.likes}</span>
           </div>
           <div>
             <img src="/static/icons/dislike-fill-gray.svg" alt="dislike" />
-            <span>{story.dislikedBy.length}</span>
+            <span>{stats.dislikes}</span>
           </div>
           <div>
             <img src="/static/icons/comment-fill-gray.svg" alt="comments" />
-            <span>{story.comments.length}</span>
+            <span>{stats.comments}</span>
           </div>
         </div>
       </ToolsBar>
@@ -61,7 +59,12 @@ function StoryItem({ story, index }) {
 }
 
 StoryItem.propTypes = {
-  story: PropTypes.shape().isRequired,
+  id: PropTypes.string.isRequired,
+  user: PropTypes.object.isRequired,
+  stats: PropTypes.object.isRequired,
+  createdAt: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  body: PropTypes.string.isRequired,
   index: PropTypes.number.isRequired,
 }
 

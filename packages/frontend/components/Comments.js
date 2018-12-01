@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {} from 'recompose'
 import Link from 'next/link'
 import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
@@ -7,7 +8,7 @@ import gql from 'graphql-tag'
 import format from 'date-fns/format'
 import PropTypes from 'prop-types'
 import Button from './Button'
-import { SINGLE_STORY_QUERY } from './SingleStory'
+import { STORY_DATA_QUERY } from './SingleStory'
 import getPhoto from '../lib/get-photo'
 
 const CREATE_COMMENT_MUTATION = gql`
@@ -113,7 +114,7 @@ class Comments extends Component {
         <Mutation
           mutation={CREATE_COMMENT_MUTATION}
           variables={{ id, body }}
-          refetchQueries={[{ query: SINGLE_STORY_QUERY, variables: { id } }]}
+          refetchQueries={[{ query: STORY_DATA_QUERY, variables: { id } }]}
         >
           {(createComment, { loading }) => (
             <Textarea>
@@ -156,7 +157,7 @@ class Comments extends Component {
                     <div>
                       <span className="username">{c.user.username}</span>
                       <span className="created-at">
-                        {format(+c.createdAt, 'MMM D, YYYY')}
+                        {format(c.createdAt, 'MMM D, YYYY')}
                       </span>
                     </div>
                   </a>

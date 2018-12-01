@@ -32,6 +32,7 @@
     "next-with-apollo": "^3.3.0",
     "nprogress": "^0.2.0",
     "prop-types": "^15.6.2",
+    "ramda": "^0.26.1",
     "react": "^16.6.3",
     "react-adopt": "^0.6.0",
     "react-apollo": "^2.3.1",
@@ -40,6 +41,7 @@
     "react-image-crop": "^6.0.9",
     "react-modal": "^3.6.1",
     "react-textarea-autosize": "^7.1.0-1",
+    "recompose": "^0.30.0",
     "styled-components": "^4.1.1"
   },
   "devDependencies": {

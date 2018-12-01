@@ -3,69 +3,13 @@ import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 
 const CURRENT_USER_QUERY = gql`
-  query {
+  query CURRENT_USER_QUERY {
     me {
       id
       username
       email
       isVerified
       photo
-      writtenStories {
-        id
-        body
-        title
-        user {
-          id
-          username
-          photo
-        }
-        likedBy {
-          id
-          userId
-        }
-        dislikedBy {
-          id
-          userId
-        }
-        comments {
-          id
-          body
-          user {
-            id
-            username
-          }
-          createdAt
-        }
-        createdAt
-      }
-      likedStories {
-        id
-        body
-        title
-        user {
-          id
-          username
-          photo
-        }
-        likedBy {
-          id
-          userId
-        }
-        dislikedBy {
-          id
-          userId
-        }
-        comments {
-          id
-          body
-          user {
-            id
-            username
-          }
-          createdAt
-        }
-        createdAt
-      }
     }
   }
 `

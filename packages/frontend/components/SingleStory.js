@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import format from 'date-fns/format'
+import { map, filter, split } from 'ramda'
 import PropTypes from 'prop-types'
 import Error from './ErrorMessage'
 import BigLoader from './BigLoader'
@@ -14,40 +15,51 @@ import Comments from './Comments'
 import User from './User'
 import getPhoto from '../lib/get-photo'
 
-const SINGLE_STORY_QUERY = gql`
-  query SINGLE_STORY_QUERY($id: ID!) {
+const STORY_DATA_QUERY = gql`
+  query STORY_DATA_QUERY($id: ID!, $cursor: String, $limit: Int) {
     story(id: $id) {
       id
       title
       body
+      stats {
+        likes
+        dislikes
+        comments
+      }
       user {
-        id
-        username
-        photo
-      }
-      likedBy {
-        id
-        userId
-      }
-      dislikedBy {
-        id
-        userId
-      }
-      viewedBy {
-        id
-      }
-      comments {
-        id
-        body
-        user {
-          id
-          photo
-          username
-        }
-        createdAt
+        ...author
       }
       createdAt
     }
+
+    reactions(storyId: $id) {
+      id
+      state
+      userId
+      storyId
+    }
+
+    comments(cursor: $cursor, limit: $limit, storyId: $id)
+      @connection(key: "CommentsConnection") {
+      edges {
+        id
+        body
+        user {
+          ...author
+        }
+        createdAt
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+
+  fragment author on User {
+    id
+    username
+    photo
   }
 `
 
@@ -119,12 +131,12 @@ const Toolbar = styled.aside`
 const SingleStory = ({ id }) => (
   <User>
     {({ data: { me } }) => (
-      <Query query={SINGLE_STORY_QUERY} variables={{ id }}>
-        {({ error, loading, data }) => {
+      <Query query={STORY_DATA_QUERY} variables={{ id, limit: 10 }}>
+        {({ error, loading, data, fetchMore }) => {
           if (error) return <Error error={error} />
           if (loading) return <BigLoader />
           if (!data.story) return <p>Story not found</p>
-          const { story } = data
+          const { story, reactions, comments } = data
           return (
             <>
               <SingleStoryStyles>
@@ -145,19 +157,19 @@ const SingleStory = ({ id }) => (
                       <a>{story.user.username}</a>
                     </Link>
                     <p className="created-at">
-                      {format(+story.createdAt, 'MMM D, YYYY')}
+                      {format(story.createdAt, 'MMM D, YYYY')}
                     </p>
                   </div>
                 </div>
                 <h1 className="title">{story.title}</h1>
-                {story.body
-                  .split('\n')
-                  .filter(p => p !== '')
-                  .map((p, index) => (
+                {map(
+                  (paragraph, index) => (
                     <p key={index} className="body-paragraph">
-                      {p}
+                      {paragraph}
                     </p>
-                  ))}
+                  ),
+                  filter(paragraph => paragraph !== '', split('/', story.body))
+                )}
               </SingleStoryStyles>
               {me && (
                 <>
@@ -165,19 +177,25 @@ const SingleStory = ({ id }) => (
                     <div className="reaction-buttons">
                       <LikeButton
                         id={id}
-                        qty={story.likedBy.length}
-                        isLiked={story.likedBy.some(i => i.userId === me.id)}
+                        qty={story.stats.likes}
+                        isLiked={reactions.some(
+                          reaction =>
+                            reaction.userId === me.id &&
+                            reaction.state === 'like'
+                        )}
                       />
                       <DislikeButton
                         id={id}
-                        qty={story.dislikedBy.length}
-                        isDisliked={story.dislikedBy.some(
-                          i => i.userId === me.id
+                        qty={story.stats.dislikes}
+                        isDisliked={reactions.some(
+                          reaction =>
+                            reaction.userId === me.id &&
+                            reaction.state === 'dislike'
                         )}
                       />
                     </div>
                   </Toolbar>
-                  <Comments id={id} comments={story.comments} />
+                  <Comments {...comments} id={id} fetchMore={fetchMore} />
                 </>
               )}
             </>
@@ -193,4 +211,4 @@ SingleStory.propTypes = {
 }
 
 export default SingleStory
-export { SINGLE_STORY_QUERY }
+export { STORY_DATA_QUERY }

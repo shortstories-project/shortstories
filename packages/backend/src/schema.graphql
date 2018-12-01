@@ -1,4 +1,5 @@
 scalar Upload
+scalar Date
 
 type Me {
   id: ID!
@@ -6,16 +7,12 @@ type Me {
   photo: String
   email: String!
   isVerified: Boolean!
-  writtenStories: [Story!]!
-  likedStories: [Story!]!
-  viewedStories: [Story!]!
 }
 
 type User {
   id: ID!
   username: String!
   photo: String
-  writtenStories: [Story!]!
 }
 
 type SuccessMessage {
@@ -26,16 +23,19 @@ type RequestReset {
   email: String!
 }
 
+type Stats {
+  likes: Int
+  dislikes: Int
+  comments: Int
+}
+
 type Story {
   id: ID!
   title: String!
   body: String!
   user: User!
-  likedBy: [Reaction!]!
-  dislikedBy: [Reaction!]!
-  viewedBy: [View!]!
-  comments: [Comment!]!
-  createdAt: String!
+  stats: Stats!
+  createdAt: Date!
 }
 
 type Reaction {
@@ -53,12 +53,7 @@ type View {
 
 type StoryConnection {
   edges: [Story!]!
-  pageInfo: StoriesPageInfo!
-}
-
-type StoriesPageInfo {
-  hasNextPage: Boolean!
-  endCursor: String!
+  pageInfo: PageInfo!
 }
 
 type Comment {
@@ -70,25 +65,35 @@ type Comment {
 
 type CommentConnection {
   edges: [Comment!]!
-  pageInfo: CommentsPageInfo!
+  pageInfo: PageInfo!
 }
 
-type CommentsPageInfo {
+type PageInfo {
   hasNextPage: Boolean!
   endCursor: String!
 }
 
 type Query {
-  # User
+  # Users
   me: Me
   user(id: ID!): User
 
-  # Story
-  stories(cursor: String, limit: Int = 100): StoryConnection!
+  # Stories
+  stories(
+    cursor: String,
+    limit: Int = 20,
+    userId: ID,
+    isLiked: Boolean = false
+  ): StoryConnection!
   story(id: ID!): Story!
+  reactions(storyId: ID!): [Reaction!]!
 
-  # Comment
-  comments(cursor: String, limit: Int = 10): CommentConnection!
+  # Comments
+  comments(
+    cursor: String,
+    limit: Int = 10,
+    storyId: ID!
+  ): CommentConnection!
   comment(id: ID!): Comment!
 }
 

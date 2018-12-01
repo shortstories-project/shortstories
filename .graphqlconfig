@@ -1,0 +1,8 @@
+{
+  "schemaPath": "/packages/backend/src/schema.graphql",
+  "extensions": {
+    "endpoints": {
+      "dev": "http://localhost:4000"
+    }
+  }
+}

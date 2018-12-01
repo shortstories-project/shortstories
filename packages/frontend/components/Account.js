@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Modal from 'react-modal'
+import { Query } from 'react-apollo'
 import User from './User'
 import PleaseSignIn from './PleaseSignIn'
 import DropAndCrop from './DropAndCrop'
-import StoriesList from './styles/StoriesList'
-import StoryItem from './StoryItem'
+import BigLoader from './BigLoader'
+import StoriesGrid from './StoriesGrid'
+import Error from './ErrorMessage'
 import getPhoto from '../lib/get-photo'
-import API_URL from '../config'
+import { STORIES_QUERY } from './Stories'
 
 const AccountStyles = styled.div`
   max-width: 1200px;
@@ -136,10 +138,15 @@ class Account extends Component {
     isOpen: false,
   }
 
-  changeTab = tab => {
-    this.setState({
-      activeTab: tab,
-    })
+  changeTab = (tab, cb) => {
+    this.setState(
+      {
+        activeTab: tab,
+      },
+      () => {
+        cb()
+      }
+    )
   }
 
   openModal = () => {
@@ -156,81 +163,90 @@ class Account extends Component {
 
   render() {
     const { activeTab, isOpen } = this.state
-    const getStories = me =>
-      activeTab === 'written' ? me.writtenStories : me.likedStories
     return (
-      <PleaseSignIn>
-        <User>
-          {({ data: { me } }) => (
-            <AccountStyles>
-              <div className="user-info">
-                <button
-                  onClick={this.openModal}
-                  className="photo-edit"
-                  type="button"
-                >
-                  <img
-                    className="avatar"
-                    src={getPhoto(me.photo)}
-                    alt={me.username}
-                  />
-                  <div className="blur">
-                    <img
-                      className="photo-icon"
-                      src="/static/icons/photo.svg"
-                      alt=""
-                    />
-                  </div>
-                </button>
-                <span className="username">{me.username}</span>
-                <span className="email">{me.email}</span>
-              </div>
-              <nav>
-                <ul>
-                  <li className={activeTab === 'written' ? 'active' : ''}>
-                    <span>
+      <User>
+        {({ data: { me } }) => (
+          <Query
+            query={STORIES_QUERY}
+            variables={
+              activeTab === 'written'
+                ? { limit: 20, userId: me.id, isLiked: false }
+                : { limit: 20, userId: null, isLiked: true }
+            }
+          >
+            {({ data: { stories }, loading, error, fetchMore, refetch }) => {
+              if (loading) return <BigLoader />
+              if (error) return <Error error={error} />
+              return (
+                <PleaseSignIn isAuth={me}>
+                  <AccountStyles>
+                    <div className="user-info">
                       <button
+                        onClick={this.openModal}
+                        className="photo-edit"
                         type="button"
-                        role="tab"
-                        onClick={() => this.changeTab('written')}
                       >
-                        Written
+                        <img
+                          className="avatar"
+                          src={getPhoto(me.photo)}
+                          alt={me.username}
+                        />
+                        <div className="blur">
+                          <img
+                            className="photo-icon"
+                            src="/static/icons/photo.svg"
+                            alt=""
+                          />
+                        </div>
                       </button>
-                    </span>
-                  </li>
-                  <li className={activeTab === 'favs' ? 'active' : ''}>
-                    <span>
-                      <button
-                        type="button"
-                        role="tab"
-                        onClick={() => this.changeTab('favs')}
-                      >
-                        Favs
-                      </button>
-                    </span>
-                  </li>
-                </ul>
-              </nav>
-              {!getStories(me).length ? (
-                <p>No stories</p>
-              ) : (
-                <StoriesList>
-                  {getStories(me).map((i, index) => (
-                    <StoryItem key={i.id} story={i} index={index} />
-                  ))}
-                </StoriesList>
-              )}
-            </AccountStyles>
-          )}
-        </User>
-        <Modal
-          onRequestClose={this.closeModal}
-          isOpen={isOpen}
-          style={customStyles}
-        >
-          <DropAndCrop afterSave={this.closeModal} />
-        </Modal>
-      </PleaseSignIn>
+                      <span className="username">{me.username}</span>
+                      <span className="email">{me.email}</span>
+                    </div>
+                    <nav>
+                      <ul>
+                        <li className={activeTab === 'written' ? 'active' : ''}>
+                          <span>
+                            <button
+                              type="button"
+                              role="tab"
+                              onClick={() => this.changeTab('written', refetch)}
+                            >
+                              Written
+                            </button>
+                          </span>
+                        </li>
+                        <li className={activeTab === 'favs' ? 'active' : ''}>
+                          <span>
+                            <button
+                              type="button"
+                              role="tab"
+                              onClick={() => this.changeTab('favs', refetch)}
+                            >
+                              Favs
+                            </button>
+                          </span>
+                        </li>
+                      </ul>
+                    </nav>
+                    {!stories.edges.length ? (
+                      <p>No stories</p>
+                    ) : (
+                      <StoriesGrid {...stories} fetchMore={fetchMore} />
+                    )}
+                  </AccountStyles>
+                  <Modal
+                    onRequestClose={this.closeModal}
+                    isOpen={isOpen}
+                    style={customStyles}
+                  >
+                    <DropAndCrop afterSave={this.closeModal} />
+                  </Modal>
+                </PleaseSignIn>
+              )
+            }}
+          </Query>
+        )}
+      </User>
     )
   }
 }

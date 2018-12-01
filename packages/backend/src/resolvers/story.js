@@ -1,15 +1,89 @@
+import Sequelize from 'sequelize'
 import { combineResolvers } from 'graphql-resolvers'
+import { last, map, filter, length } from 'ramda'
 import { isAuthenticated, isStoryOwner } from './authorization'
-import pagination from '../utils/pagination'
 import { LIKE, DISLIKE } from '../constants'
+
+const toCursorHash = string => Buffer.from(string).toString('base64')
+
+const fromCursorHash = string => Buffer.from(string, 'base64').toString('ascii')
 
 export default {
   Query: {
-    stories: async (parens, { cursor, limit = 100 }, ctx) =>
-      pagination(ctx.models.Story, cursor, limit),
+    stories: async (
+      parens,
+      { cursor, limit, userId, isLiked },
+      { models, request }
+    ) => {
+      const cursorOptions = cursor
+        ? {
+            createdAt: {
+              [Sequelize.Op.lt]: fromCursorHash(cursor),
+            },
+          }
+        : {}
+      const defaultOptions = {
+        order: [['createdAt', 'DESC']],
+        limit: limit + 1,
+      }
+      let stories
+      if (isLiked) {
+        const likes = await models.Reaction.findAll({
+          where: {
+            userId: request.userId,
+            state: LIKE,
+          },
+        })
+        const ids = map(i => i.storyId, likes)
+        stories = await models.Story.findAll({
+          ...defaultOptions,
+          where: {
+            ...cursorOptions,
+            id: {
+              [Sequelize.Op.in]: ids,
+            },
+          },
+        })
+      } else if (userId) {
+        stories = await models.Story.findAll({
+          ...defaultOptions,
+          where: {
+            ...cursorOptions,
+            userId,
+          },
+        })
+      } else {
+        stories = await models.Story.findAll({
+          ...defaultOptions,
+          where: {
+            ...cursorOptions,
+          },
+        })
+      }
+      const hasNextPage = stories.length > limit
+      const edges = hasNextPage ? stories.slice(0, -1) : stories
+      const lastStory = last(edges)
+      const endCursor = lastStory
+        ? toCursorHash(lastStory.createdAt.toString())
+        : ''
+      return {
+        edges,
+        pageInfo: {
+          hasNextPage,
+          endCursor,
+        },
+      }
+    },
 
-    story: async (parent, args, ctx) =>
-      await ctx.models.Story.findByPk(args.id),
+    reactions: async (parent, { storyId }, { models }) =>
+      await models.Reaction.findAll({
+        where: {
+          storyId,
+        },
+      }),
+
+    story: async (parent, { id }, { models }) =>
+      await models.Story.findByPk(id),
   },
 
   Mutation: {
@@ -117,34 +191,17 @@ export default {
   Story: {
     user: async (story, args, ctx) => await ctx.loaders.user.load(story.userId),
 
-    comments: async (story, args, ctx) =>
-      await ctx.models.Comment.findAll({
-        where: {
-          storyId: story.id,
-        },
-      }),
-
-    likedBy: async (story, args, ctx) =>
-      await ctx.models.Reaction.findAll({
-        where: {
-          storyId: story.id,
-          state: LIKE,
-        },
-      }),
-
-    dislikedBy: async (story, args, ctx) =>
-      await ctx.models.Reaction.findAll({
-        where: {
-          storyId: story.id,
-          state: DISLIKE,
-        },
-      }),
-
-    viewedBy: async (story, args, ctx) =>
-      await ctx.models.View.findAll({
-        where: {
-          storyId: story.id,
-        },
-      }),
+    stats: async (story, args, { models }) => {
+      const options = {
+        where: { storyId: story.id },
+      }
+      const reactions = await models.Reaction.findAll(options)
+      const comments = await models.Comment.findAll(options)
+      return {
+        likes: length(filter(reaction => reaction.state === LIKE, reactions)),
+        dislikes: length(filter(reaction => reaction.state === DISLIKE, reactions)),
+        comments: length(comments),
+      }
+    },
   },
 }

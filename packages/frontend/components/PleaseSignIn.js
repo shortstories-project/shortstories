@@ -1,8 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Query } from 'react-apollo'
 import PropTypes from 'prop-types'
-import { CURRENT_USER_QUERY } from './User'
 import Signin from './Signin'
 
 const PleaseSignInStyles = styled.div`
@@ -16,26 +14,20 @@ const PleaseSignInStyles = styled.div`
   }
 `
 
-function PleaseSignIn(props) {
-  return (
-    <Query query={CURRENT_USER_QUERY}>
-      {({ data, loading }) => {
-        if (loading) return <p>Loading...</p>
-        if (!data.me) {
-          return (
-            <PleaseSignInStyles>
-              <p>Please Sign In before Continuing</p>
-              <Signin />
-            </PleaseSignInStyles>
-          )
-        }
-        return props.children
-      }}
-    </Query>
-  )
+function PleaseSignIn({ isAuth, children }) {
+  if (!isAuth) {
+    return (
+      <PleaseSignInStyles>
+        <p>Please Sign In before Continuing</p>
+        <Signin />
+      </PleaseSignInStyles>
+    )
+  }
+  return children
 }
 
 PleaseSignIn.propTypes = {
+  isAuth: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
 }
 
