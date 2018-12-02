@@ -189,7 +189,10 @@ export default {
   },
 
   Story: {
-    user: async (story, args, ctx) => await ctx.loaders.user.load(story.userId),
+    user: async (story, args, { models }) => {
+      const user = await models.User.findByPk(story.userId)
+      return user
+    },
 
     stats: async (story, args, { models }) => {
       const options = {

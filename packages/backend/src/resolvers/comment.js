@@ -17,7 +17,7 @@ export default {
             },
           }
         : {}
-      const comments = await models.Story.findAll({
+      const comments = await models.Comment.findAll({
         order: [['createdAt', 'DESC']],
         limit: limit + 1,
         where: {
@@ -77,7 +77,9 @@ export default {
   },
 
   Comment: {
-    user: async (comment, args, { loaders }) =>
-      await loaders.user.load(comment.userId),
+    user: async (story, args, { models }) => {
+      const user = await models.User.findByPk(story.userId)
+      return user
+    },
   },
 }

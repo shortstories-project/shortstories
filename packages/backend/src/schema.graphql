@@ -60,7 +60,7 @@ type Comment {
   id: ID!
   body: String!
   user: User!
-  createdAt: String!
+  createdAt: Date!
 }
 
 type CommentConnection {

@@ -1,63 +1,25 @@
-import 'cross-fetch/polyfill'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { ApolloClient } from 'apollo-client'
-import { createUploadLink } from 'apollo-upload-client'
-import { getDataFromTree, ApolloProvider } from 'react-apollo'
 import App, { Container } from 'next/app'
-import Head from 'next/head'
+import { ApolloProvider } from 'react-apollo'
 import Page from '../components/Page'
-import API_URL from '../config'
-
-const createApolloClient = (cache = {}, headers) =>
-  new ApolloClient({
-    ssrMode: typeof window !== 'undefined',
-    cache: new InMemoryCache().restore(cache),
-    link: createUploadLink({
-      uri: API_URL,
-      credentials: 'include',
-      headers,
-    }),
-  })
+import withApollo from '../lib/with-apollo'
 
 class MyApp extends App {
-  static async getInitialProps({ ctx, router, Component }) {
+  static async getInitialProps({ Component, ctx }) {
     let pageProps = {}
-
-    if (Component.getInitialProps)
+    if (Component.getInitialProps) {
       pageProps = await Component.getInitialProps(ctx)
-
-    if (ctx.req) {
-      const apolloClient = createApolloClient(undefined, ctx.req.headers)
-      try {
-        await getDataFromTree(
-          <MyApp
-            {...pageProps}
-            apolloClient={apolloClient}
-            router={router}
-            Component={Component}
-          />
-        )
-      } catch (error) {
-        console.error('getInitialProps error:', error)
-      }
-      Head.rewind()
-      pageProps.apolloCache = apolloClient.cache.extract()
     }
-
+    // this exposes the query to the user
     pageProps.query = ctx.query
-
     return { pageProps }
   }
 
-  apolloClient =
-    this.props.apolloClient ||
-    createApolloClient(this.props.pageProps.apolloCache)
-
   render() {
-    const { Component, pageProps } = this.props
+    const { Component, apollo, pageProps } = this.props
+
     return (
       <Container>
-        <ApolloProvider client={this.apolloClient}>
+        <ApolloProvider client={apollo}>
           <Page>
             <Component {...pageProps} />
           </Page>
@@ -67,4 +29,4 @@ class MyApp extends App {
   }
 }
 
-export default MyApp
+export default withApollo(MyApp)

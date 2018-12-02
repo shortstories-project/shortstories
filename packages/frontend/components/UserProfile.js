@@ -5,44 +5,16 @@ import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import BigLoader from './BigLoader'
 import Error from './ErrorMessage'
-import StoriesList from './styles/StoriesList'
-import StoryItem from './StoryItem'
+// import StoriesList from './styles/StoriesList'
+// import StoryItem from './StoryItem'
 import getPhoto from '../lib/get-photo'
 
-const USER_QUERY = gql`
+export const USER_QUERY = gql`
   query USER_QUERY($id: ID!) {
     user(id: $id) {
       id
       username
       photo
-      writtenStories {
-        id
-        body
-        title
-        user {
-          id
-          username
-          photo
-        }
-        likedBy {
-          id
-          userId
-        }
-        dislikedBy {
-          id
-          userId
-        }
-        comments {
-          id
-          body
-          user {
-            id
-            username
-          }
-          createdAt
-        }
-        createdAt
-      }
     }
   }
 `
@@ -89,6 +61,7 @@ const UserProfileStyles = styled.div`
 `
 
 function UserProfile({ id }) {
+  console.log(id)
   return (
     <Query query={USER_QUERY} variables={{ id }}>
       {({ loading, error, data }) => {
@@ -106,7 +79,7 @@ function UserProfile({ id }) {
               </div>
               <span className="username">{data.user.username}</span>
             </div>
-            {!data.user.writtenStories.length ? (
+            {/* {!data.user.writtenStories.length ? (
               <p>No stories</p>
             ) : (
               <StoriesList>
@@ -114,7 +87,7 @@ function UserProfile({ id }) {
                   <StoryItem key={i.id} story={i} index={index} />
                 ))}
               </StoriesList>
-            )}
+            )} */}
           </UserProfileStyles>
         )
       }}

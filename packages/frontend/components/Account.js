@@ -130,7 +130,9 @@ const customStyles = {
   },
 }
 
-Modal.setAppElement('#__next')
+if (process.browser) {
+  Modal.setAppElement('#__next')
+}
 
 class Account extends Component {
   state = {
@@ -239,7 +241,7 @@ class Account extends Component {
                     isOpen={isOpen}
                     style={customStyles}
                   >
-                    <DropAndCrop afterSave={this.closeModal} />
+                    <DropAndCrop userId={me.id} afterSave={this.closeModal} />
                   </Modal>
                 </PleaseSignIn>
               )

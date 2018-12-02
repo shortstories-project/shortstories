@@ -14,7 +14,12 @@ function StoryItem({ id, user, stats, createdAt, title, body, index }) {
   return (
     <StoryStyles
       onClick={() => {
-        Router.push(`/story?id=${id}`)
+        Router.push({
+          pathname: '/story',
+          query: {
+            id,
+          },
+        })
       }}
     >
       <div

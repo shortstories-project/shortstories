@@ -7,6 +7,7 @@ import ReactDropzone from 'react-dropzone'
 import ReactCrop, { makeAspectCrop } from 'react-image-crop'
 import Button from './Button'
 import { CURRENT_USER_QUERY } from './User'
+import { USER_QUERY } from './UserProfile'
 
 const POST_PHOTO_MUTATION = gql`
   mutation POST_PHOTO_MUTATION(
@@ -69,6 +70,7 @@ const Dropzone = styled(ReactDropzone)`
 class DropAndCrop extends Component {
   static propTypes = {
     afterSave: PropTypes.func.isRequired,
+    userId: PropTypes.string.isRequired,
   }
 
   state = {
@@ -160,6 +162,7 @@ class DropAndCrop extends Component {
   }
 
   render() {
+    const { userId } = this.props
     const {
       imgSrc,
       crop,
@@ -181,7 +184,10 @@ class DropAndCrop extends Component {
         ) : (
           <Mutation
             mutation={POST_PHOTO_MUTATION}
-            refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+            refetchQueries={[
+              { query: USER_QUERY, variables: { id: userId } },
+              { query: CURRENT_USER_QUERY },
+            ]}
             variables={{
               file,
               width: percentToPx(naturalWidth, crop.width),
