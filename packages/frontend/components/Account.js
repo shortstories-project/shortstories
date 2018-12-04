@@ -233,7 +233,11 @@ class Account extends Component {
                     {!stories.edges.length ? (
                       <p>No stories</p>
                     ) : (
-                      <StoriesGrid {...stories} fetchMore={fetchMore} />
+                      <StoriesGrid
+                        {...stories}
+                        userId={activeTab === 'written' ? me.id : null}
+                        fetchMore={fetchMore}
+                      />
                     )}
                   </AccountStyles>
                   <Modal

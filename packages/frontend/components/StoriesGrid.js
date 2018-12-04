@@ -5,12 +5,17 @@ import StoryItem from './StoryItem'
 import Button from './Button'
 import StoriesList from './styles/StoriesList'
 
-function StoriesGrid({ edges, pageInfo, fetchMore }) {
+function StoriesGrid({ edges, pageInfo, fetchMore, userId = null }) {
   return (
     <StoriesList>
       {map(
         (story, index) => (
-          <StoryItem key={story.id} index={index} {...story} />
+          <StoryItem
+            isStoryOwner={userId === story.user.id}
+            key={story.id}
+            index={index}
+            {...story}
+          />
         ),
         edges
       )}
@@ -49,6 +54,7 @@ StoriesGrid.propTypes = {
   edges: PropTypes.array.isRequired,
   pageInfo: PropTypes.object.isRequired,
   fetchMore: PropTypes.func.isRequired,
+  userId: PropTypes.string.isRequired,
 }
 
 export default StoriesGrid

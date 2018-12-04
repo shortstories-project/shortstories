@@ -168,7 +168,7 @@ const SingleStory = ({ id }) => (
                       {paragraph}
                     </p>
                   ),
-                  filter(paragraph => paragraph !== '', split('/', story.body))
+                  filter(paragraph => paragraph !== '', split('\n', story.body))
                 )}
               </SingleStoryStyles>
               {me && (

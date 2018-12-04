@@ -59,6 +59,27 @@ const StoryStyles = styled.div`
       }
     }
   }
+
+  .edit-and-delete {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
 `
 
 export default StoryStyles
