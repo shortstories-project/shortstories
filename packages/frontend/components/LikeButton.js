@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import ReactionButtonStyles from './styles/ReactionButtonStyles'
+import { STORY_DATA_QUERY } from './SingleStory'
 
 const LIKE_MUTATION = gql`
   mutation LIKE_MUTATION($id: ID!) {
@@ -20,7 +21,13 @@ function LikeButton({ id, qty, isLiked }) {
     ? '/static/icons/like-fill.svg'
     : '/static/icons/like.svg'
   return (
-    <Mutation mutation={LIKE_MUTATION} variables={{ id }}>
+    <Mutation
+      mutation={LIKE_MUTATION}
+      variables={{ id }}
+      refetchQueries={[
+        { query: STORY_DATA_QUERY, variables: { id, limit: 10 } },
+      ]}
+    >
       {likeStory => (
         <ReactionButtonStyles>
           <button

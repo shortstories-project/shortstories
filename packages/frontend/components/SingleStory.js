@@ -183,6 +183,7 @@ const SingleStory = ({ id }) => (
                             reaction.userId === me.id &&
                             reaction.state === 'like'
                         )}
+                        reactions={reactions}
                       />
                       <DislikeButton
                         id={id}

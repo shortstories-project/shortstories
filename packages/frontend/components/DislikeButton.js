@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import ReactionButtonStyles from './styles/ReactionButtonStyles'
+import { STORY_DATA_QUERY } from './SingleStory'
 
 const DISLIKE_MUTATION = gql`
   mutation DISLIKE_MUTATION($id: ID!) {
@@ -20,7 +21,13 @@ function DislikeButton({ id, qty, isDisliked }) {
     ? '/static/icons/dislike-fill.svg'
     : '/static/icons/dislike.svg'
   return (
-    <Mutation mutation={DISLIKE_MUTATION} variables={{ id }}>
+    <Mutation
+      mutation={DISLIKE_MUTATION}
+      variables={{ id }}
+      refetchQueries={[
+        { query: STORY_DATA_QUERY, variables: { id, limit: 10 } },
+      ]}
+    >
       {dislikeStory => (
         <ReactionButtonStyles>
           <button
