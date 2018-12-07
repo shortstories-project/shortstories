@@ -196,7 +196,7 @@ const SingleStory = ({ id }) => (
                       />
                     </div>
                   </Toolbar>
-                  <Comments {...comments} id={id} fetchMore={fetchMore} />
+                  <Comments {...comments} id={id} me={me} fetchMore={fetchMore} />
                 </>
               )}
             </>

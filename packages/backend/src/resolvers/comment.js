@@ -59,8 +59,8 @@ export default {
       isAuthenticated,
       isCommentOwner,
       async (parent, { id, body }, ctx) => {
-        const comment = ctx.models.Comment.findByPk(id)
-        return comment.update({ body })
+        const comment = await ctx.models.Comment.findByPk(id)
+        return await comment.update({ body })
       }
     ),
 

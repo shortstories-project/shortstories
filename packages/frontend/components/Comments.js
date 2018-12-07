@@ -1,5 +1,4 @@
-import React, { Fragment } from 'react'
-import { withState } from 'recompose'
+import React, { Fragment, Component } from 'react'
 import { map, merge, concat } from 'ramda'
 import Link from 'next/link'
 import styled from 'styled-components'
@@ -14,6 +13,24 @@ import getPhoto from '../lib/get-photo'
 const CREATE_COMMENT_MUTATION = gql`
   mutation CREATE_COMMENT_MUTATION($id: ID!, $body: String!) {
     createComment(id: $id, body: $body) {
+      id
+      body
+      user {
+        id
+      }
+    }
+  }
+`
+
+const DELETE_COMMENT_MUTATION = gql`
+  mutation DELETE_COMMENT_MUTATION($id: ID!) {
+    deleteComment(id: $id)
+  }
+`
+
+const UPDATE_COMMENT_MUTATION = gql`
+  mutation UPDATE_COMMENT_MUTATION($id: ID!, $body: String!) {
+    updateComment(id: $id, body: $body) {
       id
       body
       user {
@@ -53,6 +70,32 @@ const CommentsList = styled.ul`
     border-radius: 50%;
   }
 
+  .comment-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .edit-and-delete {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      cursor: pointer;
+      background: none;
+      border: none;
+      width: 20px;
+      height: 20px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: 16px;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
+  }
+
   li {
     position: relative;
     background-color: #fff;
@@ -89,101 +132,187 @@ const CommentsList = styled.ul`
   }
 `
 
-const Comments = withState('body', 'onChange', '')(
-  ({ body, onChange, edges, pageInfo, fetchMore, id }) => (
-    <CommentsStyles>
-      <Mutation
-        mutation={CREATE_COMMENT_MUTATION}
-        variables={{ id, body }}
-        refetchQueries={[{ query: STORY_DATA_QUERY, variables: { id } }]}
-      >
-        {(createComment, { loading }) => (
-          <Textarea>
-            <TextareaAutosize
-              placeholder="Write your comment..."
-              name="body"
-              id="body"
-              value={body}
-              onChange={event => {
-                onChange(event.target.value)
-              }}
-              maxLength={300}
-            />
-            <Button
-              disabled={body.length === 0}
-              loading={loading}
-              type="button"
-              onClick={() => {
-                createComment().then(() => {
-                  onChange('')
-                })
-              }}
-            >
-              Comment
-            </Button>
-          </Textarea>
-        )}
-      </Mutation>
-      {edges.length > 0 && (
-        <Fragment>
-          <CommentsList>
-            {map(
-              comment => (
-                <li key={comment.id}>
-                  <Link href={`/user?id=${comment.user.id}`}>
-                    <a>
-                      <img
-                        className="avatar"
-                        src={getPhoto(comment.user.photo)}
-                        alt={comment.user.username}
-                      />
-                      <div>
-                        <span className="username">
-                          {comment.user.username}
-                        </span>
-                        <span className="created-at">
-                          {format(comment.createdAt, 'MMM D, YYYY')}
-                        </span>
-                      </div>
-                    </a>
-                  </Link>
-                  <p className="body">{comment.body}</p>
-                </li>
-              ),
-              edges
-            )}
-          </CommentsList>
-          {pageInfo.hasNextPage && (
-            <Button
-              onClick={() => {
-                fetchMore({
-                  variables: {
-                    cursor: pageInfo.endCursor,
-                  },
-                  updateQuery: (previousResult, { fetchMoreResult }) => {
-                    if (!fetchMoreResult) {
-                      return previousResult
-                    }
+class Comments extends Component {
+  state = {
+    body: '',
+    editId: null,
+    comment: '',
+  }
 
-                    return {
-                      comments: merge(fetchMoreResult.comments, {
-                        edges: concat(
-                          previousResult.comments.edges,
-                          fetchMoreResult.comments.edges
-                        ),
-                      }),
-                    }
-                  },
-                })
-              }}
-            >
-              More
-            </Button>
+  onChange = e => {
+    const { name, value } = e.target
+    this.setState({
+      [name]: value,
+    })
+  }
+
+  render() {
+    const { onChange, edges, pageInfo, fetchMore, id, me } = this.props
+    const { body, editId, comment: commentBody } = this.state
+    return (
+      <CommentsStyles>
+        <Mutation
+          mutation={CREATE_COMMENT_MUTATION}
+          variables={{ id, body }}
+          refetchQueries={[{ query: STORY_DATA_QUERY, variables: { id } }]}
+        >
+          {(createComment, { loading }) => (
+            <Textarea>
+              <TextareaAutosize
+                placeholder="Write your comment..."
+                name="body"
+                id="body"
+                value={body}
+                onChange={this.onChange}
+                maxLength={300}
+              />
+              <Button
+                disabled={body.length === 0}
+                loading={loading}
+                type="button"
+                onClick={() => {
+                  createComment().then(() => {
+                    onChange('')
+                  })
+                }}
+              >
+                Comment
+              </Button>
+            </Textarea>
           )}
-        </Fragment>
-      )}
-    </CommentsStyles>
-  )
-)
+        </Mutation>
+        {edges.length > 0 && (
+          <Fragment>
+            <CommentsList>
+              {map(
+                comment =>
+                  editId === comment.id ? (
+                    <Mutation
+                      mutation={UPDATE_COMMENT_MUTATION}
+                      variables={{ id: comment.id, body: commentBody }}
+                    >
+                      {(updateComment, { loading }) => (
+                        <Textarea>
+                          <TextareaAutosize
+                            placeholder="Edit your comment..."
+                            name="comment"
+                            id={comment.id}
+                            value={commentBody}
+                            onChange={this.onChange}
+                            maxLength={300}
+                          />
+                          <Button
+                            disabled={commentBody.length === 0}
+                            loading={loading}
+                            type="button"
+                            onClick={() => {
+                              updateComment().then(() => {
+                                this.setState({
+                                  editId: null,
+                                  comment: '',
+                                })
+                              })
+                            }}
+                          >
+                            Save
+                          </Button>
+                        </Textarea>
+                      )}
+                    </Mutation>
+                  ) : (
+                    <li key={comment.id}>
+                      <div className="comment-header">
+                        <Link href={`/user?id=${comment.user.id}`}>
+                          <a>
+                            <img
+                              className="avatar"
+                              src={getPhoto(comment.user.photo)}
+                              alt={comment.user.username}
+                            />
+                            <div>
+                              <span className="username">
+                                {comment.user.username}
+                              </span>
+                              <span className="created-at">
+                                {format(comment.createdAt, 'MMM D, YYYY')}
+                              </span>
+                            </div>
+                          </a>
+                        </Link>
+                        {me.id === comment.user.id && (
+                          <div className="edit-and-delete">
+                            <button
+                              type="button"
+                              onClick={e => {
+                                e.stopPropagation()
+                                this.setState({
+                                  editId: comment.id,
+                                  comment: comment.body,
+                                })
+                              }}
+                            >
+                              <img src="/static/icons/edit.svg" alt="Edit" />
+                            </button>
+                            <Mutation
+                              mutation={DELETE_COMMENT_MUTATION}
+                              variables={{ id: comment.id }}
+                            >
+                              {deleteComment => (
+                                <button
+                                  type="button"
+                                  onClick={e => {
+                                    e.stopPropagation()
+                                    deleteComment()
+                                  }}
+                                >
+                                  <img
+                                    src="/static/icons/cross.svg"
+                                    alt="Delete"
+                                  />
+                                </button>
+                              )}
+                            </Mutation>
+                          </div>
+                        )}
+                      </div>
+                      <p className="body">{comment.body}</p>
+                    </li>
+                  ),
+                edges
+              )}
+            </CommentsList>
+            {pageInfo.hasNextPage && (
+              <Button
+                onClick={() => {
+                  fetchMore({
+                    variables: {
+                      cursor: pageInfo.endCursor,
+                    },
+                    updateQuery: (previousResult, { fetchMoreResult }) => {
+                      if (!fetchMoreResult) {
+                        return previousResult
+                      }
+
+                      return {
+                        comments: merge(fetchMoreResult.comments, {
+                          edges: concat(
+                            previousResult.comments.edges,
+                            fetchMoreResult.comments.edges
+                          ),
+                        }),
+                      }
+                    },
+                  })
+                }}
+              >
+                More
+              </Button>
+            )}
+          </Fragment>
+        )}
+      </CommentsStyles>
+    )
+  }
+}
 
 export default Comments
