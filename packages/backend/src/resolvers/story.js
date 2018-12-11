@@ -179,12 +179,15 @@ export default {
     deleteStory: combineResolvers(
       isAuthenticated,
       isStoryOwner,
-      async (parent, args, ctx) =>
+      async (parent, args, ctx) => {
+        const story = await ctx.models.Story.findByPk(args.id)
         await ctx.models.Story.destroy({
           where: {
             id: args.id,
           },
         })
+        return story
+      }
     ),
   },
 

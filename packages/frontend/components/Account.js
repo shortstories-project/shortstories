@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 import Modal from 'react-modal'
 import { Query } from 'react-apollo'
 import User from './User'
@@ -10,6 +10,26 @@ import StoriesGrid from './StoriesGrid'
 import Error from './ErrorMessage'
 import getPhoto from '../lib/get-photo'
 import { STORIES_QUERY } from './Stories'
+
+const toWritten = keyframes`
+  from {
+    left: 85px;
+  }
+
+  to {
+    left: 0px;
+  }
+`
+
+const toLiked = keyframes`
+  from {
+    left: 0px;
+  }
+
+  to {
+    left: 85px;
+  }
+`
 
 const AccountStyles = styled.div`
   max-width: 1200px;
@@ -79,9 +99,11 @@ const AccountStyles = styled.div`
       white-space: nowrap;
       list-style-type: none;
       li {
+        position: relative;
         display: inline-block;
         padding-bottom: 8px;
         margin-right: 20px;
+        width: 65px;
         button {
           outline: none;
           cursor: pointer;
@@ -92,13 +114,31 @@ const AccountStyles = styled.div`
           font-size: 1.6rem;
           font-weight: bold;
           background: transparent;
-          opacity: 0.8;
+        }
+        &:first-child::after {
+          content: '';
+          position: absolute;
+          width: 100%;
+          border-bottom: 2px solid rgb(109, 71, 217, 0.8);
+          bottom: 0;
         }
       }
-      .active {
-        border-bottom: 1px solid rgb(109, 71, 217, 0.54);
+      .written {
         button {
           opacity: 1;
+        }
+        &::after {
+          left: 0;
+          animation: ${toWritten} 0.25s ease;
+        }
+      }
+      .favs {
+        button {
+          opacity: 1;
+        }
+        &::after {
+          left: 85px;
+          animation: ${toLiked} 0.25s ease;
         }
       }
     }
@@ -145,9 +185,7 @@ class Account extends Component {
       {
         activeTab: tab,
       },
-      () => {
-        cb()
-      }
+      cb
     )
   }
 
@@ -180,7 +218,7 @@ class Account extends Component {
               if (loading) return <BigLoader />
               if (error) return <Error error={error} />
               return (
-                <PleaseSignIn isAuth={me}>
+                <PleaseSignIn isAuth={!!me}>
                   <AccountStyles>
                     <div className="user-info">
                       <button
@@ -206,7 +244,7 @@ class Account extends Component {
                     </div>
                     <nav>
                       <ul>
-                        <li className={activeTab === 'written' ? 'active' : ''}>
+                        <li className={activeTab}>
                           <span>
                             <button
                               type="button"

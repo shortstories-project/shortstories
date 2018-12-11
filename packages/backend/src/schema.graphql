@@ -125,7 +125,7 @@ type Mutation {
   likeStory(id: ID!): Reaction!
   dislikeStory(id: ID!): Reaction!
   viewStory(id: ID!): View!
-  deleteStory(id: ID!): Boolean!
+  deleteStory(id: ID!): Story!
 
   # Comment
   createComment(id: ID!, body: String!): Comment!

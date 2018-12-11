@@ -1,19 +1,36 @@
 import React from 'react'
 import { map, merge, concat } from 'ramda'
-import PropTypes from 'prop-types'
+import { arrayOf, func, shape, string, bool } from 'prop-types'
 import StoryItem from './StoryItem'
 import Button from './Button'
 import StoriesList from './styles/StoriesList'
+import story from '../types/story'
 
-function StoriesGrid({ edges, pageInfo, fetchMore, userId = null }) {
+function loadMoreStories(fetchMore, cursor) {
+  fetchMore({
+    variables: { cursor },
+    updateQuery: (previousResult, { fetchMoreResult }) =>
+      !fetchMoreResult
+        ? previousResult
+        : {
+            stories: merge(fetchMoreResult.stories, {
+              edges: concat(
+                previousResult.stories.edges,
+                fetchMoreResult.stories.edges
+              ),
+            }),
+          },
+  })
+}
+
+function StoriesGrid({ edges, pageInfo, fetchMore, userId }) {
   return (
     <StoriesList>
       {map(
-        (story, index) => (
+        story => (
           <StoryItem
             isStoryOwner={userId === story.user.id}
             key={story.id}
-            index={index}
             {...story}
           />
         ),
@@ -22,25 +39,7 @@ function StoriesGrid({ edges, pageInfo, fetchMore, userId = null }) {
       {pageInfo.hasNextPage && (
         <Button
           onClick={() => {
-            fetchMore({
-              variables: {
-                cursor: pageInfo.endCursor,
-              },
-              updateQuery: (previousResult, { fetchMoreResult }) => {
-                if (!fetchMoreResult) {
-                  return previousResult
-                }
-
-                return {
-                  stories: merge(fetchMoreResult.stories, {
-                    edges: concat(
-                      previousResult.stories.edges,
-                      fetchMoreResult.stories.edges
-                    ),
-                  }),
-                }
-              },
-            })
+            loadMoreStories(fetchMore, pageInfo.endCursor)
           }}
         >
           More
@@ -51,10 +50,13 @@ function StoriesGrid({ edges, pageInfo, fetchMore, userId = null }) {
 }
 
 StoriesGrid.propTypes = {
-  edges: PropTypes.array.isRequired,
-  pageInfo: PropTypes.object.isRequired,
-  fetchMore: PropTypes.func.isRequired,
-  userId: PropTypes.string.isRequired,
+  edges: arrayOf(story).isRequired,
+  pageInfo: shape({
+    endCursor: string.isRequired,
+    hasNextPage: bool.isRequired,
+  }).isRequired,
+  fetchMore: func.isRequired,
+  userId: string,
 }
 
 export default StoriesGrid

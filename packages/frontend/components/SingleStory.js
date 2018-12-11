@@ -1,11 +1,13 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import Head from 'next/head'
 import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import format from 'date-fns/format'
-import { map, filter, split } from 'ramda'
+import map from 'ramda/src/map'
+import filter from 'ramda/src/filter'
+import split from 'ramda/src/split'
 import PropTypes from 'prop-types'
 import Error from './ErrorMessage'
 import BigLoader from './BigLoader'
@@ -138,7 +140,7 @@ const SingleStory = ({ id }) => (
           if (!data.story) return <p>Story not found</p>
           const { story, reactions, comments } = data
           return (
-            <>
+            <Fragment>
               <SingleStoryStyles>
                 <Head>
                   <title>Shortstories | {story.title}</title>
@@ -172,7 +174,7 @@ const SingleStory = ({ id }) => (
                 )}
               </SingleStoryStyles>
               {me && (
-                <>
+                <Fragment>
                   <Toolbar>
                     <div className="reaction-buttons">
                       <LikeButton
@@ -196,10 +198,15 @@ const SingleStory = ({ id }) => (
                       />
                     </div>
                   </Toolbar>
-                  <Comments {...comments} id={id} me={me} fetchMore={fetchMore} />
-                </>
+                  <Comments
+                    {...comments}
+                    id={id}
+                    me={me}
+                    fetchMore={fetchMore}
+                  />
+                </Fragment>
               )}
-            </>
+            </Fragment>
           )
         }}
       </Query>

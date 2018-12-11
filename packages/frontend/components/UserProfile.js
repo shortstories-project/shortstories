@@ -5,8 +5,8 @@ import gql from 'graphql-tag'
 import PropTypes from 'prop-types'
 import BigLoader from './BigLoader'
 import Error from './ErrorMessage'
-// import StoriesList from './styles/StoriesList'
-// import StoryItem from './StoryItem'
+import StoriesGrid from './StoriesGrid'
+import { STORIES_QUERY } from './Stories'
 import getPhoto from '../lib/get-photo'
 
 export const USER_QUERY = gql`
@@ -61,7 +61,6 @@ const UserProfileStyles = styled.div`
 `
 
 function UserProfile({ id }) {
-  console.log(id)
   return (
     <Query query={USER_QUERY} variables={{ id }}>
       {({ loading, error, data }) => {
@@ -79,15 +78,17 @@ function UserProfile({ id }) {
               </div>
               <span className="username">{data.user.username}</span>
             </div>
-            {/* {!data.user.writtenStories.length ? (
-              <p>No stories</p>
-            ) : (
-              <StoriesList>
-                {data.user.writtenStories.map((i, index) => (
-                  <StoryItem key={i.id} story={i} index={index} />
-                ))}
-              </StoriesList>
-            )} */}
+            <Query query={STORIES_QUERY}>
+              {({ data: { stories }, loading, error, fetchMore }) => {
+                if (loading) return <BigLoader />
+                if (error) return <Error error={error} />
+                return !stories.edges.length ? (
+                  <p>No stories</p>
+                ) : (
+                  <StoriesGrid {...stories} fetchMore={fetchMore} />
+                )
+              }}
+            </Query>
           </UserProfileStyles>
         )
       }}

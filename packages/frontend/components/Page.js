@@ -13,8 +13,12 @@ const theme = {
   black: '#272727',
   white: '#fcfcfc',
   purple: '#fc67fa',
+  purpleDark: '#6d47d9',
   pink: '#f4c4f3',
   red: '#ff0000',
+  grey: '#dcdcdc',
+  darkGrey: '#aaaaaa',
+  lightGrey: '#eeeeee',
   maxWidth: '1200px',
   bs: '0 1px 16px rgba(0, 0, 0, 0.25)',
 }
@@ -29,10 +33,22 @@ const StyledPage = styled.div`
           }
         `
       : css`
-          background-image: url('/static/topography.svg');
-          background-color: #eee;
-          background-size: 300px, auto;
-          min-height: 100vh;
+          position: relative;
+          overflow: hidden;
+          min-height: 100%;
+          &::before {
+            content: '';
+            background-image: url('/static/topography.svg');
+            background-color: ${theme.lightGrey};
+            background-size: 300px, auto;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            will-change: transform;
+            z-index: -1;
+          }
         `};
   color: ${props => props.theme.black};
 `
@@ -58,6 +74,7 @@ const GlobalStyle = createGlobalStyle`
   html {
     box-sizing: border-box;
     font-size: 10px;
+    height: 100%;
   }
 
   *, *:before, *:after {
@@ -67,6 +84,7 @@ const GlobalStyle = createGlobalStyle`
   body {
     padding: 0;
     margin: 0;
+    height: 100%;
     font-size: 1.5rem;
     font-family: 'Montserrat', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }

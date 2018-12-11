@@ -4,6 +4,7 @@ import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
 import BigLoader from './BigLoader'
 import StoriesGrid from './StoriesGrid'
+import ErrorMessage from './ErrorMessage'
 
 export const STORIES_QUERY = gql`
   query STORIES_QUERY(
@@ -47,7 +48,7 @@ function Stories() {
     <Query query={STORIES_QUERY}>
       {({ data: { stories }, loading, error, fetchMore }) => {
         if (loading) return <BigLoader />
-        if (error) return <p>Error: {error.message}</p>
+        if (error) return <ErrorMessage error={error} />
         if (!stories.edges.length)
           return (
             <div>

@@ -2,11 +2,15 @@ import React from 'react'
 import Router from 'next/router'
 import styled from 'styled-components'
 import { Mutation } from 'react-apollo'
-import TextareaAutosize from 'react-textarea-autosize'
+import ReactTextareaAutosize from 'react-textarea-autosize'
 import { Formik } from 'formik'
 import gql from 'graphql-tag'
+import nanoid from 'nanoid'
 import Button from './Button'
 import Error from './ErrorMessage'
+import User from './User'
+import PleaseSignIn from './PleaseSignIn'
+import { STORIES_QUERY } from './Stories'
 
 const CREATE_STORY_MUTATION = gql`
   mutation CREATE_STORY_MUTATION($title: String!, $body: String!) {
@@ -21,6 +25,7 @@ const CREATE_STORY_MUTATION = gql`
 const FormStyles = styled.form`
   max-width: 700px;
   margin: 0 auto;
+  display: grid;
 
   .title-block,
   .body-block {
@@ -60,11 +65,6 @@ const FormStyles = styled.form`
     font-size: 1.2rem;
     font-weight: bold;
   }
-
-  button {
-    float: right;
-    width: 160px;
-  }
 `
 
 export const validate = values => {
@@ -81,6 +81,15 @@ export const validate = values => {
   return errors
 }
 
+function update(cache, payload) {
+  const data = cache.readQuery({ query: STORIES_QUERY })
+  data.stories.edges = [...data.stories.edges, payload.data.createStory]
+  cache.writeQuery({
+    query: STORIES_QUERY,
+    data,
+  })
+}
+
 const INITIAL_VALUES = {
   title: '',
   body: '',
@@ -88,62 +97,88 @@ const INITIAL_VALUES = {
 
 function StoryCreator() {
   return (
-    <Mutation mutation={CREATE_STORY_MUTATION}>
-      {(createStory, { loading, error }) => (
+    <User>
+      {({ data: { me } }) => (
         <Formik
           isInitialValid={false}
           initialValues={INITIAL_VALUES}
-          onSubmit={values => {
-            createStory({ variables: { ...values } }).then(() => {
-              Router.push('/me')
-            })
-          }}
           validate={validate}
-          render={({
+        >
+          {({
             values,
             errors,
             touched,
             handleChange,
             handleBlur,
             handleSubmit,
+            setTouched,
+            setSubmitting,
           }) => (
-            <FormStyles onSubmit={handleSubmit}>
-              <Error error={error} />
-              <div className="title-block">
-                <input
-                  placeholder="Title"
-                  type="text"
-                  name="title"
-                  id="title"
-                  value={values.title}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.title && touched.title && (
-                  <span className="error-message">{errors.title}</span>
-                )}
-              </div>
-              <div className="body-block">
-                <TextareaAutosize
-                  placeholder="Where is your mind?"
-                  name="body"
-                  id="body"
-                  value={values.body}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-                {errors.body && touched.body && (
-                  <span className="error-message">{errors.body}</span>
-                )}
-              </div>
-              <Button loading={loading} type="submit">
-                Publish
-              </Button>
-            </FormStyles>
+            <Mutation
+              mutation={CREATE_STORY_MUTATION}
+              update={update}
+              optimisticResponse={{
+                __typename: 'Mutation',
+                createStory: {
+                  __typename: 'Story',
+                  id: nanoid(10),
+                  title: values.title,
+                  body: values.body,
+                },
+              }}
+            >
+              {(createStory, { loading, error }) => (
+                <PleaseSignIn isAuth={!!me}>
+                  <FormStyles onSubmit={handleSubmit}>
+                    <Error error={error} />
+                    <div className="title-block">
+                      <input
+                        placeholder="Title"
+                        type="text"
+                        name="title"
+                        id="title"
+                        value={values.title}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.title && touched.title && (
+                        <span className="error-message">{errors.title}</span>
+                      )}
+                    </div>
+                    <div className="body-block">
+                      <ReactTextareaAutosize
+                        placeholder="Where is your mind?"
+                        name="body"
+                        id="body"
+                        value={values.body}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      {errors.body && touched.body && (
+                        <span className="error-message">{errors.body}</span>
+                      )}
+                    </div>
+                    <Button
+                      onClick={async () => {
+                        setTouched(values)
+                        setSubmitting(true)
+                        await createStory({ variables: { ...values } })
+                        Router.push('/me')
+                        setSubmitting(false)
+                      }}
+                      loading={loading}
+                      type="submit"
+                    >
+                      Publish
+                    </Button>
+                  </FormStyles>
+                </PleaseSignIn>
+              )}
+            </Mutation>
           )}
-        />
+        </Formik>
       )}
-    </Mutation>
+    </User>
   )
 }
 

@@ -4,7 +4,7 @@ const StoryStyles = styled.div`
   cursor: pointer;
   height: 450px;
   overflow: hidden;
-  background: #fff;
+  background: ${props => props.theme.white};
   border-radius: 4px;
   box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.25);
   padding: 20px;
@@ -36,6 +36,13 @@ const StoryStyles = styled.div`
   .author {
     display: flex;
     height: 50px;
+    &:hover {
+      .name-and-date {
+        .name::after {
+          width: 100%;
+        }
+      }
+    }
 
     .avatar {
       width: 50px;
@@ -50,11 +57,25 @@ const StoryStyles = styled.div`
       flex-direction: column;
       justify-content: center;
       .name {
-        color: #6d47d9;
+        display: flex;
+        color: ${props => props.theme.purpleDark};
         font-weight: bold;
+        position: relative;
+        &::after {
+          content: '';
+          border-bottom: 3px solid ${props => props.theme.purpleDark};
+          position: absolute;
+          width: 0%;
+          bottom: -1px;
+          transform: translateX(-50%);
+          transition: width 0.4s;
+          transition-timing-function: cubic-bezier(1, -0.65, 0, 2.31);
+          left: 50%;
+        }
       }
       .date {
-        color: #aaa;
+        margin-top: 4px;
+        color: ${props => props.theme.darkGrey};
         font-size: 1rem;
       }
     }
@@ -63,20 +84,28 @@ const StoryStyles = styled.div`
   .edit-and-delete {
     display: flex;
     justify-content: flex-end;
+    position: relative;
+    margin-top: -20px;
+    margin-right: -20px;
+    margin-left: -20px;
     button {
       cursor: pointer;
-      background: none;
+      background-color: ${props => props.theme.white};
+      outline: none;
       border: none;
-      width: 20px;
-      height: 20px;
+      width: 50px;
+      height: 50px;
       padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-left: 16px;
+      transition: background-color 0.25s ease-in-out;
       img {
-        width: 100%;
-        height: 100%;
+        width: 20px;
+        height: 20px;
+      }
+      &:hover {
+        background-color: ${props => props.theme.lightGrey};
       }
     }
   }
