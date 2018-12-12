@@ -27,7 +27,6 @@
       }
     ],
     "object-curly-spacing": ["error", "always"],
-    "arrow-parens": ["error", "always"],
     "prefer-const": ["error"],
     "prefer-arrow-callback": ["error"],
     "arrow-body-style": ["error", "as-needed"]
