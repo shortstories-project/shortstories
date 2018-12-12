@@ -57,7 +57,7 @@ const EditForm = styled.form`
   input,
   textarea {
     font-family: 'Alegreya', serif;
-    border: 3px solid ${props => props.theme.grey};
+    border: 3px solid ${props => props.theme.yellow};
     outline: none;
     color: ${props => props.theme.black};
   }
@@ -101,6 +101,10 @@ const EditForm = styled.form`
       margin-right: 20px;
       &:last-child {
         margin-right: 0;
+        background-color: #32cd32;
+        &:hover {
+          background-color: #228b22;
+        }
       }
     }
   }
@@ -169,9 +173,6 @@ function EditingStoryModal({ isOpen, toggle, title, body, id }) {
                   )}
                 </div>
                 <div className="buttons-block">
-                  <Button loading={loading} type="submit">
-                    Save
-                  </Button>
                   <Button
                     type="button"
                     onClick={() => {
@@ -179,6 +180,9 @@ function EditingStoryModal({ isOpen, toggle, title, body, id }) {
                     }}
                   >
                     Cancel
+                  </Button>
+                  <Button loading={loading} type="submit">
+                    Save
                   </Button>
                 </div>
               </EditForm>

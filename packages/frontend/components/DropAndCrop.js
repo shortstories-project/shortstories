@@ -34,6 +34,19 @@ const percentToPx = (a, b) => a * (b / 100)
 const CropStyles = styled.div`
   display: flex;
   flex-direction: column;
+  .buttons {
+    display: flex;
+    width: 100%;
+    button {
+      width: 50%;
+      &:last-child {
+        background-color: #32cd32;
+        &:hover {
+          background-color: #228b22;
+        }
+      }
+    }
+  }
 `
 
 const Dropzone = styled(ReactDropzone)`
@@ -205,22 +218,24 @@ class DropAndCrop extends Component {
                   onChange={this.onCropChange}
                   keepSelection
                 />
-                <Button
-                  onClick={() => {
-                    this.setState({
-                      imgSrc: null,
-                    })
-                  }}
-                >
-                  Select another file
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.saveAndContinue(postPhoto)
-                  }}
-                >
-                  Save and continue
-                </Button>
+                <div className="buttons">
+                  <Button
+                    onClick={() => {
+                      this.setState({
+                        imgSrc: null,
+                      })
+                    }}
+                  >
+                    Select another file
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      this.saveAndContinue(postPhoto)
+                    }}
+                  >
+                    Save and continue
+                  </Button>
+                </div>
               </CropStyles>
             )}
           </Mutation>

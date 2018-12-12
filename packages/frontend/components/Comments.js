@@ -4,12 +4,12 @@ import { Mutation } from 'react-apollo'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import gql from 'graphql-tag'
 import compareDesc from 'date-fns/compare_desc'
-import format from 'date-fns/format'
 import nanoid from 'nanoid'
 import Button from './Button'
 import ErrorMessage from './ErrorMessage'
 import CommentsList from './CommentsList'
 import { STORY_DATA_QUERY } from './SingleStory'
+import { STORIES_QUERY } from './Stories'
 
 const CREATE_COMMENT_MUTATION = gql`
   mutation CREATE_COMMENT_MUTATION($id: ID!, $body: String!) {
@@ -28,23 +28,34 @@ const Textarea = styled.div`
   display: flex;
   flex-direction: column;
   textarea {
-    border: 1px solid gainsboro;
+    border: 1px solid ${props => props.theme.grey};
+    background-color: ${props => props.theme.white};
+    font-family: 'Montserrat', serif;
     resize: none;
-    min-height: 60px;
+    min-height: 63px;
     padding: 20px;
     font-size: 1.6rem;
-    outline: none;
+    &:focus {
+      outline-color: ${props => props.theme.black};
+    }
   }
 `
 
 const CommentsStyles = styled.div`
   max-width: 700px;
   margin: 0 auto;
+
+  .no-comments {
+    margin: 20px 0;
+  }
+
+  .more-button {
+    width: 100%;
+  }
 `
 
 function update(cache, payload, id) {
   const data = cache.readQuery({ query: STORY_DATA_QUERY, variables: { id } })
-  console.log(payload.data.createComment)
   data.comments.edges = [
     ...data.comments.edges,
     payload.data.createComment,
@@ -54,6 +65,23 @@ function update(cache, payload, id) {
     variables: { id },
     data,
   })
+  try {
+    const data = cache.readQuery({ query: STORIES_QUERY })
+    data.stories.edges = data.stories.edges.map(story =>
+      story.id === id
+        ? {
+            ...story,
+            stats: { ...story.stats, comments: story.stats.comments + 1 },
+          }
+        : story
+    )
+    cache.writeQuery({
+      query: STORIES_QUERY,
+      data,
+    })
+  } catch (e) {
+    // nothing
+  }
 }
 
 class Comments extends Component {
@@ -67,6 +95,20 @@ class Comments extends Component {
     const { name, value } = e.target
     this.setState({
       [name]: value,
+    })
+  }
+
+  resetAfterUpdate = () => {
+    this.setState({
+      editId: null,
+      comment: '',
+    })
+  }
+
+  activateEditMode = comment => {
+    this.setState({
+      editId: comment.id,
+      comment: comment.body,
     })
   }
 
@@ -129,6 +171,8 @@ class Comments extends Component {
           me={me}
           pageInfo={pageInfo}
           fetchMore={fetchMore}
+          resetAfterUpdate={this.resetAfterUpdate}
+          activateEditMode={this.activateEditMode}
         />
       </CommentsStyles>
     )

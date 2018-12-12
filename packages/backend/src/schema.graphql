@@ -130,5 +130,5 @@ type Mutation {
   # Comment
   createComment(id: ID!, body: String!): Comment!
   updateComment(id: ID!, body: String!): Comment!
-  deleteComment(id: ID!): Boolean!
+  deleteComment(id: ID!): Comment!
 }

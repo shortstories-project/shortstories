@@ -4,13 +4,12 @@ import { withState } from 'recompose'
 import { Mutation } from 'react-apollo'
 import gql from 'graphql-tag'
 import { func, bool, string, number, shape } from 'prop-types'
-import format from 'date-fns/format'
 import filter from 'ramda/src/filter'
 import EditingStoryModal from './EditingStoryModal'
+import UserAndDate from './UserAndDate'
 import StoryStyles from './styles/StoryStyles'
 import ToolsBar from './styles/ToolsBar'
 import { STORIES_QUERY } from './Stories'
-import getPhoto from '../lib/get-photo'
 import user from '../types/user'
 
 const DELETE_STORY_MUTATION = gql`
@@ -20,11 +19,6 @@ const DELETE_STORY_MUTATION = gql`
     }
   }
 `
-
-function routeToUserPage(event, id) {
-  event.stopPropagation()
-  Router.push(`/user?id=${id}`)
-}
 
 function update(cache, payload) {
   const data = cache.readQuery({ query: STORIES_QUERY })
@@ -93,23 +87,7 @@ function StoryItem({
             </Mutation>
           </div>
         ) : (
-          <div
-            role="link"
-            className="author"
-            onClick={event => {
-              routeToUserPage(event, user.id)
-            }}
-          >
-            <img
-              className="avatar"
-              src={getPhoto(user.photo)}
-              alt={user.username}
-            />
-            <div className="name-and-date">
-              <span className="name">{user.username}</span>
-              <span className="date">{format(createdAt, 'MMM D, YYYY')}</span>
-            </div>
-          </div>
+          <UserAndDate user={user} date={createdAt} />
         )}
         <h2 className="title">{title}</h2>
         <p className="body">{body}</p>

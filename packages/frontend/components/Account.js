@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import styled, { keyframes } from 'styled-components'
-import Modal from 'react-modal'
+import ReactModal from 'react-modal'
 import { Query } from 'react-apollo'
+import gql from 'graphql-tag'
 import User from './User'
 import PleaseSignIn from './PleaseSignIn'
 import DropAndCrop from './DropAndCrop'
@@ -9,7 +10,70 @@ import BigLoader from './BigLoader'
 import StoriesGrid from './StoriesGrid'
 import Error from './ErrorMessage'
 import getPhoto from '../lib/get-photo'
-import { STORIES_QUERY } from './Stories'
+
+const WRITTEN_STORIES_QUERY = gql`
+  query WRITTEN_STORIES_QUERY($cursor: String, $userId: ID) {
+    stories(cursor: $cursor, limit: 20, userId: $userId, isLiked: false)
+      @connection(key: "StoriesConnection") {
+      edges {
+        id
+        title
+        body
+        user {
+          ...author
+        }
+        stats {
+          likes
+          dislikes
+          comments
+        }
+        createdAt
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+
+  fragment author on User {
+    id
+    username
+    photo
+  }
+`
+
+const LIKED_STORIES_QUERY = gql`
+  query LIKED_STORIES_QUERY($cursor: String) {
+    stories(cursor: $cursor, limit: 20, userId: null, isLiked: true)
+      @connection(key: "StoriesConnection") {
+      edges {
+        id
+        title
+        body
+        user {
+          ...author
+        }
+        stats {
+          likes
+          dislikes
+          comments
+        }
+        createdAt
+      }
+      pageInfo {
+        hasNextPage
+        endCursor
+      }
+    }
+  }
+
+  fragment author on User {
+    id
+    username
+    photo
+  }
+`
 
 const toWritten = keyframes`
   from {
@@ -90,7 +154,7 @@ const AccountStyles = styled.div`
   }
 
   nav {
-    border-bottom: 1px solid rgb(109, 71, 217, 0.2);
+    border-bottom: 1px solid rgb(255, 198, 0, 0.2);
     margin-bottom: 50px;
     ul {
       margin: 0;
@@ -110,7 +174,7 @@ const AccountStyles = styled.div`
           border: none;
           margin: 0;
           padding: 0;
-          color: #6d47d9;
+          color: ${props => props.theme.yellow};
           font-size: 1.6rem;
           font-weight: bold;
           background: transparent;
@@ -119,7 +183,7 @@ const AccountStyles = styled.div`
           content: '';
           position: absolute;
           width: 100%;
-          border-bottom: 2px solid rgb(109, 71, 217, 0.8);
+          border-bottom: 2px solid rgb(255, 198, 0, 0.8);
           bottom: 0;
         }
       }
@@ -171,22 +235,13 @@ const customStyles = {
 }
 
 if (process.browser) {
-  Modal.setAppElement('#__next')
+  ReactModal.setAppElement('#__next')
 }
 
 class Account extends Component {
   state = {
     activeTab: 'written',
     isOpen: false,
-  }
-
-  changeTab = (tab, cb) => {
-    this.setState(
-      {
-        activeTab: tab,
-      },
-      cb
-    )
   }
 
   openModal = () => {
@@ -201,93 +256,109 @@ class Account extends Component {
     })
   }
 
+  changeTab = tab => {
+    this.setState({
+      activeTab: tab,
+    })
+  }
+
+  renderStories = (me, loading, error, stories, fetchMore) => {
+    const { activeTab } = this.state
+    if (loading || !stories) return <BigLoader />
+    if (error) return <Error error={error} />
+    return !stories.edges.length ? (
+      <p>No stories</p>
+    ) : (
+      <StoriesGrid
+        {...stories}
+        userId={activeTab === 'written' ? me.id : null}
+        fetchMore={fetchMore}
+      />
+    )
+  }
+
   render() {
     const { activeTab, isOpen } = this.state
     return (
       <User>
         {({ data: { me } }) => (
           <Query
-            query={STORIES_QUERY}
-            variables={
+            query={
               activeTab === 'written'
-                ? { limit: 20, userId: me.id, isLiked: false }
-                : { limit: 20, userId: null, isLiked: true }
+                ? WRITTEN_STORIES_QUERY
+                : LIKED_STORIES_QUERY
             }
+            variables={activeTab === 'written' ? { userId: me.id } : undefined}
+            fetchPolicy="cache-and-network"
           >
-            {({ data: { stories }, loading, error, fetchMore, refetch }) => {
-              if (loading) return <BigLoader />
-              if (error) return <Error error={error} />
-              return (
-                <PleaseSignIn isAuth={!!me}>
-                  <AccountStyles>
-                    <div className="user-info">
-                      <button
-                        onClick={this.openModal}
-                        className="photo-edit"
-                        type="button"
-                      >
-                        <img
-                          className="avatar"
-                          src={getPhoto(me.photo)}
-                          alt={me.username}
-                        />
-                        <div className="blur">
-                          <img
-                            className="photo-icon"
-                            src="/static/icons/photo.svg"
-                            alt=""
-                          />
-                        </div>
-                      </button>
-                      <span className="username">{me.username}</span>
-                      <span className="email">{me.email}</span>
-                    </div>
-                    <nav>
-                      <ul>
-                        <li className={activeTab}>
-                          <span>
-                            <button
-                              type="button"
-                              role="tab"
-                              onClick={() => this.changeTab('written', refetch)}
-                            >
-                              Written
-                            </button>
-                          </span>
-                        </li>
-                        <li className={activeTab === 'favs' ? 'active' : ''}>
-                          <span>
-                            <button
-                              type="button"
-                              role="tab"
-                              onClick={() => this.changeTab('favs', refetch)}
-                            >
-                              Favs
-                            </button>
-                          </span>
-                        </li>
-                      </ul>
-                    </nav>
-                    {!stories.edges.length ? (
-                      <p>No stories</p>
-                    ) : (
-                      <StoriesGrid
-                        {...stories}
-                        userId={activeTab === 'written' ? me.id : null}
-                        fetchMore={fetchMore}
+            {({ data: { stories }, loading, error, fetchMore }) => (
+              <PleaseSignIn isAuth={!!me}>
+                <AccountStyles>
+                  <div className="user-info">
+                    <button
+                      onClick={this.openModal}
+                      className="photo-edit"
+                      type="button"
+                    >
+                      <img
+                        className="avatar"
+                        src={getPhoto(me.photo)}
+                        alt={me.username}
                       />
-                    )}
-                  </AccountStyles>
-                  <Modal
+                      <div className="blur">
+                        <img
+                          className="photo-icon"
+                          src="/static/icons/photo.svg"
+                          alt=""
+                        />
+                      </div>
+                    </button>
+                    <span className="username">{me.username}</span>
+                    <span className="email">{me.email}</span>
+                  </div>
+                  <nav>
+                    <ul>
+                      <li className={activeTab}>
+                        <span>
+                          <button
+                            type="button"
+                            role="tab"
+                            onClick={() => {
+                              this.changeTab('written')
+                            }}
+                          >
+                            Written
+                          </button>
+                        </span>
+                      </li>
+                      <li className={activeTab === 'favs' ? 'active' : ''}>
+                        <span>
+                          <button
+                            type="button"
+                            role="tab"
+                            onClick={() => {
+                              this.changeTab('favs')
+                            }}
+                          >
+                            Favs
+                          </button>
+                        </span>
+                      </li>
+                    </ul>
+                  </nav>
+                  {this.renderStories(me, loading, error, stories, fetchMore)}
+                </AccountStyles>
+                {isOpen && (
+                  <ReactModal
                     onRequestClose={this.closeModal}
                     isOpen={isOpen}
                     style={customStyles}
                   >
                     <DropAndCrop userId={me.id} afterSave={this.closeModal} />
-                  </Modal>
-                </PleaseSignIn>
-              )
-            }}
+                  </ReactModal>
+                )}
+              </PleaseSignIn>
+            )}
           </Query>
         )}
       </User>

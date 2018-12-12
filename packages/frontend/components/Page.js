@@ -27,19 +27,18 @@ const StyledPage = styled.div`
   ${props =>
     props.isSingleStory
       ? css`
-          background-color: #fff;
+          background-color: #ffffff;
           > div {
             height: auto;
           }
         `
       : css`
           position: relative;
-          overflow: hidden;
           min-height: 100%;
           &::before {
             content: '';
-            background-image: url('/static/topography.svg');
-            background-color: ${theme.lightGrey};
+            background-image: url('/static/topography.svg'),
+              linear-gradient(20deg, rgb(69, 104, 220), rgb(176, 106, 179));
             background-size: 300px, auto;
             position: fixed;
             top: 0;

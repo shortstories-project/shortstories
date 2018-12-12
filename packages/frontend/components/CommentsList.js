@@ -1,21 +1,23 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
-import Link from 'next/link'
 import { Mutation } from 'react-apollo'
 import ReactTextareaAutosize from 'react-textarea-autosize'
 import map from 'ramda/src/map'
 import merge from 'ramda/src/merge'
 import concat from 'ramda/src/concat'
-import format from 'date-fns/format'
 import gql from 'graphql-tag'
 import { array, object, string, func } from 'prop-types'
 import Button from './Button'
+import ErrorMessage from './ErrorMessage'
+import UserAndDate from './UserAndDate'
 import { STORY_DATA_QUERY } from './SingleStory'
-import getPhoto from '../lib/get-photo'
+import { STORIES_QUERY } from './Stories'
 
 const DELETE_COMMENT_MUTATION = gql`
   mutation DELETE_COMMENT_MUTATION($id: ID!) {
-    deleteComment(id: $id)
+    deleteComment(id: $id) {
+      id
+    }
   }
 `
 
@@ -34,13 +36,18 @@ const UPDATE_COMMENT_MUTATION = gql`
 const Textarea = styled.div`
   display: flex;
   flex-direction: column;
+  margin-bottom: 20px;
   textarea {
     border: 1px solid ${props => props.theme.grey};
+    background-color: ${props => props.theme.white};
+    font-family: 'Montserrat', serif;
     resize: none;
-    min-height: 60px;
+    min-height: 63px;
     padding: 20px;
     font-size: 1.6rem;
-    outline: none;
+    &:focus {
+      outline-color: ${props => props.theme.black};
+    }
   }
 `
 
@@ -59,36 +66,47 @@ const List = styled.ul`
   .comment-header {
     display: flex;
     align-items: center;
+    .user-and-date {
+      width: 100%;
+    }
   }
 
   .edit-and-delete {
     display: flex;
     justify-content: flex-end;
+    position: relative;
+    top: -20px;
+    right: -20px;
     button {
       cursor: pointer;
-      background: none;
+      outline: none;
+      background-color: ${props => props.theme.white};
       border: none;
-      width: 20px;
-      height: 20px;
+      width: 50px;
+      height: 50px;
       padding: 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-left: 16px;
+      transition: background-color 0.25s ease-in-out;
       img {
-        width: 100%;
-        height: 100%;
+        width: 20px;
+        height: 20px;
+      }
+      &:hover {
+        background-color: ${props => props.theme.lightGrey};
       }
     }
   }
 
   li {
     position: relative;
-    background-color: #fff;
+    background-color: ${props => props.theme.white};
     margin-bottom: 20px;
     border-radius: 4px;
     padding: 20px;
-    border: 1px solid gainsboro;
+    border: 1px solid ${props => props.theme.grey};
+    overflow: hidden;
 
     a {
       display: flex;
@@ -113,20 +131,84 @@ const List = styled.ul`
     }
 
     .body {
-      margin-top: 10px;
+      margin-top: 18px;
     }
   }
 `
 
-function CommentEditor({ comment, commentBody, id, onChange }) {
+function editUpdate(cache, payload, id) {
+  const data = cache.readQuery({ query: STORY_DATA_QUERY, variables: { id } })
+  data.comments.edges = data.comments.edges.map(comment =>
+    payload.data.updateComment.id === comment.id
+      ? payload.data.updateComment
+      : comment
+  )
+  cache.writeQuery({
+    query: STORY_DATA_QUERY,
+    variables: { id },
+    data,
+  })
+}
+
+function deleteUpdate(cache, payload, id) {
+  const data = cache.readQuery({ query: STORY_DATA_QUERY, variables: { id } })
+  data.comments.edges = data.comments.edges.filter(
+    comment => comment.id !== payload.data.deleteComment.id
+  )
+  cache.writeQuery({
+    query: STORY_DATA_QUERY,
+    variables: { id },
+    data,
+  })
+  try {
+    const data = cache.readQuery({ query: STORIES_QUERY })
+    data.stories.edges = data.stories.edges.map(story =>
+      story.id === id
+        ? {
+            ...story,
+            stats: { ...story.stats, comments: story.stats.comments - 1 },
+          }
+        : story
+    )
+    cache.writeQuery({
+      query: STORIES_QUERY,
+      data,
+    })
+  } catch (e) {
+    // nothing
+  }
+}
+
+function CommentEditor({
+  comment,
+  commentBody,
+  id,
+  onChange,
+  me,
+  resetAfterUpdate,
+}) {
   return (
     <Mutation
       mutation={UPDATE_COMMENT_MUTATION}
       variables={{ id: comment.id, body: commentBody }}
-      refetchQueries={[{ query: STORY_DATA_QUERY, variables: { id } }]}
+      update={(cache, payload) => editUpdate(cache, payload, id)}
+      optimisticResponse={{
+        __typename: 'Mutation',
+        updateComment: {
+          __typename: 'Comment',
+          id: comment.id,
+          body: commentBody,
+          user: {
+            __typename: 'User',
+            id: me.id,
+          },
+          createdAt: new Date().toISOString(),
+        },
+      }}
     >
-      {(updateComment, { loading }) => (
+      {(updateComment, { loading, error }) => (
         <Textarea>
+          <ErrorMessage error={error} />
           <ReactTextareaAutosize
             placeholder="Edit your comment..."
             name="comment"
@@ -139,13 +221,9 @@ function CommentEditor({ comment, commentBody, id, onChange }) {
             disabled={commentBody.length === 0}
             loading={loading}
             type="button"
-            onClick={() => {
-              updateComment().then(() => {
-                this.setState({
-                  editId: null,
-                  comment: '',
-                })
-              })
+            onClick={async () => {
+              await updateComment()
+              resetAfterUpdate()
             }}
           >
             Save
@@ -165,6 +243,8 @@ function CommentsList({
   me,
   pageInfo,
   fetchMore,
+  resetAfterUpdate,
+  activateEditMode,
 }) {
   return edges.length > 0 ? (
     <Fragment>
@@ -173,51 +253,44 @@ function CommentsList({
           comment =>
             editId === comment.id ? (
               <CommentEditor
+                resetAfterUpdate={resetAfterUpdate}
                 comment={comment}
                 commentBody={commentBody}
                 onChange={onChange}
                 id={id}
+                me={me}
               />
             ) : (
               <li key={comment.id}>
                 <div className="comment-header">
-                  <Link href={`/user?id=${comment.user.id}`}>
-                    <a>
-                      <img
-                        className="avatar"
-                        src={getPhoto(comment.user.photo)}
-                        alt={comment.user.username}
-                      />
-                      <div>
-                        <span className="username">
-                          {comment.user.username}
-                        </span>
-                        <span className="created-at">
-                          {format(comment.createdAt, 'MMM D, YYYY')}
-                        </span>
-                      </div>
-                    </a>
-                  </Link>
+                  <UserAndDate
+                    className="user-and-date"
+                    user={comment.user}
+                    date={comment.createdAt}
+                  />
                   {me.id === comment.user.id && (
                     <div className="edit-and-delete">
                       <button
                         type="button"
-                        onClick={e => {
-                          e.stopPropagation()
-                          this.setState({
-                            editId: comment.id,
-                            comment: comment.body,
-                          })
+                        onClick={() => {
+                          activateEditMode(comment)
                         }}
                       >
                         <img src="/static/icons/edit.svg" alt="Edit" />
                       </button>
                       <Mutation
                         mutation={DELETE_COMMENT_MUTATION}
-                        refetchQueries={[
-                          { query: STORY_DATA_QUERY, variables: { id } },
-                        ]}
                         variables={{ id: comment.id }}
+                        update={(cache, payload) =>
+                          deleteUpdate(cache, payload, id)
+                        }
+                        optimisticResponse={{
+                          __typename: 'Mutation',
+                          deleteComment: {
+                            __typename: 'Comment',
+                            id: comment.id,
+                          },
+                        }}
                       >
                         {deleteComment => (
                           <button
@@ -242,6 +315,7 @@ function CommentsList({
       </List>
       {pageInfo.hasNextPage && (
         <Button
+          className="more-button"
           onClick={() => {
             fetchMore({
               variables: {
@@ -269,7 +343,7 @@ function CommentsList({
       )}
     </Fragment>
   ) : (
-    <p>No comments yet</p>
+    <p className="no-comments">No comments yet</p>
   )
 }
 

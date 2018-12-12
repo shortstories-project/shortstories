@@ -32,15 +32,19 @@ const FormStyles = styled.form`
     margin-bottom: 20px;
   }
 
+  input,
+  textarea {
+    width: 100%;
+    font-family: 'Alegreya', serif;
+    border: 5px solid ${props => props.theme.yellow};
+    outline: none;
+    color: ${props => props.theme.black};
+  }
+
   .title-block {
     input {
-      width: 100%;
       padding: 10px 20px;
       font-size: 5rem;
-      font-family: 'Alegreya', serif;
-      color: ${props => props.theme.black};
-      outline: none;
-      border: 3px solid gainsboro;
       margin-bottom: 4px;
     }
   }
@@ -48,13 +52,8 @@ const FormStyles = styled.form`
   .body-block {
     textarea {
       font-size: 2.1rem;
-      font-family: 'Alegreya', serif;
       line-height: 1.4;
-      border: 3px solid gainsboro;
-      color: ${props => props.theme.black};
-      width: 100%;
       padding: 10px 20px;
-      outline: none;
       resize: none;
       min-height: 300px;
     }
@@ -73,21 +72,25 @@ export const validate = values => {
     errors.title = 'Enter title'
   }
   if (values.body.length < 600) {
-    errors.body = 'Too short story (min length = 600 symbols)'
+    errors.body = 'Too short story (min 600 symbols)'
   }
   if (values.body.length > 4000) {
-    errors.body = 'Too long story (max length = 4000 symbols)'
+    errors.body = 'Too long story (max 4000 symbols)'
   }
   return errors
 }
 
 function update(cache, payload) {
-  const data = cache.readQuery({ query: STORIES_QUERY })
-  data.stories.edges = [...data.stories.edges, payload.data.createStory]
-  cache.writeQuery({
-    query: STORIES_QUERY,
-    data,
-  })
+  try {
+    const stories = cache.readQuery({ query: STORIES_QUERY })
+    stories.stories.edges = [...stories.stories.edges, payload.data.createStory]
+    cache.writeQuery({
+      query: STORIES_QUERY,
+      data: stories,
+    })
+  } catch (error) {
+    // Nothing
+  }
 }
 
 const INITIAL_VALUES = {

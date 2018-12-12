@@ -45,7 +45,7 @@ export const STORIES_QUERY = gql`
 
 function Stories() {
   return (
-    <Query query={STORIES_QUERY}>
+    <Query query={STORIES_QUERY} fetchPolicy="cache-first">
       {({ data: { stories }, loading, error, fetchMore }) => {
         if (loading) return <BigLoader />
         if (error) return <ErrorMessage error={error} />

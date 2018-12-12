@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Fragment } from 'react'
 import { map, merge, concat } from 'ramda'
 import { arrayOf, func, shape, string, bool } from 'prop-types'
 import StoryItem from './StoryItem'
@@ -25,19 +25,26 @@ function loadMoreStories(fetchMore, cursor) {
 
 function StoriesGrid({ edges, pageInfo, fetchMore, userId }) {
   return (
-    <StoriesList>
-      {map(
-        story => (
-          <StoryItem
-            isStoryOwner={userId === story.user.id}
-            key={story.id}
-            {...story}
-          />
-        ),
-        edges
-      )}
+    <Fragment>
+      <StoriesList>
+        {map(
+          story => (
+            <StoryItem
+              isStoryOwner={userId === story.user.id}
+              key={story.id}
+              {...story}
+            />
+          ),
+          edges
+        )}
+      </StoriesList>
       {pageInfo.hasNextPage && (
         <Button
+          style={{
+            width: '320px',
+            margin: '20px auto',
+            display: 'block',
+          }}
           onClick={() => {
             loadMoreStories(fetchMore, pageInfo.endCursor)
           }}
@@ -45,7 +52,7 @@ function StoriesGrid({ edges, pageInfo, fetchMore, userId }) {
           More
         </Button>
       )}
-    </StoriesList>
+    </Fragment>
   )
 }
 

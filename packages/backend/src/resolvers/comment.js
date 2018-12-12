@@ -67,12 +67,15 @@ export default {
     deleteComment: combineResolvers(
       isAuthenticated,
       isCommentOwner,
-      async (parent, { id }, ctx) =>
+      async (parent, { id }, ctx) => {
+        const comment = await ctx.models.Comment.findByPk(id)
         await ctx.models.Comment.destroy({
           where: {
             id,
           },
         })
+        return comment
+      }
     ),
   },
 

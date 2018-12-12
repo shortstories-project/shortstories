@@ -1,21 +1,16 @@
 import React, { Fragment } from 'react'
 import styled from 'styled-components'
 import Head from 'next/head'
-import Link from 'next/link'
 import { Query } from 'react-apollo'
 import gql from 'graphql-tag'
-import format from 'date-fns/format'
-import map from 'ramda/src/map'
-import filter from 'ramda/src/filter'
-import split from 'ramda/src/split'
 import PropTypes from 'prop-types'
 import Error from './ErrorMessage'
+import UserAndDate from './UserAndDate'
 import BigLoader from './BigLoader'
 import LikeButton from './LikeButton'
 import DislikeButton from './DislikeButton'
 import Comments from './Comments'
 import User from './User'
-import getPhoto from '../lib/get-photo'
 
 const STORY_DATA_QUERY = gql`
   query STORY_DATA_QUERY($id: ID!, $cursor: String, $limit: Int) {
@@ -145,33 +140,16 @@ const SingleStory = ({ id }) => (
                 <Head>
                   <title>Shortstories | {story.title}</title>
                 </Head>
-                <div className="author">
-                  <Link href={`/user?id=${story.user.id}`}>
-                    <a className="avatar">
-                      <img
-                        src={getPhoto(story.user.photo)}
-                        alt={story.user.username}
-                      />
-                    </a>
-                  </Link>
-                  <div>
-                    <Link href={`/user?id=${story.user.id}`}>
-                      <a>{story.user.username}</a>
-                    </Link>
-                    <p className="created-at">
-                      {format(story.createdAt, 'MMM D, YYYY')}
-                    </p>
-                  </div>
-                </div>
+                <UserAndDate user={story.user} date={story.createdAt} />
                 <h1 className="title">{story.title}</h1>
-                {map(
-                  (paragraph, index) => (
+                {story.body
+                  .split('\n')
+                  .filter(paragraph => paragraph !== '')
+                  .map((paragraph, index) => (
                     <p key={index} className="body-paragraph">
                       {paragraph}
                     </p>
-                  ),
-                  filter(paragraph => paragraph !== '', split('\n', story.body))
-                )}
+                  ))}
               </SingleStoryStyles>
               {me && (
                 <Fragment>

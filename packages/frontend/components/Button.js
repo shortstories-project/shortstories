@@ -18,20 +18,29 @@ const StyledButton = styled.button`
   pointer-events: ${props =>
     props.disabled || props.loading ? 'none' : 'auto'};
   &:hover {
-    background-color: ${props => props.theme.purple};
+    background-color: ${props => props.theme.purpleDark};
   }
   &:active {
     transform: scale(0.95);
   }
 `
 
-const Button = ({ className, children, disabled, type, loading, onClick }) => (
+const Button = ({
+  className,
+  children,
+  disabled,
+  type,
+  loading,
+  onClick,
+  style = {},
+}) => (
   <StyledButton
     className={className}
     onClick={onClick}
     disabled={disabled || loading}
     loading={loading}
     type={type}
+    style={{ ...style }}
   >
     {loading ? <Loader /> : children}
   </StyledButton>

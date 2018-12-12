@@ -1,4 +1,16 @@
-import styled from 'styled-components'
+import styled, { keyframes } from 'styled-components'
+
+const pulse = keyframes`
+  0% {
+    box-shadow: 0 0 0 0 rgba(109, 71, 217, 0.4);
+  }
+  70% {
+      box-shadow: 0 0 0 7px rgba(204, 169, 44, 0);
+  }
+  100% {
+      box-shadow: 0 0 0 0 rgba(204, 169, 44, 0);
+  }
+`
 
 const ReactionButtonStyles = styled.div`
   display: flex;
@@ -7,8 +19,8 @@ const ReactionButtonStyles = styled.div`
   width: 60px;
 
   button {
-    background-color: white;
-    border: 1px solid #222;
+    background-color: ${props => props.theme.white};
+    border: 1px solid ${props => props.theme.black};
     display: flex;
     align-items: center;
     justify-content: center;
@@ -16,6 +28,17 @@ const ReactionButtonStyles = styled.div`
     padding: 10px;
     cursor: pointer;
     outline: none;
+    box-shadow: 0 0 0 rgba(109, 71, 217, 0.4);
+    animation: ${pulse} 2s infinite;
+    transform: scale(1);
+    transition: transform 0.25s ease-in-out;
+    &:hover {
+      animation: none;
+      transform: scale(1.06);
+    }
+    &:active {
+      transform: scale(0.88);
+    }
   }
 
   span {
